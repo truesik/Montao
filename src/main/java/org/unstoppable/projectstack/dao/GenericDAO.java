@@ -29,15 +29,13 @@ public interface GenericDAO<T> {
      * Removes the object.
      *
      * @param object Object.
-     * @return True or false.
      */
-    Boolean delete(T object);
+    void delete(T object);
 
     /**
      * Adds object to db.
      *
      * @param object Object.
-     * @return Object.
      */
-    T add(T object);
+    void add(T object);
 }

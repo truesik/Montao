@@ -2,7 +2,8 @@ package org.unstoppable.projectstack.dao;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,28 +12,32 @@ import java.util.List;
  *
  * @param <T>
  */
-@Component
+@Repository
 public class GenericDAOImpl<T> implements GenericDAO<T> {
     @Autowired
     private SessionFactory sessionFactory;
 
     @Override
+    @Transactional
     public List<T> getAll(Class<T> type) {
-        return null;
+        return sessionFactory.getCurrentSession().createCriteria(type).list();
     }
 
     @Override
+    @Transactional
     public T getById(Class<T> type, Long id) {
-        return null;
+        return sessionFactory.getCurrentSession().get(type, id);
     }
 
     @Override
-    public Boolean delete(T object) {
-        return null;
+    @Transactional
+    public void delete(T object) {
+        sessionFactory.getCurrentSession().delete(object);
     }
 
     @Override
-    public T add(T object) {
-        return null;
+    @Transactional
+    public void add(T object) {
+        sessionFactory.getCurrentSession().saveOrUpdate(object);
     }
 }
