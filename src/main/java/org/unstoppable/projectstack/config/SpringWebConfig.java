@@ -19,7 +19,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"org.unstoppable.projectstack.*"})
+@ComponentScan(basePackages = {"org.unstoppable.projectstack.controller"})
 public class SpringWebConfig extends WebMvcConfigurerAdapter {
     private static final String UTF_8 = "UTF-8";
 
@@ -53,6 +53,9 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
         templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
+        // Template cache is true by default. Set to false if you want
+        // templates to be automatically updated when modified.
+        templateResolver.setCacheable(false);
         return templateResolver;
     }
 }
