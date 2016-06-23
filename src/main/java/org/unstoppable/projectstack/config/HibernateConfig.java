@@ -9,6 +9,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.User;
 
 import javax.sql.DataSource;
@@ -19,7 +20,7 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"org.unstoppable.projectstack.config"})
+//@ComponentScan(basePackages = {"org.unstoppable.projectstack.entity"})
 @PropertySource(value = {"classpath:hibernate.properties"})
 public class HibernateConfig {
     @Autowired
@@ -31,7 +32,7 @@ public class HibernateConfig {
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan("org.unstoppable.projectstack.*");
         sessionFactory.setHibernateProperties(hibernateProperties());
-        sessionFactory.setAnnotatedClasses(User.class);
+        sessionFactory.setAnnotatedClasses(User.class, Community.class);
         return sessionFactory;
     }
 
