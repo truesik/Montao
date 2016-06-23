@@ -34,6 +34,11 @@ public class User {
     @NotEmpty
     private String email;
 
+    @Column(name = "ROLE", nullable = false)
+    @NotNull
+    @NotEmpty
+    private String role;
+
     @Column(name = "IS_CONFIRMED", nullable = false)
     @NotNull
     @NotEmpty
@@ -69,6 +74,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Boolean isConfirmed() {
