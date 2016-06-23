@@ -44,6 +44,11 @@ public class User {
     @NotEmpty
     private Boolean isConfirmed;
 
+    @Column(name = "IS_LOCKED", nullable = false)
+    @NotNull
+    @NotEmpty
+    private Boolean isLocked;
+
     public int getId() {
         return id;
     }
@@ -88,8 +93,16 @@ public class User {
         return isConfirmed;
     }
 
-    public void setConfirmed(Boolean isConfirmed) {
-        this.isConfirmed = isConfirmed;
+    public void setConfirmed(Boolean confirmed) {
+        this.isConfirmed = confirmed;
+    }
+
+    public Boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(Boolean locked) {
+        isLocked = locked;
     }
 
     @Override
@@ -103,7 +116,9 @@ public class User {
         if (!username.equals(user.username)) return false;
         if (!password.equals(user.password)) return false;
         if (!email.equals(user.email)) return false;
-        return isConfirmed.equals(user.isConfirmed);
+        if (!role.equals(user.role)) return false;
+        if (!isConfirmed.equals(user.isConfirmed)) return false;
+        return isLocked.equals(user.isLocked);
 
     }
 
@@ -113,7 +128,9 @@ public class User {
         result = 31 * result + username.hashCode();
         result = 31 * result + password.hashCode();
         result = 31 * result + email.hashCode();
+        result = 31 * result + role.hashCode();
         result = 31 * result + isConfirmed.hashCode();
+        result = 31 * result + isLocked.hashCode();
         return result;
     }
 }
