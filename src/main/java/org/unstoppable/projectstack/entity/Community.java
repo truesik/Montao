@@ -9,18 +9,18 @@ import javax.validation.constraints.NotNull;
  * Table that contains list of communities.
  */
 @Entity
-@Table(name = "COMMUNITIES")
+@Table(name = "communities")
 public class Community {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "TITLE", nullable = false)
+    @Column(name = "title", nullable = false)
     @NotNull
     @NotEmpty
     private String title;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     private String description;
 
     public Long getId() {
