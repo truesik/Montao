@@ -11,43 +11,41 @@ import javax.validation.constraints.Size;
  * Table that contains users.
  */
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "USERNAME", nullable = false)
+    @Column(name = "username", nullable = false)
     @NotNull
     @NotEmpty
     @Size(min = 3)
     private String username;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "password", nullable = false)
     @NotNull
     @NotEmpty
     private String password;
 
-    @Column(name = "EMAIL", nullable = false)
+    @Column(name = "email", nullable = false)
     @Email
     @NotNull
     @NotEmpty
     private String email;
 
-    @Column(name = "ROLE", nullable = false)
+    @Column(name = "role", nullable = false)
     @NotNull
     @NotEmpty
     private String role;
 
-    @Column(name = "IS_CONFIRMED", nullable = false)
+    @Column(name = "is_confirmed", nullable = false)
     @NotNull
-    @NotEmpty
-    private Boolean isConfirmed;
+    private Boolean isConfirmed = false;
 
-    @Column(name = "IS_LOCKED", nullable = false)
+    @Column(name = "is_locked", nullable = false)
     @NotNull
-    @NotEmpty
-    private Boolean isLocked;
+    private Boolean isLocked = false;
 
     public int getId() {
         return id;
