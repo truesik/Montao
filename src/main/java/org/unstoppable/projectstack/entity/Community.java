@@ -22,6 +22,7 @@ public class Community {
     @Column(name = "description")
     private String description;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "creation_date", nullable = false)
     @NotEmpty
     private String creationDate;

@@ -46,6 +46,7 @@ public class User {
     @NotNull
     private Boolean isLocked = false;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "registration_date", nullable = false)
     @NotNull
     private LocalDate registrationDate;
