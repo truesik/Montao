@@ -2,6 +2,7 @@ package org.unstoppable.projectstack.entity;
 
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "messages")
@@ -11,11 +12,18 @@ public class Message {
     private BigInteger id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "message")
+    @Column(name = "received_time", nullable = false)
+    private LocalDateTime receivedTime;
+
+    @Column(name = "message", nullable = false)
     private String message;
+
+    @ManyToOne
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
 
     public BigInteger getId() {
         return id;
@@ -33,12 +41,28 @@ public class Message {
         this.user = user;
     }
 
+    public LocalDateTime getReceivedTime() {
+        return receivedTime;
+    }
+
+    public void setReceivedTime(LocalDateTime receivedTime) {
+        this.receivedTime = receivedTime;
+    }
+
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 
     @Override
@@ -50,7 +74,9 @@ public class Message {
 
         if (!id.equals(message1.id)) return false;
         if (!user.equals(message1.user)) return false;
-        return message.equals(message1.message);
+        if (!receivedTime.equals(message1.receivedTime)) return false;
+        if (!message.equals(message1.message)) return false;
+        return channel.equals(message1.channel);
 
     }
 
@@ -58,7 +84,9 @@ public class Message {
     public int hashCode() {
         int result = id.hashCode();
         result = 31 * result + user.hashCode();
+        result = 31 * result + receivedTime.hashCode();
         result = 31 * result + message.hashCode();
+        result = 31 * result + channel.hashCode();
         return result;
     }
 }
