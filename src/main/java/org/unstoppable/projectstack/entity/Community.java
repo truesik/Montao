@@ -3,7 +3,7 @@ package org.unstoppable.projectstack.entity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.math.BigInteger;
 
 /**
  * Table that contains list of communities.
@@ -13,21 +13,28 @@ import javax.validation.constraints.NotNull;
 public class Community {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private BigInteger id;
 
-    @Column(name = "title", nullable = false)
-    @NotNull
+    @Column(name = "title", nullable = false, unique = true)
     @NotEmpty
     private String title;
 
     @Column(name = "description")
     private String description;
 
-    public Long getId() {
+    @Column(name = "creation_date", nullable = false)
+    @NotEmpty
+    private String creationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "founder_id")
+    private User founder;
+
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -47,6 +54,22 @@ public class Community {
         this.description = description;
     }
 
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public User getFounder() {
+        return founder;
+    }
+
+    public void setFounder(User founder) {
+        this.founder = founder;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,7 +79,10 @@ public class Community {
 
         if (!id.equals(community.id)) return false;
         if (!title.equals(community.title)) return false;
-        return description != null ? description.equals(community.description) : community.description == null;
+        if (description != null ? !description.equals(community.description) : community.description != null)
+            return false;
+        if (!creationDate.equals(community.creationDate)) return false;
+        return founder.equals(community.founder);
 
     }
 
@@ -65,6 +91,8 @@ public class Community {
         int result = id.hashCode();
         result = 31 * result + title.hashCode();
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + creationDate.hashCode();
+        result = 31 * result + founder.hashCode();
         return result;
     }
 }
