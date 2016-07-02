@@ -2,14 +2,18 @@ package org.unstoppable.projectstack.config;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.entity.Community;
+import org.unstoppable.projectstack.entity.Message;
 import org.unstoppable.projectstack.entity.User;
 
 import javax.sql.DataSource;
@@ -32,7 +36,7 @@ public class HibernateConfig {
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan("org.unstoppable.projectstack.*");
         sessionFactory.setHibernateProperties(hibernateProperties());
-        sessionFactory.setAnnotatedClasses(User.class, Community.class);
+        sessionFactory.setAnnotatedClasses(User.class, Community.class, Channel.class, Message.class);
         return sessionFactory;
     }
 
