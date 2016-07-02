@@ -15,7 +15,6 @@ public class Message {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "received_time", nullable = false)
     private LocalDateTime receivedTime;
 
