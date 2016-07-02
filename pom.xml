@@ -10,10 +10,10 @@
     <packaging>war</packaging>
 
     <properties>
-        <spring.version>4.2.5.RELEASE</spring.version>
+        <spring.version>4.3.0.RELEASE</spring.version>
         <jdk.version>1.8</jdk.version>
         <spring.security.version>4.0.4.RELEASE</spring.security.version>
-        <hibernate-version>5.0.1.Final</hibernate-version>
+        <hibernate-version>5.2.1.Final</hibernate-version>
         <spring-security-test>4.0.3.RELEASE</spring-security-test>
     </properties>
 
@@ -99,14 +99,6 @@
             <version>1.10.19</version>
         </dependency>
 
-        <!--JSP -->
-        <!--<dependency>-->
-            <!--<groupId>jstl</groupId>-->
-            <!--<artifactId>jstl</artifactId>-->
-            <!--<version>1.2</version>-->
-        <!--</dependency>-->
-
-
         <!--Thymeleaf-->
         <dependency>
             <groupId>org.thymeleaf</groupId>
@@ -149,7 +141,6 @@
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate-version}</version>
         </dependency>
-        <!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
@@ -160,12 +151,12 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.0.1.Final</version>
+            <version>5.2.4.Final</version>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>stack</finalName>
+        <finalName>projectstack</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
