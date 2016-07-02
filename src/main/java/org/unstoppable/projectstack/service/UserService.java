@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.unstoppable.projectstack.dao.GenericDAO;
 import org.unstoppable.projectstack.entity.User;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,6 +19,8 @@ public class UserService {
      * @param user User.
      */
     public void add(User user) {
+        user.setRole("ROLE_USER");
+        user.setRegistrationDate(LocalDate.now());
         genericDAO.add(user);
     }
 
