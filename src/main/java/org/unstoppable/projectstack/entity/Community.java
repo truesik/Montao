@@ -3,31 +3,43 @@ package org.unstoppable.projectstack.entity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.math.BigInteger;
+import java.time.LocalDate;
 
 /**
  * Table that contains list of communities.
  */
 @Entity
-@Table(name = "COMMUNITIES")
+@Table(name = "communities")
 public class Community {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private BigInteger id;
 
-    @Column(name = "TITLE", nullable = false)
-    @NotNull
+    @Column(name = "title", nullable = false, unique = true)
     @NotEmpty
     private String title;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     private String description;
 
-    public Long getId() {
+    @Column(name = "creation_date", nullable = false)
+    @NotEmpty
+    private LocalDate creationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "founder_id")
+    private User founder;
+
+    @Column(name = "is_visible", nullable = false)
+    @NotEmpty
+    private Boolean isVisible;
+
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -47,6 +59,30 @@ public class Community {
         this.description = description;
     }
 
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public User getFounder() {
+        return founder;
+    }
+
+    public void setFounder(User founder) {
+        this.founder = founder;
+    }
+
+    public Boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(Boolean visible) {
+        isVisible = visible;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,7 +92,11 @@ public class Community {
 
         if (!id.equals(community.id)) return false;
         if (!title.equals(community.title)) return false;
-        return description != null ? description.equals(community.description) : community.description == null;
+        if (description != null ? !description.equals(community.description) : community.description != null)
+            return false;
+        if (!creationDate.equals(community.creationDate)) return false;
+        if (!founder.equals(community.founder)) return false;
+        return isVisible.equals(community.isVisible);
 
     }
 
@@ -65,6 +105,9 @@ public class Community {
         int result = id.hashCode();
         result = 31 * result + title.hashCode();
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + creationDate.hashCode();
+        result = 31 * result + founder.hashCode();
+        result = 31 * result + isVisible.hashCode();
         return result;
     }
 }
