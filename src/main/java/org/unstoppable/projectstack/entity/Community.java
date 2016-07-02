@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.time.LocalDate;
 
 /**
  * Table that contains list of communities.
@@ -22,14 +23,17 @@ public class Community {
     @Column(name = "description")
     private String description;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "creation_date", nullable = false)
     @NotEmpty
-    private String creationDate;
+    private LocalDate creationDate;
 
     @ManyToOne
     @JoinColumn(name = "founder_id")
     private User founder;
+
+    @Column(name = "is_visible", nullable = false)
+    @NotEmpty
+    private Boolean isVisible;
 
     public BigInteger getId() {
         return id;
@@ -55,11 +59,11 @@ public class Community {
         this.description = description;
     }
 
-    public String getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -69,6 +73,14 @@ public class Community {
 
     public void setFounder(User founder) {
         this.founder = founder;
+    }
+
+    public Boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(Boolean visible) {
+        isVisible = visible;
     }
 
     @Override
@@ -83,7 +95,8 @@ public class Community {
         if (description != null ? !description.equals(community.description) : community.description != null)
             return false;
         if (!creationDate.equals(community.creationDate)) return false;
-        return founder.equals(community.founder);
+        if (!founder.equals(community.founder)) return false;
+        return isVisible.equals(community.isVisible);
 
     }
 
@@ -94,6 +107,7 @@ public class Community {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + creationDate.hashCode();
         result = 31 * result + founder.hashCode();
+        result = 31 * result + isVisible.hashCode();
         return result;
     }
 }
