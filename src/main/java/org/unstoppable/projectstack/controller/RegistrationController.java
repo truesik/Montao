@@ -24,7 +24,6 @@ public class RegistrationController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") User user) {
-        user.setRole("ROLE_USER");
         userService.add(user);
         return "redirect:/";
     }
