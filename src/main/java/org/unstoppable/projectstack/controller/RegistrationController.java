@@ -29,7 +29,7 @@ public class RegistrationController {
     }
 
     /**
-     * Returns true if username already exist and false if not.
+     * Returns false if username already exist and true if not.
      *
      * @param username Username.
      * @return String "true" or "false".
@@ -41,7 +41,7 @@ public class RegistrationController {
     }
 
     /**
-     * Returns true if email already exist and false if not.
+     * Returns false if email already exist and true if not.
      *
      * @param email Email.
      * @return String "true" or "false".
