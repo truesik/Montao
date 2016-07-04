@@ -7,41 +7,47 @@ import java.util.List;
 
 public interface UserDAO {
     /**
-     * Returns object list.
+     * Returns user list.
      *
-     * @param type Objects class type.
-     * @return List.
+     * @return User list.
      */
     List<User> getAll();
 
     /**
-     * Returns object.
+     * Returns users by id.
      *
-     * @param type Object class type.
-     * @param id   Object id.
-     * @return Object.
+     * @param id User id.
+     * @return User.
      */
     User getById(BigInteger id);
 
     /**
-     * Removes the object.
+     * Removes user.
      *
-     * @param object Object.
+     * @param user User.
      */
     void delete(User user);
 
     /**
-     * Adds object to db.
+     * Adds user to db.
      *
-     * @param object Object.
+     * @param user User.
      */
     void add(User user);
 
     /**
+     * Returna user by username.
      *
-     * @param type
-     * @param s
-     * @return
+     * @param username Username.
+     * @return User,
      */
     User getUserByUsername(String username);
+
+    /**
+     * Returns user by email.
+     *
+     * @param email Email.
+     * @return User.
+     */
+    User getUserByEmail(String email);
 }
