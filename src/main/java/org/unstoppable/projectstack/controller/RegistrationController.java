@@ -25,6 +25,30 @@ public class RegistrationController {
     @RequestMapping(method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") User user) {
         userService.add(user);
-        return "redirect:/";
+        return "redirect:/success";
+    }
+
+    /**
+     * Returns true if username already exist and false if not.
+     *
+     * @param username Username.
+     * @return String "true" or "false".
+     */
+    @RequestMapping(value = "/check_username", method = RequestMethod.POST)
+    @ResponseBody
+    public String checkUsername(String username) {
+        return userService.checkUsername(username).toString();
+    }
+
+    /**
+     * Returns true if email already exist and false if not.
+     *
+     * @param email Email.
+     * @return String "true" or "false".
+     */
+    @RequestMapping(value = "/check_email", method = RequestMethod.POST)
+    @ResponseBody
+    public String checkEmail(String email) {
+        return userService.checkEmail(email).toString();
     }
 }
