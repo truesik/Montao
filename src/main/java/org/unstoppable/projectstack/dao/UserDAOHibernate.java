@@ -48,4 +48,13 @@ public class UserDAOHibernate implements UserDAO {
         query.setParameter("username", username);
         return query.uniqueResult();
     }
+
+    @Override
+    @Transactional
+    public User getUserByEmail(String email) {
+        String hql = "FROM User WHERE email = :email";
+        Query<User> query = sessionFactory.getCurrentSession().createQuery(hql, User.class);
+        query.setParameter("email", email);
+        return query.uniqueResult();
+    }
 }
