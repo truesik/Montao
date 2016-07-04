@@ -30,7 +30,6 @@ public class User {
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
-    @NotNull
     @NotEmpty
     private String email;
 
