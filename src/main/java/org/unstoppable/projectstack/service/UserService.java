@@ -62,4 +62,26 @@ public class UserService {
     public User getUserByUsername(String username) {
         return userDAO.getUserByUsername(username);
     }
+
+    /**
+     * Returns false if user found and true if not.
+     *
+     * @param username Username.
+     * @return True or false.
+     */
+    public Boolean checkUsername(String username) {
+        User user = userDAO.getUserByUsername(username);
+        return user == null;
+    }
+
+    /**
+     * Returns false if user found and true if not.
+     *
+     * @param email email.
+     * @return True or false.
+     */
+    public Boolean checkEmail(String email) {
+        User user = userDAO.getUserByEmail(email);
+        return user == null;
+    }
 }
