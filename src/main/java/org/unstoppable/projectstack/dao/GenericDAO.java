@@ -38,4 +38,14 @@ public interface GenericDAO<T> {
      * @param object Object.
      */
     void add(T object);
+
+    /**
+     * Find by...
+     *
+     * @param type   Object class type,
+     * @param column Column.
+     * @param object By what.
+     * @return Object.
+     */
+    T findBy(Class<T> type, String column, String object);
 }
