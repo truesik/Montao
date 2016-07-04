@@ -21,7 +21,7 @@ public class User {
 
     @Column(name = "username", nullable = false, unique = true)
     @NotEmpty
-    @Size(min = 3)
+    @Size(min = 4)
     private String username;
 
     @Column(name = "password", nullable = false)
