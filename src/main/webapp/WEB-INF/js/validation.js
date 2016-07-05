@@ -3,7 +3,7 @@ $(document).ready(function () {
         rules: {
             username: {
                 required: true,
-                minlength: 4, 
+                minlength: 4,
                 remote: {
                     url: "/registration/check_username",
                     type: "post",
@@ -13,27 +13,35 @@ $(document).ready(function () {
                         }
                     }
                 }
-            }, 
+            },
             email: {
                 required: true,
-                email: true, 
+                email: true,
                 remote: {
-                    url: "/registration/check_email", 
-                    type: "post", 
+                    url: "/registration/check_email",
+                    type: "post",
                     data: {
                         '_csrf': function () {
                             return $('input[name="_csrf"]').val();
                         }
                     }
                 }
-            }, 
+            },
             password: {
-                required: true, 
+                required: true,
                 minlength: 8
-            }, 
+            },
             confirm_password: {
-                required: true, 
+                required: true,
                 equalTo: '#password'
+            }
+        },
+        messages: {
+            username: {
+                remote: "This username already exists."
+            },
+            email: {
+                remote: "This email already exists."
             }
         }
     });
