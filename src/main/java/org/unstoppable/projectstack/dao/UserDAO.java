@@ -41,7 +41,7 @@ public interface UserDAO {
      * @param username Username.
      * @return User,
      */
-    User getUserByUsername(String username);
+    User getByUsername(String username);
 
     /**
      * Returns user by email.
@@ -49,5 +49,5 @@ public interface UserDAO {
      * @param email Email.
      * @return User.
      */
-    User getUserByEmail(String email);
+    User getByEmail(String email);
 }

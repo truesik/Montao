@@ -42,7 +42,7 @@ public class UserDAOHibernate implements UserDAO {
 
     @Override
     @Transactional
-    public User getUserByUsername(String username) {
+    public User getByUsername(String username) {
         String hql = "FROM User WHERE username = :username";
         Query<User> query = sessionFactory.getCurrentSession().createQuery(hql, User.class);
         query.setParameter("username", username);
@@ -51,7 +51,7 @@ public class UserDAOHibernate implements UserDAO {
 
     @Override
     @Transactional
-    public User getUserByEmail(String email) {
+    public User getByEmail(String email) {
         String hql = "FROM User WHERE email = :email";
         Query<User> query = sessionFactory.getCurrentSession().createQuery(hql, User.class);
         query.setParameter("email", email);
