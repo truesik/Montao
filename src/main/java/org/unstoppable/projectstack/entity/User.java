@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -15,17 +14,21 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "users")
 public class User {
+    private static final int MIN_USERNAME_LENGTH = 4;
+    private static final int MIN_PASSWORD_LENGTH = 8;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private BigInteger id;
 
     @Column(name = "username", nullable = false, unique = true)
     @NotEmpty
-    @Size(min = 4)
+    @Size(min = MIN_USERNAME_LENGTH)
     private String username;
 
     @Column(name = "password", nullable = false)
     @NotEmpty
+    @Size(min = MIN_PASSWORD_LENGTH)
     private String password;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -34,19 +37,15 @@ public class User {
     private String email;
 
     @Column(name = "role", nullable = false)
-    @NotEmpty
     private String role;
 
     @Column(name = "is_confirmed", nullable = false)
-    @NotNull
     private Boolean isConfirmed = false;
 
     @Column(name = "is_locked", nullable = false)
-    @NotNull
     private Boolean isLocked = false;
 
     @Column(name = "registration_date", nullable = false)
-    @NotNull
     private LocalDate registrationDate;
 
     public BigInteger getId() {
@@ -120,27 +119,27 @@ public class User {
 
         User user = (User) o;
 
-        if (!id.equals(user.id)) return false;
-        if (!username.equals(user.username)) return false;
-        if (!password.equals(user.password)) return false;
-        if (!email.equals(user.email)) return false;
-        if (!role.equals(user.role)) return false;
-        if (!isConfirmed.equals(user.isConfirmed)) return false;
-        if (!isLocked.equals(user.isLocked)) return false;
-        return registrationDate.equals(user.registrationDate);
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (role != null ? !role.equals(user.role) : user.role != null) return false;
+        if (isConfirmed != null ? !isConfirmed.equals(user.isConfirmed) : user.isConfirmed != null) return false;
+        if (isLocked != null ? !isLocked.equals(user.isLocked) : user.isLocked != null) return false;
+        return registrationDate != null ? registrationDate.equals(user.registrationDate) : user.registrationDate == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + username.hashCode();
-        result = 31 * result + password.hashCode();
-        result = 31 * result + email.hashCode();
-        result = 31 * result + role.hashCode();
-        result = 31 * result + isConfirmed.hashCode();
-        result = 31 * result + isLocked.hashCode();
-        result = 31 * result + registrationDate.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (isConfirmed != null ? isConfirmed.hashCode() : 0);
+        result = 31 * result + (isLocked != null ? isLocked.hashCode() : 0);
+        result = 31 * result + (registrationDate != null ? registrationDate.hashCode() : 0);
         return result;
     }
 }
