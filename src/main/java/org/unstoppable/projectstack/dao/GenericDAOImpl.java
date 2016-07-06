@@ -1,6 +1,7 @@
 package org.unstoppable.projectstack.dao;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,8 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
     @Override
     @Transactional
     public List<T> getAll(Class<T> type) {
-        return sessionFactory.getCurrentSession().createCriteria(type).list();
+        String hql = "FROM " + type.getName();
+        return sessionFactory.getCurrentSession().createQuery(hql, type).list();
     }
 
     @Override
@@ -39,5 +41,14 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
     @Transactional
     public void add(T object) {
         sessionFactory.getCurrentSession().saveOrUpdate(object);
+    }
+
+    @Override
+    @Transactional
+    public T findBy(Class<T> type, String column, String object) {
+        String hql = "FROM " + type.getName() + " WHERE " + column + " = :object";
+        Query<T> query = sessionFactory.getCurrentSession().createQuery(hql, type);
+        query.setParameter("object", object);
+        return query.uniqueResult();
     }
 }

@@ -2,16 +2,17 @@ package org.unstoppable.projectstack.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.unstoppable.projectstack.dao.GenericDAO;
+import org.unstoppable.projectstack.dao.UserDAO;
 import org.unstoppable.projectstack.entity.User;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class UserService {
     @Autowired
-    private GenericDAO<User> genericDAO;
+    private UserDAO userDAO;
 
     /**
      * Used to add user to db.
@@ -21,7 +22,7 @@ public class UserService {
     public void add(User user) {
         user.setRole("ROLE_USER");
         user.setRegistrationDate(LocalDate.now());
-        genericDAO.add(user);
+        userDAO.add(user);
     }
 
     /**
@@ -30,17 +31,17 @@ public class UserService {
      * @return List of users.
      */
     public List<User> getAll() {
-        return genericDAO.getAll(User.class);
+        return userDAO.getAll();
     }
 
     /**
      * Returns user from db.
      *
      * @param id User id.
-     * @return
+     * @return User.
      */
-    public User getById(Long id) {
-        return genericDAO.getById(User.class, id);
+    public User getById(BigInteger id) {
+        return userDAO.getById(id);
     }
 
     /**
@@ -49,6 +50,38 @@ public class UserService {
      * @param user User.
      */
     public void delete(User user) {
-        genericDAO.delete(user);
+        userDAO.delete(user);
+    }
+
+    /**
+     * Find user by username.
+     *
+     * @param username Username.
+     * @return User.
+     */
+    public User getByUsername(String username) {
+        return userDAO.getByUsername(username);
+    }
+
+    /**
+     * Returns false if user exist and true if not.
+     *
+     * @param username Username.
+     * @return True or false.
+     */
+    public Boolean checkUsername(String username) {
+        User user = userDAO.getByUsername(username);
+        return user == null;
+    }
+
+    /**
+     * Returns false if user exist and true if not.
+     *
+     * @param email email.
+     * @return True or false.
+     */
+    public Boolean checkEmail(String email) {
+        User user = userDAO.getByEmail(email);
+        return user == null;
     }
 }
