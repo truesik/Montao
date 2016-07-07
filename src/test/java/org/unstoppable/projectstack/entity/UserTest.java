@@ -11,6 +11,7 @@ public class UserTest {
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email@mail.com";
     private static final LocalDate REGISTRATION_DATE = LocalDate.now();
+    private static final String ROLE = "ROLE_USER";
 
     @Test
     public void equals() throws Exception {
@@ -26,6 +27,7 @@ public class UserTest {
         user.setPassword(PASSWORD);
         user.setEmail(EMAIL);
         user.setRegistrationDate(REGISTRATION_DATE);
+        user.setRole(ROLE);
         return user;
     }
 
