@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -14,11 +15,15 @@ public class SuccessControllerTest {
 
     @Before
     public void setUp() throws Exception {
+        SuccessController controller = new SuccessController();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).setViewResolvers(getViewResolver()).build();
+    }
+
+    private ViewResolver getViewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/templates/");
         viewResolver.setSuffix(".html");
-
-        mockMvc = MockMvcBuilders.standaloneSetup(new SuccessController()).setViewResolvers(viewResolver).build();
+        return viewResolver;
     }
 
     @Test
