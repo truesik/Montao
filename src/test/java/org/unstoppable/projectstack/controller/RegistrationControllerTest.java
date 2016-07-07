@@ -4,16 +4,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.service.UserService;
 
-import java.math.BigInteger;
-import java.time.LocalDate;
-
-import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -42,33 +41,84 @@ public class RegistrationControllerTest {
 
     @Test
     public void addUser() throws Exception {
-        mockMvc.perform(
-                post("/registration")
-                        .param("username", "username")
-                        .param("password", "password")
-                        .param("email", "email@mail.com")
-                        .param("registrationDate", String.valueOf(LocalDate.now())))
+        User user = createUser();
+        RequestBuilder request = post("/registration")
+                .param("username", user.getUsername())
+                .param("password", user.getPassword())
+                .param("email", user.getEmail());
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(redirectedUrl("/success"));
-        Mockito.verify(userService, Mockito.atLeastOnce()).add(getUser());
+        Mockito.verify(userService, Mockito.atLeastOnce()).add(user);
     }
 
-    private User getUser() {
+    private User createUser() {
         User user = new User();
-        user.setUsername("user");
+        user.setUsername("username");
         user.setPassword("password");
         user.setEmail("email@mail.com");
-        user.setRegistrationDate(LocalDate.now());
         return user;
     }
 
     @Test
-    public void checkUsername() throws Exception {
+    public void addWrongUser() throws Exception {
+        User user = createUser();
+        user.setEmail("sdfsd");
 
+        RequestBuilder request = post("/registration")
+                .param("username", user.getUsername())
+                .param("password", user.getEmail())
+                .param("email", user.getEmail());
+        ResultMatcher result = view().name("registration");
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(result);
     }
 
     @Test
-    public void checkEmail() throws Exception {
+    public void checkExistUsername() throws Exception {
+        User user = createUser();
+        Mockito.when(userService.checkUsername(user.getUsername())).thenReturn(false);
+        mockMvc.perform(
+                post("/registration/check_username")
+                        .param("username", user.getUsername()))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("false"));
+    }
 
+    @Test
+    public void checkNewUsername() throws Exception {
+        Mockito.when(userService.checkUsername("new_user")).thenReturn(true);
+        mockMvc.perform(
+                post("/registration/check_username")
+                        .param("username", "new_user"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
+
+    @Test
+    public void checkExistEmail() throws Exception {
+        User user = createUser();
+        Mockito.when(userService.checkEmail(user.getEmail())).thenReturn(false);
+        mockMvc.perform(
+                post("/registration/check_email")
+                        .param("email", user.getEmail()))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("false"));
+    }
+
+    @Test
+    public void checkNewEmail() throws Exception {
+        Mockito.when(userService.checkEmail("newemail@mail.com")).thenReturn(true);
+        mockMvc.perform(
+                post("/registration/check_email")
+                        .param("email", "newemail@mail.com"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
     }
 
 }
