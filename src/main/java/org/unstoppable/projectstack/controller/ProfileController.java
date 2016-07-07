@@ -16,8 +16,12 @@ import java.math.BigInteger;
  */
 @Controller
 public class ProfileController {
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public ProfileController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * Get user profile by username.
@@ -27,7 +31,7 @@ public class ProfileController {
      * @return Rendered page.
      */
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
-    public String userProfileByUsername(@PathVariable("username") String username, Model model) {
+    public String getUserProfileByUsername(@PathVariable("username") String username, Model model) {
         User user = userService.getByUsername(username);
         if (user == null) {
             return "redirect:/";
@@ -45,7 +49,7 @@ public class ProfileController {
      * @return Rendered page.
      */
     @RequestMapping(value = "/id{id}", method = RequestMethod.GET)
-    public String userProfileById(@PathVariable("id") BigInteger id, Model model) {
+    public String getUserProfileById(@PathVariable("id") BigInteger id, Model model) {
         User user = userService.getById(id);
         if (user == null) {
             return "redirect:/";
