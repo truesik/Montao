@@ -62,19 +62,19 @@ public class Channel {
 
         Channel channel = (Channel) o;
 
-        if (!id.equals(channel.id)) return false;
-        if (!title.equals(channel.title)) return false;
+        if (id != null ? !id.equals(channel.id) : channel.id != null) return false;
+        if (title != null ? !title.equals(channel.title) : channel.title != null) return false;
         if (description != null ? !description.equals(channel.description) : channel.description != null) return false;
-        return community.equals(channel.community);
+        return community != null ? community.equals(channel.community) : channel.community == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + title.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + community.hashCode();
+        result = 31 * result + (community != null ? community.hashCode() : 0);
         return result;
     }
 }
