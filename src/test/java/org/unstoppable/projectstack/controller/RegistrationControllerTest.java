@@ -42,6 +42,8 @@ public class RegistrationControllerTest {
     @Test
     public void addUser() throws Exception {
         User user = createUser();
+        Mockito.when(userService.checkUsername(user.getUsername())).thenReturn(true);
+        Mockito.when(userService.checkEmail(user.getEmail())).thenReturn(true);
         RequestBuilder request = post("/registration")
                 .param("username", user.getUsername())
                 .param("password", user.getPassword())
