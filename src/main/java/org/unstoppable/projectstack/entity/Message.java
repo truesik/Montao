@@ -72,21 +72,22 @@ public class Message {
 
         Message message1 = (Message) o;
 
-        if (!id.equals(message1.id)) return false;
-        if (!user.equals(message1.user)) return false;
-        if (!receivedTime.equals(message1.receivedTime)) return false;
-        if (!message.equals(message1.message)) return false;
-        return channel.equals(message1.channel);
+        if (id != null ? !id.equals(message1.id) : message1.id != null) return false;
+        if (user != null ? !user.equals(message1.user) : message1.user != null) return false;
+        if (receivedTime != null ? !receivedTime.equals(message1.receivedTime) : message1.receivedTime != null)
+            return false;
+        if (message != null ? !message.equals(message1.message) : message1.message != null) return false;
+        return channel != null ? channel.equals(message1.channel) : message1.channel == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + user.hashCode();
-        result = 31 * result + receivedTime.hashCode();
-        result = 31 * result + message.hashCode();
-        result = 31 * result + channel.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (receivedTime != null ? receivedTime.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (channel != null ? channel.hashCode() : 0);
         return result;
     }
 }

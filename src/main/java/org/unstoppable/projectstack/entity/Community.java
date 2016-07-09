@@ -90,24 +90,25 @@ public class Community {
 
         Community community = (Community) o;
 
-        if (!id.equals(community.id)) return false;
-        if (!title.equals(community.title)) return false;
+        if (id != null ? !id.equals(community.id) : community.id != null) return false;
+        if (title != null ? !title.equals(community.title) : community.title != null) return false;
         if (description != null ? !description.equals(community.description) : community.description != null)
             return false;
-        if (!creationDate.equals(community.creationDate)) return false;
-        if (!founder.equals(community.founder)) return false;
-        return isVisible.equals(community.isVisible);
+        if (creationDate != null ? !creationDate.equals(community.creationDate) : community.creationDate != null)
+            return false;
+        if (founder != null ? !founder.equals(community.founder) : community.founder != null) return false;
+        return isVisible != null ? isVisible.equals(community.isVisible) : community.isVisible == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + title.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + creationDate.hashCode();
-        result = 31 * result + founder.hashCode();
-        result = 31 * result + isVisible.hashCode();
+        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
+        result = 31 * result + (founder != null ? founder.hashCode() : 0);
+        result = 31 * result + (isVisible != null ? isVisible.hashCode() : 0);
         return result;
     }
 }

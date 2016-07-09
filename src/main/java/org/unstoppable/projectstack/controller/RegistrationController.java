@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.service.UserService;
+import org.unstoppable.projectstack.validator.UserValidator;
 
 import javax.validation.Valid;
 
@@ -16,8 +17,12 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "/registration")
 public class RegistrationController {
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * Get registration.html.
@@ -33,6 +38,7 @@ public class RegistrationController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String addUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
+        new UserValidator(userService).validate(user, result);
         if (result.hasErrors()) {
             return "registration";
         } else {
