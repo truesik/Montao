@@ -37,7 +37,7 @@ public class UserValidator implements Validator {
      */
     private void passwordValidation(Errors errors, UserRegistrationForm registrationForm) {
         if (!registrationForm.getPassword().equals(registrationForm.getConfirmPassword())) {
-            errors.rejectValue("confirmPassword", "Two password fields didn't match.");
+            errors.rejectValue("confirmPassword", "error.password.confirm");
         }
     }
 
@@ -50,7 +50,7 @@ public class UserValidator implements Validator {
     private void emailValidation(Errors errors, UserRegistrationForm registrationForm) {
         // Check email existence
         if (!userService.checkEmail(registrationForm.getEmail())) {
-            errors.rejectValue("email", "Email already registered.");
+            errors.rejectValue("email", "error.email.already_registered");
         }
     }
 
@@ -63,11 +63,11 @@ public class UserValidator implements Validator {
     private void usernameValidation(Errors errors, UserRegistrationForm registrationForm) {
         // Only latin chars, numbers and "_"
         if (!registrationForm.getUsername().matches("\\w+")) {
-            errors.rejectValue("username", "Wrong characters in username field.");
+            errors.rejectValue("username", "error.username.chars");
         }
         // Check username existence
         if (!userService.checkUsername(registrationForm.getUsername())) {
-            errors.rejectValue("username", "Username already registered.");
+            errors.rejectValue("username", "error.username.already_registered");
         }
     }
 }
