@@ -68,6 +68,7 @@ public class RegistrationControllerTest {
     public void addWrongUser() throws Exception {
         UserRegistrationForm user = createUserForm();
         user.setEmail("sdfsd");
+        user.setUsername("ывпаыапва");
 
         RequestBuilder request = post("/registration")
                 .param("username", user.getUsername())
