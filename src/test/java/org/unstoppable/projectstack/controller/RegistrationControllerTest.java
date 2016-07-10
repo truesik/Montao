@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.unstoppable.projectstack.entity.User;
+import org.unstoppable.projectstack.model.UserRegistrationForm;
 import org.unstoppable.projectstack.service.UserService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -41,35 +41,38 @@ public class RegistrationControllerTest {
 
     @Test
     public void addUser() throws Exception {
-        User user = createUser();
-        Mockito.when(userService.checkUsername(user.getUsername())).thenReturn(true);
-        Mockito.when(userService.checkEmail(user.getEmail())).thenReturn(true);
+        UserRegistrationForm userForm = createUserForm();
+        Mockito.when(userService.checkUsername(userForm.getUsername())).thenReturn(true);
+        Mockito.when(userService.checkEmail(userForm.getEmail())).thenReturn(true);
         RequestBuilder request = post("/registration")
-                .param("username", user.getUsername())
-                .param("password", user.getPassword())
-                .param("email", user.getEmail());
+                .param("username", userForm.getUsername())
+                .param("password", userForm.getPassword())
+                .param("confirmPassword", userForm.getConfirmPassword())
+                .param("email", userForm.getEmail());
         mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(redirectedUrl("/success"));
-        Mockito.verify(userService, Mockito.atLeastOnce()).add(user);
+        Mockito.verify(userService, Mockito.atLeastOnce()).registerNewUser(userForm);
     }
 
-    private User createUser() {
-        User user = new User();
+    private UserRegistrationForm createUserForm() {
+        UserRegistrationForm user = new UserRegistrationForm();
         user.setUsername("username");
         user.setPassword("password");
+        user.setConfirmPassword("password");
         user.setEmail("email@mail.com");
         return user;
     }
 
     @Test
     public void addWrongUser() throws Exception {
-        User user = createUser();
+        UserRegistrationForm user = createUserForm();
         user.setEmail("sdfsd");
 
         RequestBuilder request = post("/registration")
                 .param("username", user.getUsername())
                 .param("password", user.getEmail())
+                .param("confirmPassword", user.getConfirmPassword())
                 .param("email", user.getEmail());
         ResultMatcher result = view().name("registration");
         mockMvc.perform(request)
@@ -79,7 +82,7 @@ public class RegistrationControllerTest {
 
     @Test
     public void checkExistUsername() throws Exception {
-        User user = createUser();
+        UserRegistrationForm user = createUserForm();
         Mockito.when(userService.checkUsername(user.getUsername())).thenReturn(false);
         mockMvc.perform(
                 post("/registration/check_username")
@@ -102,7 +105,7 @@ public class RegistrationControllerTest {
 
     @Test
     public void checkExistEmail() throws Exception {
-        User user = createUser();
+        UserRegistrationForm user = createUserForm();
         Mockito.when(userService.checkEmail(user.getEmail())).thenReturn(false);
         mockMvc.perform(
                 post("/registration/check_email")
@@ -122,5 +125,4 @@ public class RegistrationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
-
 }
