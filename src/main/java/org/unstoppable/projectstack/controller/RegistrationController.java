@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.unstoppable.projectstack.entity.User;
+import org.unstoppable.projectstack.model.UserRegistrationForm;
 import org.unstoppable.projectstack.service.UserService;
 import org.unstoppable.projectstack.validator.UserValidator;
 
@@ -32,17 +32,24 @@ public class RegistrationController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String registration(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("userForm", new UserRegistrationForm());
         return "registration";
     }
 
+    /**
+     * Used to add new user to db.
+     *
+     * @param userForm New user registration form.
+     * @param result   Errors.
+     * @return Page.
+     */
     @RequestMapping(method = RequestMethod.POST)
-    public String addUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
-        new UserValidator(userService).validate(user, result);
+    public String addUser(@Valid @ModelAttribute("userForm") UserRegistrationForm userForm, BindingResult result) {
+        new UserValidator(userService).validate(userForm, result);
         if (result.hasErrors()) {
             return "registration";
         } else {
-            userService.add(user);
+            userService.registerNewUser(userForm);
             return "redirect:/success";
         }
     }
