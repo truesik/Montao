@@ -27,6 +27,12 @@ public class UserValidator implements Validator {
         emailValidation(errors, user);
     }
 
+    /**
+     * This method is used to validate email field.
+     *
+     * @param errors Errors.
+     * @param user   User.
+     */
     private void emailValidation(Errors errors, User user) {
         // Check email existence
         if (!userService.checkEmail(user.getEmail())) {
@@ -34,6 +40,12 @@ public class UserValidator implements Validator {
         }
     }
 
+    /**
+     * This method is used to validate username field.
+     *
+     * @param errors Errors.
+     * @param user   User.
+     */
     private void usernameValidation(Errors errors, User user) {
         // Only latin chars, numbers and "_"
         if (!user.getUsername().matches("\\w+")) {
