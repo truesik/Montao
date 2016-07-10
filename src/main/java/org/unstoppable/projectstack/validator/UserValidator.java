@@ -10,8 +10,7 @@ public class UserValidator implements Validator {
 
     public UserValidator(UserService userService) {
         if (userService == null) {
-            throw new IllegalArgumentException("The supplied [Service] is " +
-                    "required and must not be null.");
+            throw new IllegalArgumentException("The supplied [Service] is required and must not be null.");
         }
         this.userService = userService;
     }
@@ -28,13 +27,31 @@ public class UserValidator implements Validator {
         emailValidation(errors, user);
     }
 
+    /**
+     * This method is used to validate email field.
+     *
+     * @param errors Errors.
+     * @param user   User.
+     */
     private void emailValidation(Errors errors, User user) {
+        // Check email existence
         if (!userService.checkEmail(user.getEmail())) {
             errors.rejectValue("email", "Email already registered.");
         }
     }
 
+    /**
+     * This method is used to validate username field.
+     *
+     * @param errors Errors.
+     * @param user   User.
+     */
     private void usernameValidation(Errors errors, User user) {
+        // Only latin chars, numbers and "_"
+        if (!user.getUsername().matches("\\w+")) {
+            errors.rejectValue("username", "Wrong characters in username field.");
+        }
+        // Check username existence
         if (!userService.checkUsername(user.getUsername())) {
             errors.rejectValue("username", "Username already registered.");
         }
