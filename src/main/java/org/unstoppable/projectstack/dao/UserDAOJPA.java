@@ -10,6 +10,9 @@ import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.List;
 
+/**
+ * JPA implementation of UserDAO.
+ */
 @Repository
 @Transactional
 public class UserDAOJPA implements UserDAO {
@@ -51,5 +54,10 @@ public class UserDAOJPA implements UserDAO {
         TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
         query.setParameter("email", email);
         return query.getSingleResult();
+    }
+
+    @Override
+    public void update(User user) {
+        entityManager.merge(user);
     }
 }
