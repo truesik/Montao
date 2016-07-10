@@ -28,7 +28,7 @@ import java.util.Locale;
 @EnableWebMvc
 @ComponentScan(basePackages = {"org.unstoppable.projectstack.controller"})
 public class WebConfig extends WebMvcConfigurerAdapter {
-    private static final String UTF_8 = "UTF-8";
+    private static final String STANDARD_CHARSET = "UTF-8";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -42,7 +42,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public ViewResolver viewResolver() {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(templateEngine());
-        viewResolver.setCharacterEncoding(UTF_8);
+        viewResolver.setCharacterEncoding(STANDARD_CHARSET);
         return viewResolver;
     }
 
@@ -84,7 +84,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:message");
-        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setDefaultEncoding(STANDARD_CHARSET);
         return messageSource;
     }
 }
