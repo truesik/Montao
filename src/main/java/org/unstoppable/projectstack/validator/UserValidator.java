@@ -3,6 +3,7 @@ package org.unstoppable.projectstack.validator;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.unstoppable.projectstack.entity.User;
+import org.unstoppable.projectstack.model.UserRegistrationForm;
 import org.unstoppable.projectstack.service.UserService;
 
 public class UserValidator implements Validator {
@@ -22,20 +23,33 @@ public class UserValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        User user = (User) o;
-        usernameValidation(errors, user);
-        emailValidation(errors, user);
+        UserRegistrationForm registrationForm = (UserRegistrationForm) o;
+        usernameValidation(errors, registrationForm);
+        emailValidation(errors, registrationForm);
+        passwordValidation(errors, registrationForm);
+    }
+
+    /**
+     * This method is used to validate confirm password field.
+     *
+     * @param errors           Errors.
+     * @param registrationForm New user.
+     */
+    private void passwordValidation(Errors errors, UserRegistrationForm registrationForm) {
+        if (!registrationForm.getPassword().equals(registrationForm.getConfirmPassword())) {
+            errors.rejectValue("confirmPassword", "Two password fields didn't match.");
+        }
     }
 
     /**
      * This method is used to validate email field.
      *
-     * @param errors Errors.
-     * @param user   User.
+     * @param errors           Errors.
+     * @param registrationForm New user.
      */
-    private void emailValidation(Errors errors, User user) {
+    private void emailValidation(Errors errors, UserRegistrationForm registrationForm) {
         // Check email existence
-        if (!userService.checkEmail(user.getEmail())) {
+        if (!userService.checkEmail(registrationForm.getEmail())) {
             errors.rejectValue("email", "Email already registered.");
         }
     }
@@ -43,16 +57,16 @@ public class UserValidator implements Validator {
     /**
      * This method is used to validate username field.
      *
-     * @param errors Errors.
-     * @param user   User.
+     * @param errors           Errors.
+     * @param registrationForm New user.
      */
-    private void usernameValidation(Errors errors, User user) {
+    private void usernameValidation(Errors errors, UserRegistrationForm registrationForm) {
         // Only latin chars, numbers and "_"
-        if (!user.getUsername().matches("\\w+")) {
+        if (!registrationForm.getUsername().matches("\\w+")) {
             errors.rejectValue("username", "Wrong characters in username field.");
         }
         // Check username existence
-        if (!userService.checkUsername(user.getUsername())) {
+        if (!userService.checkUsername(registrationForm.getUsername())) {
             errors.rejectValue("username", "Username already registered.");
         }
     }
