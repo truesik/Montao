@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Registration</title>
+    <title th:text="#{title.registration}">Registration</title>
 
     <!-- Bootstrap -->
     <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
@@ -36,42 +36,72 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/registration" th:href="@{/registration}">Sing up</a></li>
-                <li><a href="#">Log in</a></li>
+                <li><a href="/registration" th:href="@{/registration}" th:text="#{navbar.sign_up}">Sing up</a></li>
+                <li><a href="#" th:text="#{navbar.log_in}">Log in</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
 
 <div class="container">
-    <form th:action="@{/registration}" th:object="${userForm}" method="post" id="signup">
-        <div class="form-group" th:class="${#fields.hasErrors('username')} ? 'has-error form-group'">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Username"
-                   th:field="*{username}">
-            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</span>
+    <div class="panel panel-default">
+        <div class="panel-heading" th:text="#{body.registration}">Registration</div>
+        <div class="panel-body">
+            <form th:action="@{/registration}" th:object="${userForm}" method="post" id="signup">
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('username')} ? 'has-error'">
+                    <label for="username" th:text="#{body.username}">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username"
+                           th:field="*{username}" th:placeholder="#{body.username}">
+                    <div class="alert alert-danger" role="alert"
+                         th:class="${#fields.hasErrors('username')} ? 'alert alert-danger'">
+                        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</span>
+                    </div>
+                </div>
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+                    <label for="email" th:text="#{body.email}">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                           th:field="*{email}" th:placeholder="#{body.email}">
+                    <div class="alert alert-danger" role="alert"
+                         th:class="${#fields.hasErrors('email')} ? 'alert alert-danger'">
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</span>
+                    </div>
+                </div>
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
+                    <label for="password" th:text="#{body.password}">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                           th:field="*{password}" th:placeholder="#{body.password}">
+                    <div class="alert alert-danger" role="alert"
+                         th:class="${#fields.hasErrors('password')} ? 'alert alert-danger'">
+                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</span>
+                    </div>
+                </div>
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('confirmPassword')} ? 'has-error'">
+                    <label for="confirm_password" th:text="#{body.confirm_password}">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_confirm"
+                           placeholder="Confirm Password"
+                           th:field="*{confirmPassword}" th:placeholder="#{body.confirm_password}">
+                    <div class="alert alert-danger" role="alert"
+                         th:class="${#fields.hasErrors('confirmPassword')} ? 'alert alert-danger'">
+                        <span th:if="${#fields.hasErrors('confirmPassword')}"
+                              th:errors="*{confirmPassword}">Error</span>
+                    </div>
+                </div>
+                <button type="submit" id="register" class="btn btn-primary btn-group-justified"
+                        th:text="#{body.registration}">Registration
+                </button>
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-10">
+                        <p th:text="#{body.already_have_account}">Already have an account?
+                            <a th:href="@{/login}" th:text="#{body.log_in}">Log In</a></p>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="form-group" th:class="${#fields.hasErrors('email')} ? 'has-error form-group'">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                   th:field="*{email}">
-            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</span>
-        </div>
-        <div class="form-group" th:class="${#fields.hasErrors('password')} ? 'has-error form-group'">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-                   th:field="*{password}">
-            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</span>
-        </div>
-        <div class="form-group" th:class="${#fields.hasErrors('confirmPassword')} ? 'has-error form-group'">
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" class="form-control" id="confirm_password" name="confirm_confirm"
-                   placeholder="Confirm Password"
-                   th:field="*{confirmPassword}">
-            <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
-        </div>
-        <button type="submit" id="register" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -79,5 +109,5 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="../bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
-<script src="../js/validation.js" th:href="@{/js/validation.js}"></script>
+<script src="../js/validation.js" th:src="@{/js/validation.js}" th:inline="javascript"></script>
 </body>
