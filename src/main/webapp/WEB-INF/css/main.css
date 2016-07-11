@@ -7,14 +7,8 @@
 /*padding: 0;*/
 /*margin: 0;*/
 /*}*/
-.input {
-    margin-top: 20%;
-}
 
-.row input {
-    height: 55px;
-}
-
-.btn {
-    margin-top: 15px;
+.panel {
+    width: 400px;
+    margin: 200px auto;
 }
