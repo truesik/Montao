@@ -3,9 +3,10 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="/fragments/head :: head(#{title.registration})"></head>
 <body>
-<div th:replace="fragments/navbar :: notsigned-navbar"></div>
+<div th:replace="fragments/navbar :: ${#authorization.expression('isAuthenticated()')}? 'signed-navbar' : 'notsigned-navbar'"></div>
 <div th:replace="fragments/signup :: signup"></div>
 <div th:replace="fragments/footer :: bootstrap-scripts"></div>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 <script src="../js/validation.js" th:src="@{/js/validation.js}" th:inline="javascript"></script>
 </body>
 </html>
