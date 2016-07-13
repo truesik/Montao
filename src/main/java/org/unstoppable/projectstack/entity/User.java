@@ -40,10 +40,10 @@ public class User {
     private String role;
 
     @Column(name = "is_confirmed", nullable = false)
-    private Boolean isConfirmed = false;
+    private Boolean isConfirmed;
 
     @Column(name = "is_locked", nullable = false)
-    private Boolean isLocked = false;
+    private Boolean isLocked;
 
     @Column(name = "registration_date", nullable = false)
     private LocalDate registrationDate;

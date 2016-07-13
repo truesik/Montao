@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.unstoppable.projectstack.dao.UserDAO;
 import org.unstoppable.projectstack.entity.User;
+import org.unstoppable.projectstack.model.UserRegistrationForm;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -15,14 +16,30 @@ public class UserService {
     private UserDAO userDAO;
 
     /**
-     * Used to add user to db.
+     * Used to add new user to db.
      *
-     * @param user User.
+     * @param registrationForm New user.
      */
-    public void add(User user) {
+    public void registerNewUser(UserRegistrationForm registrationForm) {
+        userDAO.add(createNewUser(registrationForm));
+    }
+
+    /**
+     * Creates new user based on register form.
+     *
+     * @param registrationForm New user register form.
+     * @return User.
+     */
+    private User createNewUser(UserRegistrationForm registrationForm) {
+        User user = new User();
+        user.setUsername(registrationForm.getUsername());
+        user.setEmail(registrationForm.getEmail());
+        user.setPassword(registrationForm.getPassword());
         user.setRole("ROLE_USER");
+        user.setConfirmed(false);
+        user.setLocked(false);
         user.setRegistrationDate(LocalDate.now());
-        userDAO.add(user);
+        return user;
     }
 
     /**
