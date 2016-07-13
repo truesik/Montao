@@ -1,4 +1,20 @@
 $(document).ready(function () {
+    $("#username").on("keypress", function (event) {
+        // Disallow anything not matching the regex pattern (A to Z uppercase, a to z lowercase, digits 0 to 9 and underscore ("_"))
+        var englishAlphabetDigitsAndUnderscore = /\w+/g;
+        // Retrieving the key from the char code passed in event.which
+        var key = String.fromCharCode(event.which);
+        if (englishAlphabetDigitsAndUnderscore.test(key)) {
+            return true;
+        }
+        // If we got this far, just return false because a disallowed key was typed.
+        return false;
+    });
+
+    $('#username').on("paste", function (event) {
+        event.preventDefault();
+    });
+
     $('#signup').validate({
         rules: {
             username: {
