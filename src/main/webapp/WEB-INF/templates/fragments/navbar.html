@@ -24,7 +24,16 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="signed-navbar">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/profile" th:href="@{/${#authentication.name}}" th:text="${#authentication.name}">User</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"
+                       th:text="${#authentication.name}">Username <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" th:href="@{/${#authentication.name}}">Profile</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Setting</a></li>
+                    </ul>
+                </li>
                 <li><a href="#" th:text="#{navbar.log_out}">Log out</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
