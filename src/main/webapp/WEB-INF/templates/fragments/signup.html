@@ -9,6 +9,7 @@
     <div class="panel panel-default">
         <div class="panel-heading" th:text="#{body.registration}">Registration</div>
         <div class="panel-body">
+            <!--/*@thymesVar id="userForm" type="org.unstoppable.projectstack.model.UserRegistrationForm"*/-->
             <form th:action="@{/registration}" th:object="${userForm}" method="post" id="signup">
                 <div class="form-group"
                      th:classappend="${#fields.hasErrors('username')}? 'has-error'">
@@ -57,8 +58,10 @@
                 </button>
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <p th:text="#{body.already_have_account}">Already have an account?
-                            <a href="#" th:text="#{body.log_in}">Log In</a></p>
+                        <p th:text="#{body.already_have_account}">Already have an account?<a href="#"
+                                                                                             th:href="@{/login}"
+                                                                                             th:text="#{body.log_in}">Log
+                            In</a></p>
                     </div>
                 </div>
             </form>
