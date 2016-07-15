@@ -29,12 +29,16 @@
                        aria-expanded="false"
                        th:text="${#authentication.name}">Username <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" th:href="@{/${#authentication.name}}">Profile</a></li>
+                        <li><a href="#" th:href="@{'/' + ${#authentication.name}}">Profile</a></li>
+                        <li><a th:href="@{/communities/new}" th:text="#{community.new}">New Community</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="#">Setting</a></li>
                     </ul>
                 </li>
-                <li><a href="#" th:text="#{navbar.log_out}">Log out</a></li>
+                <li>
+                    <a href="#" onclick="$('#logout').submit();" th:text="#{user.log_out}">Log out</a>
+                    <form style="visibility: hidden" th:action="@{/logout}" method="post" id="logout"></form>
+                </li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -58,8 +62,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="notsigned-navbar">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/registration" th:href="@{/registration}" th:text="#{navbar.sign_up}">Sing up</a></li>
-                <li><a href="#" th:text="#{navbar.log_in}">Log in</a></li>
+                <li><a href="#" th:href="@{/registration}" th:text="#{user.sign_up}">Sing up</a></li>
+                <li><a href="#" th:href="@{/login}" th:text="#{user.log_in}">Log in</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
