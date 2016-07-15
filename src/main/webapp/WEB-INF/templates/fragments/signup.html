@@ -7,15 +7,15 @@
 <body>
 <div class="container" th:fragment="signup">
     <div class="panel panel-default">
-        <div class="panel-heading" th:text="#{body.registration}">Registration</div>
+        <div class="panel-heading" th:text="#{user.registration}">Registration</div>
         <div class="panel-body">
             <!--/*@thymesVar id="userForm" type="org.unstoppable.projectstack.model.UserRegistrationForm"*/-->
             <form th:action="@{/registration}" th:object="${userForm}" method="post" id="signup">
                 <div class="form-group"
                      th:classappend="${#fields.hasErrors('username')}? 'has-error'">
-                    <label for="username" th:text="#{body.username}">Username</label>
+                    <label for="username" th:text="#{user.username}">Username</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="Username"
-                           th:field="*{username}" th:placeholder="#{body.username}">
+                           th:field="*{username}" th:placeholder="#{user.username}">
                     <div class="alert alert-danger" role="alert"
                          th:class="${#fields.hasErrors('username')}? 'alert alert-danger'">
                         <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</span>
@@ -23,9 +23,9 @@
                 </div>
                 <div class="form-group"
                      th:classappend="${#fields.hasErrors('email')}? 'has-error'">
-                    <label for="email" th:text="#{body.email}">Email</label>
+                    <label for="email" th:text="#{user.email}">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                           th:field="*{email}" th:placeholder="#{body.email}">
+                           th:field="*{email}" th:placeholder="#{user.email}">
                     <div class="alert alert-danger" role="alert"
                          th:class="${#fields.hasErrors('email')}? 'alert alert-danger'">
                         <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</span>
@@ -33,9 +33,9 @@
                 </div>
                 <div class="form-group"
                      th:classappend="${#fields.hasErrors('password')}? 'has-error'">
-                    <label for="password" th:text="#{body.password}">Password</label>
+                    <label for="password" th:text="#{user.password}">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-                           th:field="*{password}" th:placeholder="#{body.password}">
+                           th:field="*{password}" th:placeholder="#{user.password}">
                     <div class="alert alert-danger" role="alert"
                          th:class="${#fields.hasErrors('password')}? 'alert alert-danger'">
                         <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</span>
@@ -43,10 +43,10 @@
                 </div>
                 <div class="form-group"
                      th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error'">
-                    <label for="confirm_password" th:text="#{body.confirm_password}">Confirm Password</label>
+                    <label for="confirm_password" th:text="#{user.confirm_password}">Confirm Password</label>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_confirm"
                            placeholder="Confirm Password"
-                           th:field="*{confirmPassword}" th:placeholder="#{body.confirm_password}">
+                           th:field="*{confirmPassword}" th:placeholder="#{user.confirm_password}">
                     <div class="alert alert-danger" role="alert"
                          th:class="${#fields.hasErrors('confirmPassword')}? 'alert alert-danger'">
                         <span th:if="${#fields.hasErrors('confirmPassword')}"
@@ -54,14 +54,12 @@
                     </div>
                 </div>
                 <button type="submit" id="register" class="btn btn-primary btn-group-justified"
-                        th:text="#{body.registration}">Registration
+                        th:text="#{user.registration}">Registration
                 </button>
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <p th:text="#{body.already_have_account}">Already have an account?<a href="#"
-                                                                                             th:href="@{/login}"
-                                                                                             th:text="#{body.log_in}">Log
-                            In</a></p>
+                        <span th:text="#{user.already_have_account}">Already have an account?></span>
+                        <a href="#" th:href="@{/login}" th:text="#{user.log_in}">Log In</a>
                     </div>
                 </div>
             </form>
