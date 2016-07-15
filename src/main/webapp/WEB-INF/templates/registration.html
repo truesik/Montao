@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:include="/fragments/head :: head(#{title.registration})"></head>
+<head th:include="/fragments/head :: head(#{user.registration})"></head>
 <body>
 <div th:replace="fragments/navbar :: ${#authorization.expression('isAuthenticated()')}? 'signed-navbar' : 'notsigned-navbar'"></div>
 <div th:replace="fragments/signup :: signup"></div>
