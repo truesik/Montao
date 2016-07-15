@@ -2,8 +2,10 @@ package org.unstoppable.projectstack.model;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.unstoppable.projectstack.entity.User;
 
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 /**
  * Used to validate new user information before registration.
@@ -54,6 +56,23 @@ public class UserRegistrationForm {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    /**
+     * Creates user based on information from registration form.
+     *
+     * @return User.
+     */
+    public User createUser() {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setRole("ROLE_USER");
+        user.setConfirmed(false);
+        user.setLocked(false);
+        user.setRegistrationDate(LocalDate.now());
+        return user;
     }
 
     @Override
