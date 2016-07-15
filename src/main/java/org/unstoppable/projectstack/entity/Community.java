@@ -24,7 +24,6 @@ public class Community {
     private String description;
 
     @Column(name = "creation_date", nullable = false)
-    @NotEmpty
     private LocalDate creationDate;
 
     @ManyToOne
@@ -32,7 +31,6 @@ public class Community {
     private User founder;
 
     @Column(name = "is_visible", nullable = false)
-    @NotEmpty
     private Boolean isVisible;
 
     public BigInteger getId() {
