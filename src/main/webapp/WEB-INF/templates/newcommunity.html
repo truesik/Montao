@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: head('New Community')"></head>
+<body>
+<div th:replace="fragments/navbar :: ${#authorization.expression('isAuthenticated()')}? 'signed-navbar' : 'notsigned-navbar'"></div>
+
+<div class="container" th:fragment="signup">
+    <div class="panel panel-default">
+        <div class="panel-heading" th:text="#{body.newcommunity}">Create new community</div>
+        <div class="panel-body">
+            <!--/*@thymesVar id="newCommunity" type="org.unstoppable.projectstack.model.CommunityCreationForm"*/-->
+            <form th:action="@{/communities/new}" th:object="${communityForm}" method="post" id="new-community">
+                <div class="form-group">
+                    <label for="title" th:text="#{community.title}">Title</label>
+                    <input type="text" class="form-control" id="title" name="username" placeholder="Title"
+                           th:field="*{title}" th:placeholder="#{community.title}">
+                </div>
+                <div class="form-group">
+                    <label for="description" th:text="#{community.description}">Description</label>
+                    <input type="text" class="form-control" id="description" name="description" placeholder="Description"
+                           th:field="*{description}" th:placeholder="#{community.description}">
+                </div>
+                <div class="form-group">
+                    <label for="founder" th:text="#{community.founder}">Founder</label>
+                    <input type="text" class="form-control" id="founder" name="founder" placeholder="Founder"
+                           th:placeholder="#{community.founder}" th:value="${{user}}">
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="visible" id="public" value="1" checked>
+                        Public
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="visible" id="private" value="0">
+                        Private
+                    </label>
+                </div>
+                <button type="submit" id="create" class="btn btn-primary btn-group-justified"
+                        th:text="#{community.create}">Create
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: bootstrap-scripts"></div>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+<script src="../js/communityform-validation.js" th:src="@{/js/communityform-validation.js}"></script>
+</body>
+</html>
