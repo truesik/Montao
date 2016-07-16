@@ -10,11 +10,6 @@ import org.unstoppable.projectstack.service.UserService;
 @Configuration
 public class ApplicationContext {
     @Bean
-    public GenericDAO genericDAO() {
-        return new GenericDAOImpl();
-    }
-
-    @Bean
     public UserService userService() {
         return new UserService();
     }
