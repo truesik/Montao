@@ -3,8 +3,11 @@ package org.unstoppable.projectstack.entity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Table that contains list of communities.
@@ -12,12 +15,15 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "communities")
 public class Community {
+    private static final int MIN_TITLE_LENGTH = 4;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private BigInteger id;
 
     @Column(name = "title", nullable = false, unique = true)
     @NotEmpty
+    @Size(min = MIN_TITLE_LENGTH)
     private String title;
 
     @Column(name = "description")
@@ -31,7 +37,11 @@ public class Community {
     private User founder;
 
     @Column(name = "is_visible", nullable = false)
+    @NotNull
     private Boolean isVisible;
+
+    @OneToMany
+    private List<Channel> channels;
 
     public BigInteger getId() {
         return id;
@@ -79,6 +89,14 @@ public class Community {
 
     public void setVisible(Boolean visible) {
         isVisible = visible;
+    }
+
+    public List<Channel> getChannels() {
+        return channels;
+    }
+
+    public void setChannels(List<Channel> channels) {
+        this.channels = channels;
     }
 
     @Override
