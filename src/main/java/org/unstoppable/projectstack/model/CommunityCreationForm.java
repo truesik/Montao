@@ -4,17 +4,25 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.User;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 /**
  * Used to validate new community information before creation.
  */
 public class CommunityCreationForm {
+    private static final int MIN_TITLE_LENGTH = 4;
+
     @NotEmpty
+    @Size(min = MIN_TITLE_LENGTH)
     private String title;
     private String description;
-    @NotEmpty
+
+    @NotNull
     private User founder;
+
+    @NotNull
     private Boolean isVisible;
 
     public String getTitle() {
@@ -62,28 +70,5 @@ public class CommunityCreationForm {
         community.setFounder(founder);
         community.setCreationDate(LocalDate.now());
         return community;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        CommunityCreationForm that = (CommunityCreationForm) o;
-
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (founder != null ? !founder.equals(that.founder) : that.founder != null) return false;
-        return isVisible != null ? isVisible.equals(that.isVisible) : that.isVisible == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = title != null ? title.hashCode() : 0;
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (founder != null ? founder.hashCode() : 0);
-        result = 31 * result + (isVisible != null ? isVisible.hashCode() : 0);
-        return result;
     }
 }
