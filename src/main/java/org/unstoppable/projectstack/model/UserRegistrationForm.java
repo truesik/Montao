@@ -17,12 +17,15 @@ public class UserRegistrationForm {
     @NotEmpty
     @Size(min = MIN_USERNAME_LENGTH)
     private String username;
+
     @Email
     @NotEmpty
     private String email;
+
     @NotEmpty
     @Size(min = MIN_PASSWORD_LENGTH)
     private String password;
+
     @NotEmpty
     private String confirmPassword;
 
@@ -73,28 +76,5 @@ public class UserRegistrationForm {
         user.setLocked(false);
         user.setRegistrationDate(LocalDate.now());
         return user;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        UserRegistrationForm that = (UserRegistrationForm) o;
-
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        return confirmPassword != null ? confirmPassword.equals(that.confirmPassword) : that.confirmPassword == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = username != null ? username.hashCode() : 0;
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (confirmPassword != null ? confirmPassword.hashCode() : 0);
-        return result;
     }
 }
