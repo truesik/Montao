@@ -2,7 +2,10 @@ package org.unstoppable.projectstack.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.unstoppable.projectstack.dao.CommunityDAO;
+import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.entity.Community;
+
+import java.util.List;
 
 public class CommunityService {
     @Autowired
@@ -17,4 +20,12 @@ public class CommunityService {
         return community == null;
     }
 
+    public List<Channel> getChannels(String communityTitle) {
+        Community community = communityDAO.getByTitle(communityTitle);
+        return community.getChannels();
+    }
+
+    public Community getByTitle(String communityTitle) {
+        return communityDAO.getByTitle(communityTitle);
+    }
 }
