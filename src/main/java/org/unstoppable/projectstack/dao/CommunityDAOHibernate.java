@@ -18,7 +18,7 @@ public class CommunityDAOHibernate implements CommunityDAO {
 
     @Override
     public List<Community> getAll() {
-        String hql = "FROM User";
+        String hql = "FROM Community";
         return sessionFactory.getCurrentSession().createQuery(hql, Community.class).list();
     }
 
@@ -48,5 +48,14 @@ public class CommunityDAOHibernate implements CommunityDAO {
     @Override
     public void update(Community community) {
         sessionFactory.getCurrentSession().update(community);
+    }
+
+    @Override
+    public List<Community> getLimitedPublicCollection(int startRowPosition, int maxResult) {
+        String hql = "FROM Community WHERE isVisible = TRUE";
+        Query<Community> query = sessionFactory.getCurrentSession().createQuery(hql, Community.class);
+        query.setFirstResult(startRowPosition);
+        query.setMaxResults(maxResult);
+        return query.getResultList();
     }
 }

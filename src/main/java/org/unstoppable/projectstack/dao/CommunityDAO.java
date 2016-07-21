@@ -17,4 +17,13 @@ public interface CommunityDAO {
     void add(Community community);
 
     void update(Community community);
+
+    /**
+     * Returns only public communities with ability to set limitations of result list.
+     *
+     * @param startRowPosition Start row position.
+     * @param maxResult Result list limitation.
+     * @return Community list.
+     */
+    List<Community> getLimitedPublicCollection(int startRowPosition, int maxResult);
 }
