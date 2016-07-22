@@ -4,6 +4,22 @@
 <head th:include="fragments/head :: head('Project Stack')"></head>
 <body>
 <div th:replace="fragments/navbar :: ${#authorization.expression('isAuthenticated()')}? 'signed-navbar' : 'notsigned-navbar'"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3" th:each="community : ${communities}">
+            <div class="panel panel-default">
+                <div class="panel-body" th:text="${community.description}">
+                    Panel content
+                </div>
+                <div class="panel-footer">
+                    <a href="#" th:href="'/' + ${community.title}" th:text="${community.title}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div th:replace="fragments/footer :: bootstrap-scripts"></div>
 </body>
 </html>
