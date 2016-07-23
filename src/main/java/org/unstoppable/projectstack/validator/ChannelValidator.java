@@ -28,7 +28,7 @@ public class ChannelValidator implements Validator {
 
     private void titleValidation(Errors errors, ChannelCreationForm channelForm) {
         // Only latin chars, numbers and "_"
-        if (channelForm.getTitle().matches("\\w+")) {
+        if (!channelForm.getTitle().matches("\\w+")) {
             errors.rejectValue("title", "channel.error.title.chars");
         }
         // Check title existence
