@@ -34,6 +34,11 @@ public class CommunityValidator implements Validator {
      * @param communityForm New community.
      */
     private void titleValidation(Errors errors, CommunityCreationForm communityForm) {
+        // Only latin chars, numbers and "_"
+        if (!communityForm.getTitle().matches("\\w+")) {
+            errors.rejectValue("title", "community.error.title.chars");
+        }
+        // Check title existence
         if (!communityService.checkTitle(communityForm.getTitle())) {
             errors.reject("title", "community.error.title_exist");
         }
