@@ -17,4 +17,6 @@ public interface ChannelDAO {
     void add(Channel channel);
 
     void update(Channel channel);
+
+    List<Channel> getByCommunityTitle(String title);
 }

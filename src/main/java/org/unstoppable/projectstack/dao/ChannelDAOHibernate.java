@@ -50,4 +50,12 @@ public class ChannelDAOHibernate implements ChannelDAO {
     public void update(Channel channel) {
         sessionFactory.getCurrentSession().update(channel);
     }
+
+    @Override
+    public List<Channel> getByCommunityTitle(String title) {
+        String hql = "FROM Channel WHERE community.title = :title ";
+        Query<Channel> query = sessionFactory.getCurrentSession().createQuery(hql, Channel.class);
+        query.setParameter("title", title);
+        return query.getResultList();
+    }
 }
