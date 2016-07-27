@@ -79,6 +79,30 @@
             <version>2.8.1</version>
         </dependency>
 
+        <!--Web Socket-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.projectreactor/reactor-tcp -->
+        <dependency>
+            <groupId>org.projectreactor</groupId>
+            <artifactId>reactor-tcp</artifactId>
+            <version>1.0.1.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.amqp/spring-rabbit -->
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <version>1.6.1.RELEASE</version>
+        </dependency>
+
         <!--Tests-->
         <dependency>
             <groupId>junit</groupId>
