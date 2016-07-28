@@ -1,8 +1,26 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/head :: head('Project Stack')"></head>
 <body>
 <div th:replace="fragments/navbar :: ${#authorization.expression('isAuthenticated()')}? 'signed-navbar' : 'notsigned-navbar'"></div>
-<div th:replace="fragmants/footer :: bootstrap-scripts"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3" th:each="community : ${communities}">
+            <div class="panel panel-default">
+                <div class="panel-body" th:text="'&#8220' + ${community.description} + '&#8221'">
+                    Panel content
+                </div>
+                <div class="panel-footer">
+                    <i class="material-icons">group</i>
+                    <a href="#" th:href="'/' + ${community.title}" th:text="${community.title}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: bootstrap-scripts"></div>
 </body>
 </html>

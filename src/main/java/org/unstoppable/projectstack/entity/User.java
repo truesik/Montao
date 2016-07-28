@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -37,15 +38,19 @@ public class User {
     private String email;
 
     @Column(name = "role", nullable = false)
+    @NotEmpty
     private String role;
 
     @Column(name = "is_confirmed", nullable = false)
+    @NotNull
     private Boolean isConfirmed;
 
     @Column(name = "is_locked", nullable = false)
+    @NotNull
     private Boolean isLocked;
 
     @Column(name = "registration_date", nullable = false)
+    @NotNull
     private LocalDate registrationDate;
 
     public BigInteger getId() {

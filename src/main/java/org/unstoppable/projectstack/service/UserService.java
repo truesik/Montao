@@ -18,28 +18,10 @@ public class UserService {
     /**
      * Used to add new user to db.
      *
-     * @param registrationForm New user.
+     * @param user New user.
      */
-    public void registerNewUser(UserRegistrationForm registrationForm) {
-        userDAO.add(createNewUser(registrationForm));
-    }
-
-    /**
-     * Creates new user based on register form.
-     *
-     * @param registrationForm New user register form.
-     * @return User.
-     */
-    private User createNewUser(UserRegistrationForm registrationForm) {
-        User user = new User();
-        user.setUsername(registrationForm.getUsername());
-        user.setEmail(registrationForm.getEmail());
-        user.setPassword(registrationForm.getPassword());
-        user.setRole("ROLE_USER");
-        user.setConfirmed(false);
-        user.setLocked(false);
-        user.setRegistrationDate(LocalDate.now());
-        return user;
+    public void registerNewUser(User user) {
+        userDAO.add(user);
     }
 
     /**

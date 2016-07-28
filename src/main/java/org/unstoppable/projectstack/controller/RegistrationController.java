@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.model.UserRegistrationForm;
 import org.unstoppable.projectstack.service.UserService;
 import org.unstoppable.projectstack.validator.UserValidator;
@@ -49,7 +50,8 @@ public class RegistrationController {
         if (result.hasErrors()) {
             return "registration";
         } else {
-            userService.registerNewUser(userForm);
+            User user = userForm.createUser();
+            userService.registerNewUser(user);
             return "redirect:/success";
         }
     }

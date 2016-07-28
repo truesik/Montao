@@ -1,5 +1,6 @@
 package org.unstoppable.projectstack.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class Channel {
     @Column(name = "description")
     private String description;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "community_id")
     private Community community;

@@ -1,10 +1,12 @@
 package org.unstoppable.projectstack.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,6 +21,7 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.unstoppable.projectstack.formatter.UserFormatter;
 
 import java.util.Locale;
 
@@ -30,6 +33,14 @@ import java.util.Locale;
 @ComponentScan(basePackages = {"org.unstoppable.projectstack.controller"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     private static final String STANDARD_CHARSET = "UTF-8";
+
+    @Autowired
+    private UserFormatter userFormatter;
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(userFormatter);
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
