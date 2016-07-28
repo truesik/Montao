@@ -3,14 +3,15 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/head :: head('Project Stack')"></head>
 <body>
-<!-- Channel Creation Modal Dialog -->
+<link href="../css/community.css" rel="stylesheet" th:href="@{/css/community.css}">
+<!--Channel Creation Modal Dialog-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="myModalLabel" th:text="#{channel.new}">New channel</h4>
             </div>
             <div class="modal-body">
                 <form th:action="@{__${#httpServletRequest.requestURI}__/channels/new}" method="post" id="new-channel">
@@ -29,68 +30,132 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="create">Save changes</button>
+                <button type="submit" class="btn btn-primary" id="create" th:text="#{channel.create}">Create</button>
             </div>
         </div>
     </div>
 </div>
-
+<!--NAVIGATION BAR-->
 <div th:replace="fragments/navbar :: ${#authorization.expression('isAuthenticated()')}? 'signed-navbar' : 'notsigned-navbar'"></div>
 
 <div class="container-fluid">
     <div class="row">
         <!--SIDEBAR-->
-        <div class="col-md-3 sidebar">
+        <div class="col-md-2 sidebar">
             <span>Channels </span><a class="glyphicon glyphicon-plus" data-toggle="modal" href="#myModal"
                                      th:if="${#authorization.expression('isAuthenticated()')}"></a>
-            <ul class="nav nav-sidebar">
+            <ul class="nav nav-sidebar" id="channelList">
                 <li th:each="channel : ${channelList}">
                     <a href="#" th:text="${channel.title}">Channel</a>
                 </li>
             </ul>
         </div>
         <!--CHAT-->
+        <div class="col-md-10">
+
+        </div>
     </div>
 </div>
 
 <div th:replace="fragments/footer :: bootstrap-scripts"></div>
-
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
+        var currentCommunity = $(location).attr('pathname');
+
         $('#create').click(function () {
             $('#new-channel').submit()
         });
-        $('#new-channel').submit(function () {
-            var channelForm = {
-                title: $('#title').val(),
-                description: $('#description').val()
-            };
-            var currentCommunity = $(location).attr('pathname');
-            var csrfToken = /*[[${_csrf.token}]]*/ '';
-            var csrfHeader = 'X-CSRF-TOKEN';
-            var headers = {};
-            headers[csrfHeader] = csrfToken;
-            $.ajax({
-                url: currentCommunity + '/channels/new',
-                type: "POST",
-                dataType: 'json',
-                data: JSON.stringify(channelForm),
-                contentType: "application/json",
-                headers: headers,
-                success: callback()
-            });
-            function callback(response) {
-                console.log(response);
-                if (response === 'success') {
-                    console.log('yes')
-                } else {
-                    console.log('no')
-                }
-            }
 
+        $('#new-channel').validate({
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 4,
+                    remote: {
+                        url: currentCommunity + "/channels/check_title",
+                        type: "post",
+                        data: {  // MUST send the CSRF Token Value
+                            '_csrf': function () {
+                                return $('input[name="_csrf"]').val();
+                            }
+                        }
+                    }
+                }
+            },
+            messages: {
+                title: {
+                    remote: "This title already exists."
+                }
+            },
+            submitHandler: function () {
+                var channelForm = {
+                    title: $('#title').val(),
+                    description: $('#description').val()
+                };
+                var csrfToken = /*[[${_csrf.token}]]*/ '';
+                var csrfHeader = 'X-CSRF-TOKEN';
+                var headers = {};
+                headers[csrfHeader] = csrfToken;
+                $.ajax({
+                    url: currentCommunity + '/channels/new',
+                    type: "post",
+                    contentType: "application/json",
+                    cache: false,
+                    data: JSON.stringify(channelForm),
+                    headers: headers,
+                    success: callback
+                });
+                return false;
+            }
+        });
+
+        function callback(response) {
+            console.log(response);
+            if (response === 'success') {
+                $('#myModal').modal("hide")
+            }
+        }
+
+        $("#title").on("keypress", function (event) {
+            // Disallow anything not matching the regex pattern (A to Z uppercase, a to z lowercase, digits 0 to 9 and underscore ("_"))
+            var englishAlphabetDigitsAndUnderscore = /\w+/g;
+            // Retrieving the key from the char code passed in event.which
+            var key = String.fromCharCode(event.which);
+            if (englishAlphabetDigitsAndUnderscore.test(key)) {
+                return true;
+            }
+            // If we got this far, just return false because a disallowed key was typed.
             return false;
-        })
+        }).on("paste", function (event) {
+            event.preventDefault();
+        });
+    });
+    /*]]>*/
+</script>
+
+<script src="//cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        var path = /*[[@{/projectstack}]]*/ "";
+        var sock = new SockJS(path);
+        var stomp = Stomp.over(sock);
+
+        stomp.connect('guest', 'guest', function (frame) {
+            stomp.subscribe('/topic/newchannel', handleNewChannel)
+        });
+
+        function handleNewChannel(incoming) {
+            var channel = JSON.parse(incoming.body);
+            $('#channelList').append(
+                    $('<li>').append(
+                            $('<a>').attr('href', '#').text(channel.title)
+                    )
+            )
+        }
     });
     /*]]>*/
 </script>
