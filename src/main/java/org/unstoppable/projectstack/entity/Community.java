@@ -1,5 +1,6 @@
 package org.unstoppable.projectstack.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -40,7 +41,8 @@ public class Community {
     @NotNull
     private Boolean isVisible;
 
-    @OneToMany
+    @JsonBackReference
+    @OneToMany(mappedBy = "community", fetch = FetchType.EAGER)
     private List<Channel> channels;
 
     public BigInteger getId() {
