@@ -143,9 +143,10 @@
         var path = /*[[@{/projectstack}]]*/ "";
         var sock = new SockJS(path);
         var stomp = Stomp.over(sock);
+        var currentCommunity = $(location).attr('pathname');
 
         stomp.connect('guest', 'guest', function (frame) {
-            stomp.subscribe('/topic/newchannel', handleNewChannel)
+            stomp.subscribe('/topic/' + currentCommunity + '/newchannel', handleNewChannel)
         });
 
         function handleNewChannel(incoming) {
