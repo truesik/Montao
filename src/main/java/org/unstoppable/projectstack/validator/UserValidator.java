@@ -10,7 +10,7 @@ import org.unstoppable.projectstack.service.UserService;
 public class UserValidator implements Validator {
     private UserService userService;
 
-    public UserValidator(UserService userService, CommunityService communityService) {
+    public UserValidator(UserService userService) {
         if (userService == null) {
             throw new IllegalArgumentException("The supplied [Service] is required and must not be null.");
         }
