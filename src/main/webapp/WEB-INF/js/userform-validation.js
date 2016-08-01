@@ -54,7 +54,7 @@ $(document).ready(function () {
         },
         messages: {
             username: {
-                remote: "This username already exists."
+                remote: "This name already exists."
             },
             email: {
                 remote: "This email already exists."
