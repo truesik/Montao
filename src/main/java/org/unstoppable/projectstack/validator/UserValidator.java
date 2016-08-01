@@ -4,16 +4,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.model.UserRegistrationForm;
+import org.unstoppable.projectstack.service.CommunityService;
 import org.unstoppable.projectstack.service.UserService;
 
 public class UserValidator implements Validator {
     private UserService userService;
+    private CommunityService communityService;
 
-    public UserValidator(UserService userService) {
-        if (userService == null) {
+    public UserValidator(UserService userService, CommunityService communityService) {
+        if (userService == null || communityService == null) {
             throw new IllegalArgumentException("The supplied [Service] is required and must not be null.");
         }
         this.userService = userService;
+        this.communityService = communityService;
     }
 
     @Override
@@ -67,6 +70,10 @@ public class UserValidator implements Validator {
         }
         // Check username existence
         if (!userService.checkUsername(registrationForm.getUsername())) {
+            errors.rejectValue("username", "user.error.username.already_registered");
+        }
+        // Check community title existence with same name
+        if (!communityService.checkTitle(registrationForm.getUsername())) {
             errors.rejectValue("username", "user.error.username.already_registered");
         }
     }
