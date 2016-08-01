@@ -4,6 +4,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.model.UserRegistrationForm;
+import org.unstoppable.projectstack.service.CommunityService;
 import org.unstoppable.projectstack.service.UserService;
 
 public class UserValidator implements Validator {

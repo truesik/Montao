@@ -2,18 +2,20 @@ package org.unstoppable.projectstack.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.unstoppable.projectstack.dao.CommunityDAO;
 import org.unstoppable.projectstack.dao.UserDAO;
+import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.User;
-import org.unstoppable.projectstack.model.UserRegistrationForm;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class UserService {
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private CommunityDAO communityDAO;
 
     /**
      * Used to add new user to db.
@@ -69,8 +71,11 @@ public class UserService {
      * @return True or false.
      */
     public Boolean checkUsername(String username) {
+        // check same username existence
         User user = userDAO.getByUsername(username);
-        return user == null;
+        // check same community title existence
+        Community community = communityDAO.getByTitle(username);
+        return user == null && community == null;
     }
 
     /**
