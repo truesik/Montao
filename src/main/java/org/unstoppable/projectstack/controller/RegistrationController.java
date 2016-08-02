@@ -52,6 +52,7 @@ public class RegistrationController {
         } else {
             User user = userForm.createUser();
             userService.registerNewUser(user);
+//            userService.sendConfirmRegistrationMessage(user);
             return "redirect:/success";
         }
     }
@@ -78,5 +79,23 @@ public class RegistrationController {
     @ResponseBody
     public String checkEmail(String email) {
         return userService.checkEmail(email).toString();
+    }
+
+    @RequestMapping(value = "/confirm", method = RequestMethod.GET)
+    public String confirmRegistration(@RequestParam String token) {
+        User user = userService.getByToken(token);
+        if (user != null) {
+            if (!user.isConfirmed()) {
+                user.setConfirmed(true);
+                userService.update(user);
+                return "redirect:/success";
+            } else {
+                // TODO: 02.08.2016 Already confirmed
+                return "redirect:/success";
+            }
+        } else {
+            // TODO: 02.08.2016 no such token
+            return "redirect:/badUser";
+        }
     }
 }
