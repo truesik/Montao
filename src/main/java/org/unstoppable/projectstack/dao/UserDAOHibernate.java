@@ -60,4 +60,12 @@ public class UserDAOHibernate implements UserDAO {
     public void update(User user) {
         sessionFactory.getCurrentSession().update(user);
     }
+
+    @Override
+    public User getByUUID(String token) {
+        String hql = "FROM User WHERE uuid = :uuid";
+        Query<User> query = sessionFactory.getCurrentSession().createQuery(hql, User.class);
+        query.setParameter("uuid", token);
+        return query.uniqueResult();
+    }
 }
