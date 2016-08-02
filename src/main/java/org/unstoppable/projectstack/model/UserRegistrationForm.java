@@ -6,6 +6,7 @@ import org.unstoppable.projectstack.entity.User;
 
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * Used to validate new user information before registration.
@@ -68,6 +69,7 @@ public class UserRegistrationForm {
      */
     public User createUser() {
         User user = new User();
+        user.setUuid(UUID.randomUUID());
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
