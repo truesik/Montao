@@ -69,7 +69,7 @@ public class UserRegistrationForm {
      */
     public User createUser() {
         User user = new User();
-        user.setUuid(UUID.randomUUID());
+        user.setUuid(UUID.randomUUID().toString());
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
