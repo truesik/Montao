@@ -157,6 +157,13 @@
             <version>3.0.0.RELEASE</version>
         </dependency>
 
+        <!--Mail-->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.5</version>
+        </dependency>
+
 
         <dependency>
             <groupId>javax.servlet</groupId>
