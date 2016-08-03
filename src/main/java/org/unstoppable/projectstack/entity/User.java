@@ -24,7 +24,7 @@ public class User {
     private BigInteger id;
 
     @NotNull
-    private UUID uuid;
+    private String uuid;
 
     @Column(name = "username", nullable = false, unique = true)
     @NotEmpty
@@ -121,11 +121,11 @@ public class User {
         this.registrationDate = registrationDate;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
