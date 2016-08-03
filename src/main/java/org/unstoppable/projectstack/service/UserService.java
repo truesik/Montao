@@ -1,15 +1,16 @@
 package org.unstoppable.projectstack.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.unstoppable.projectstack.dao.CommunityDAO;
 import org.unstoppable.projectstack.dao.UserDAO;
 import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.User;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class UserService {
     private UserDAO userDAO;
     @Autowired
     private CommunityDAO communityDAO;
+    @Autowired
+    private JavaMailSender mailSender;
 
     /**
      * Used to add new user to db.
@@ -101,14 +104,19 @@ public class UserService {
     }
 
     public void sendConfirmRegistrationMessage(User user) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(user.getEmail());
-        simpleMailMessage.setSubject("Registration Confirmation");
-        simpleMailMessage.setText("" +
-                "<p>Thanks for signing up!<p>" +
-                "<p>Please click the link below to activate your account:<p>" +
-                "<a href=\"http://localhost:8080/registration/confirm?token=" + user.getUuid() + "\">Verify You Account<a>");
-        JavaMailSender mailSender = new JavaMailSenderImpl();
-        mailSender.send(simpleMailMessage);
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
+            messageHelper.setFrom("noreply@mail.com");
+            messageHelper.setTo(user.getEmail());
+            messageHelper.setSubject("Registration Confirmation");
+            messageHelper.setText("" +
+                    "<p>Thanks for signing up!<p>" +
+                    "<p>Please click the link below to activate your account:<p>" +
+                    "<a href=\"http://localhost:8080/registration/confirm?token=" + user.getUuid() + "\">Verify You Account<a>");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        mailSender.send(message);
     }
 }
