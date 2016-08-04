@@ -52,6 +52,7 @@ public class RegistrationController {
         } else {
             User user = userForm.createUser();
             userService.registerNewUser(user);
+//            userService.sendConfirmRegistrationMessage(user);
             return "redirect:/success";
         }
     }
@@ -78,5 +79,31 @@ public class RegistrationController {
     @ResponseBody
     public String checkEmail(String email) {
         return userService.checkEmail(email).toString();
+    }
+
+    /**
+     * Used to account confirmation after registration.
+     *
+     * @param token Unique user id.
+     * @param model Page renderer.
+     * @return Page.
+     */
+    @RequestMapping(value = "/confirm", method = RequestMethod.GET)
+    public String confirmRegistration(@RequestParam String token, Model model) {
+        User user = userService.getByToken(token);
+        if (user != null) {
+            if (!user.isConfirmed()) {
+                user.setConfirmed(true);
+                userService.update(user);
+                model.addAttribute("message", "Your account has been successfully verified");
+                return "message";
+            } else {
+                model.addAttribute("message", "User already confirmed");
+                return "message";
+            }
+        } else {
+            model.addAttribute("message", "No such token exist");
+            return "message";
+        }
     }
 }

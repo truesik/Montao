@@ -2,11 +2,15 @@ package org.unstoppable.projectstack.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.unstoppable.projectstack.dao.*;
 import org.unstoppable.projectstack.formatter.UserFormatter;
 import org.unstoppable.projectstack.service.ChannelService;
 import org.unstoppable.projectstack.service.CommunityService;
 import org.unstoppable.projectstack.service.UserService;
+
+import java.util.Properties;
 
 @Configuration
 public class ApplicationContext {
@@ -43,5 +47,22 @@ public class ApplicationContext {
     @Bean
     public UserFormatter userFormatter() {
         return new UserFormatter();
+    }
+
+    @Bean
+    public JavaMailSender mailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+        mailSender.setUsername("StackTechSup@gmail.com");
+        mailSender.setPassword("cn'dct3ghbj,]");
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", true);
+        properties.put("mail.smtp.starttls.enable", true);
+        properties.put("mail.smtp.debug", true);
+
+        mailSender.setJavaMailProperties(properties);
+        return mailSender;
     }
 }

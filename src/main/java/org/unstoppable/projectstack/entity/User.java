@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * Table that contains users.
@@ -21,6 +22,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private BigInteger id;
+
+    @NotNull
+    private String uuid;
 
     @Column(name = "username", nullable = false, unique = true)
     @NotEmpty
@@ -117,6 +121,14 @@ public class User {
         this.registrationDate = registrationDate;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -125,6 +137,7 @@ public class User {
         User user = (User) o;
 
         if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (uuid != null ? !uuid.equals(user.uuid) : user.uuid != null) return false;
         if (username != null ? !username.equals(user.username) : user.username != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
@@ -138,6 +151,7 @@ public class User {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);

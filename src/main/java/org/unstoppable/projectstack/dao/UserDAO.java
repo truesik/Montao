@@ -60,4 +60,12 @@ public interface UserDAO {
      * @param user User.
      */
     void update(User user);
+
+    /**
+     * Returns user by uuid.
+     *
+     * @param token uuid.
+     * @return User.
+     */
+    User getByUUID(String token);
 }
