@@ -11,6 +11,7 @@ import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.model.ChannelCreationForm;
 import org.unstoppable.projectstack.service.ChannelService;
 import org.unstoppable.projectstack.service.CommunityService;
+import org.unstoppable.projectstack.service.MessageService;
 import org.unstoppable.projectstack.validator.ChannelValidator;
 
 import javax.validation.Valid;
@@ -19,12 +20,17 @@ import javax.validation.Valid;
 public class ChannelController {
     private final CommunityService communityService;
     private final ChannelService channelService;
+    private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public ChannelController(CommunityService communityService, ChannelService channelService, SimpMessagingTemplate messagingTemplate) {
+    public ChannelController(CommunityService communityService,
+                             ChannelService channelService,
+                             MessageService messageService,
+                             SimpMessagingTemplate messagingTemplate) {
         this.communityService = communityService;
         this.channelService = channelService;
+        this.messageService = messageService;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -69,5 +75,12 @@ public class ChannelController {
     @ResponseBody
     public String checkTitle(@PathVariable("communityTitle") String communityTitle, String title) {
         return channelService.checkTitle(title, communityTitle).toString();
+    }
+
+    @RequestMapping(value = "{communityTitle}/channels/{channel}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String channel(@PathVariable("communityTitle") String communityTitle,
+                          @PathVariable("channel") String channel) {
+
     }
 }
