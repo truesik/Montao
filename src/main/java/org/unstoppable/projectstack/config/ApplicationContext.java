@@ -8,6 +8,7 @@ import org.unstoppable.projectstack.dao.*;
 import org.unstoppable.projectstack.formatter.UserFormatter;
 import org.unstoppable.projectstack.service.ChannelService;
 import org.unstoppable.projectstack.service.CommunityService;
+import org.unstoppable.projectstack.service.MessageService;
 import org.unstoppable.projectstack.service.UserService;
 
 import java.util.Properties;
@@ -30,6 +31,11 @@ public class ApplicationContext {
     }
 
     @Bean
+    public MessageService messageService() {
+        return new MessageService();
+    }
+
+    @Bean
     public UserDAO userDAO() {
         return new UserDAOHibernate();
     }
@@ -42,6 +48,11 @@ public class ApplicationContext {
     @Bean
     public ChannelDAO channelDAO() {
         return new ChannelDAOHibernate();
+    }
+
+    @Bean
+    public MessageDAO messageDAO() {
+        return new MessageDAOHibernate();
     }
 
     @Bean
