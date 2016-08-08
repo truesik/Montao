@@ -53,10 +53,9 @@
         <!--CHAT-->
         <div class="col-md-offset-2 col-md-10">
             <div id="messages">
-                <div></div>
             </div>
-            <div id="messages-input">
-                <form>
+            <div>
+                <form th:action="@{/messages/newmessage}" method="post" id="messages-input">
                     <input type="text" class="form-control" id="message">
                 </form>
             </div>
@@ -150,7 +149,8 @@
         var path = /*[[@{/projectstack}]]*/ "";
         var sock = new SockJS(path);
         var stomp = Stomp.over(sock);
-        var currentCommunity = $(location).attr('pathname');
+        var pathArray = $(location).attr('pathname').split('/');
+        var currentCommunity = pathArray[0];
 
         stomp.connect('guest', 'guest', function (frame) {
             stomp.subscribe('/topic/' + currentCommunity + '/newchannel', handleNewChannel)
@@ -162,6 +162,41 @@
                     $('<li>').append(
                             $('<a>').attr('href', '#').text(channel.title)
                     )
+            )
+        }
+    });
+    /*]]>*/
+</script>
+<script th:inline="javasript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        $('#message').keypress(function (event) {
+            if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
+                $('#messages-input').submit();
+            }
+        })
+    });
+    /*]]>*/
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        var path = /*[[@{/projectstack}]]*/ "";
+        var sock = new SockJS(path);
+        var stomp = Stomp.over(sock);
+        var pathArray = $(location).attr('pathname').split('/');
+        var currentCommunity = pathArray[0];
+        var currentChannel = pathArray[2];
+
+        stomp.connect('guest', 'guest', function (frame) {
+            stomp.subscribe('/topic/' + currentCommunity + '/' + currentChannel, handleChannel)
+        });
+
+        function handleChannel(incoming) {
+            var message = JSON.parse(incoming.body);
+            $('#messages').append(
+                    $('<p>').text(message.user + ' ' + message.receivedTime),
+                    $('<p>').text(message.message)
             )
         }
     });
