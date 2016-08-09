@@ -1,5 +1,6 @@
 package org.unstoppable.projectstack.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -34,6 +35,7 @@ public class User {
     @Column(name = "password", nullable = false)
     @NotEmpty
     @Size(min = MIN_PASSWORD_LENGTH)
+    @JsonIgnore
     private String password;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -43,18 +45,22 @@ public class User {
 
     @Column(name = "role", nullable = false)
     @NotEmpty
+    @JsonIgnore
     private String role;
 
     @Column(name = "is_confirmed", nullable = false)
     @NotNull
+    @JsonIgnore
     private Boolean isConfirmed;
 
     @Column(name = "is_locked", nullable = false)
     @NotNull
+    @JsonIgnore
     private Boolean isLocked;
 
     @Column(name = "registration_date", nullable = false)
     @NotNull
+    @JsonIgnore
     private LocalDate registrationDate;
 
     public BigInteger getId() {
