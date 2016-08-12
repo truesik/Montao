@@ -51,13 +51,18 @@
             </ul>
         </div>
         <!--CHAT-->
-        <div class="col-md-offset-2 col-md-10">
-            <div id="messages">
+        <div class="col-md-offset-2 col-md-10 content-area" id="chat">
+            <div class="chat" id="messages">
+                <div th:each="message : ${messages}" th:id="${message.id}">
+                    <strong th:text="${message.user.username}">username</strong>
+                    <small th:text="${message.receivedTime}">2016-04-05 21:05</small>
+                    <p th:text="${message.message}">Hello World!</p>
+                </div>
             </div>
-            <div>
-                <form th:action="@{/messages/newmessage}" method="post" id="messages-input">
-                    <input type="text" class="form-control" id="message">
-                </form>
+            <div class="message-input">
+                <!--<form th:action="@{__${#httpServletRequest.requestURI}__/messages/new}" method="post" id="messages-input">-->
+                    <input type="text" class="form-control" id="message" name="message" onsubmit="return false;">
+                <!--</form>-->
             </div>
         </div>
     </div>
@@ -68,7 +73,8 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
-        var currentCommunity = $(location).attr('pathname');
+        var pathArray = $(location).attr('pathname').split('/');
+        var currentCommunity = pathArray[1];
 
         $('#create').click(function () {
             $('#new-channel').submit()
@@ -80,7 +86,7 @@
                     required: true,
                     minlength: 4,
                     remote: {
-                        url: currentCommunity + "/channels/check_title",
+                        url: '/' + currentCommunity + "/channels/check_title",
                         type: "post",
                         data: {  // MUST send the CSRF Token Value
                             '_csrf': function () {
@@ -105,7 +111,7 @@
                 var headers = {};
                 headers[csrfHeader] = csrfToken;
                 $.ajax({
-                    url: currentCommunity + '/channels/new',
+                    url: '/' + currentCommunity + '/channels/new',
                     type: "post",
                     contentType: "application/json",
                     cache: false,
@@ -150,7 +156,7 @@
         var sock = new SockJS(path);
         var stomp = Stomp.over(sock);
         var pathArray = $(location).attr('pathname').split('/');
-        var currentCommunity = pathArray[0];
+        var currentCommunity = pathArray[1];
 
         stomp.connect('guest', 'guest', function (frame) {
             stomp.subscribe('/topic/' + currentCommunity + '/newchannel', handleNewChannel)
@@ -167,12 +173,32 @@
     });
     /*]]>*/
 </script>
-<script th:inline="javasript">
+<script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
         $('#message').keypress(function (event) {
             if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
-                $('#messages-input').submit();
+                var messageForm = {
+                    message: $('#message').val()
+                };
+                var csrfToken = /*[[${_csrf.token}]]*/ '';
+                var csrfHeader = 'X-CSRF-TOKEN';
+                var headers = {};
+                headers[csrfHeader] = csrfToken;
+                $.ajax({
+                    url: $(location).attr('pathname') + '/messages/new',
+                    type: "post",
+                    contentType: "application/json",
+                    cache: false,
+                    data: JSON.stringify(messageForm),
+                    headers: headers,
+                    success: function (result) {
+                        if (result == 'success') {
+                            $('#message').val('')
+                        }
+                    }
+                });
+                return false;
             }
         })
     });
@@ -185,8 +211,8 @@
         var sock = new SockJS(path);
         var stomp = Stomp.over(sock);
         var pathArray = $(location).attr('pathname').split('/');
-        var currentCommunity = pathArray[0];
-        var currentChannel = pathArray[2];
+        var currentCommunity = pathArray[1];
+        var currentChannel = pathArray[3];
 
         stomp.connect('guest', 'guest', function (frame) {
             stomp.subscribe('/topic/' + currentCommunity + '/' + currentChannel, handleChannel)
@@ -195,8 +221,11 @@
         function handleChannel(incoming) {
             var message = JSON.parse(incoming.body);
             $('#messages').append(
-                    $('<p>').text(message.user + ' ' + message.receivedTime),
-                    $('<p>').text(message.message)
+                    $('<div>').attr('id', message.id).append(
+                            $('<strong>').text(message.user.username),
+                            $('<small>').text(message.receivedTime),
+                            $('<p>').text(message.message)
+                    )
             )
         }
     });
