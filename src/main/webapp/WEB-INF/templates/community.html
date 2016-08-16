@@ -70,6 +70,8 @@
 
 <div th:replace="fragments/footer :: bootstrap-scripts"></div>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+<script src="//cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
@@ -146,9 +148,6 @@
     });
     /*]]>*/
 </script>
-
-<script src="//cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
