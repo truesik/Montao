@@ -152,7 +152,7 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
-        var path = /*[[@{/projectstack}]]*/ "";
+        var path = /*[[@{/websocket}]]*/ "";
         var sock = new SockJS(path);
         var stomp = Stomp.over(sock);
         var pathArray = $(location).attr('pathname').split('/');
@@ -207,7 +207,7 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
-        var path = /*[[@{/projectstack}]]*/ "";
+        var path = /*[[@{/websocket}]]*/ "";
         var sock = new SockJS(path);
         var stomp = Stomp.over(sock);
         var pathArray = $(location).attr('pathname').split('/');
