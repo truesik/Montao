@@ -41,6 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .anyRequest().permitAll()
                 .and().formLogin().loginPage("/login").failureUrl("/login=error").successHandler(new SuccessUrlHandler()).permitAll()
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").permitAll();
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").permitAll()
+                .and().csrf().ignoringAntMatchers("/websocket/**");
+//                .and().headers().frameOptions().sameOrigin();
     }
 }
