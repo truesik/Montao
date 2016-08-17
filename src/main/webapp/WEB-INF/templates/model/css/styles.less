@@ -31,18 +31,24 @@ header{
             position: relative;
         }
         div.button-contain{
-            background-color: #92d36e;
+            @button-color:#92d36e;
+            background-color: @button-color;
             border-radius: 100px;
             width: 70px;
             text-align: center;
             cursor: pointer;
+            border-style: solid;
+            border-color: @button-color;
+            border-width: 2px;
             span{
                 color: white;
                 line-height: 25px;
             }
             &:hover{
-                border-width: 1px;
-                border-style: solid;
+                
+                border-color: black;    
+                //border-width: 1px;
+                //border-style: solid;
             }
             &:active{
                 background-color: #4caf50;

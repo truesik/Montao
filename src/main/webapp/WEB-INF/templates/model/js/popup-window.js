@@ -5,7 +5,7 @@ $(function(){
 	 // $('#cover').fadeIn('slow');
 	 $('#cover').slideDown('slow');
   });
-  $('#btnClose').click(function(){
+  $('#cover').click(function(){
 	 // $('#cover').css('display','none'); 
 	 // $('#cover').hide('slow');
 	 // $('#cover').fadeOut('slow');
