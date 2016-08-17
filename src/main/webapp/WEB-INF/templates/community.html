@@ -61,7 +61,8 @@
             </div>
             <div class="message-input">
                 <input type="text" autocomplete="false" class="form-control" id="message" name="message"
-                       onsubmit="return false;">
+                       onsubmit="return false;"
+                        th:disabled="${#authorization.expression('!isAuthenticated()')}">
             </div>
         </div>
     </div>
