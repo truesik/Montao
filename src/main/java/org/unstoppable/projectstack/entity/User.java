@@ -167,4 +167,19 @@ public class User {
         result = 31 * result + (registrationDate != null ? registrationDate.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", uuid='" + uuid + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", isConfirmed=" + isConfirmed +
+                ", isLocked=" + isLocked +
+                ", registrationDate=" + registrationDate +
+                '}';
+    }
 }
