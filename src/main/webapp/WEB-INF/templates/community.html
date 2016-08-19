@@ -51,18 +51,20 @@
             </ul>
         </div>
         <!--CHAT-->
-        <div class="col-md-offset-2 col-md-10 content-area" id="chat">
+        <div class="col-md-offset-2 col-md-10">
             <div class="chat" id="messages">
-                <div th:each="message : ${messages}" th:id="${message.id}">
-                    <strong th:text="${message.user.username}">username</strong>
-                    <small th:text="${message.receivedTime}">2016-04-05 21:05</small>
-                    <p th:text="${message.message}">Hello World!</p>
+                <div class="panel panel-default" th:each="message : ${messages}" th:id="${message.id}">
+                    <div class="panel-body">
+                        <strong th:text="${message.user.username}">username</strong>
+                        <small th:text="${{message.receivedTime}}">2016-04-05 21:05</small>
+                        <p th:text="${message.message}">Hello World!</p>
+                    </div>
                 </div>
             </div>
             <div class="message-input">
                 <input type="text" autocomplete="false" class="form-control" id="message" name="message"
                        onsubmit="return false;"
-                        th:disabled="${#authorization.expression('!isAuthenticated()')}">
+                       th:disabled="${#authorization.expression('!isAuthenticated()')}">
             </div>
         </div>
     </div>
@@ -72,6 +74,13 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 <script src="//cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        // Scroll to bottom after page load
+        var $messages = $('#messages');
+        $messages.scrollTop($messages.get(0).scrollHeight)
+    })
+</script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
@@ -177,27 +186,29 @@
     $(document).ready(function () {
         $('#message').keypress(function (event) {
             if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
-                var messageForm = {
-                    message: $('#message').val()
-                };
-                var csrfToken = /*[[${_csrf.token}]]*/ '';
-                var csrfHeader = 'X-CSRF-TOKEN';
-                var headers = {};
-                headers[csrfHeader] = csrfToken;
-                $.ajax({
-                    url: $(location).attr('pathname') + '/messages/new',
-                    type: "post",
-                    contentType: "application/json",
-                    cache: false,
-                    data: JSON.stringify(messageForm),
-                    headers: headers,
-                    success: function (result) {
-                        if (result == 'success') {
-                            $('#message').val('')
+                if ($.trim($(this).val()).length > 0) {
+                    var messageForm = {
+                        message: $(this).val()
+                    };
+                    var csrfToken = /*[[${_csrf.token}]]*/ '';
+                    var csrfHeader = 'X-CSRF-TOKEN';
+                    var headers = {};
+                    headers[csrfHeader] = csrfToken;
+                    $.ajax({
+                        url: $(location).attr('pathname') + '/messages/new',
+                        type: "post",
+                        contentType: "application/json",
+                        cache: false,
+                        data: JSON.stringify(messageForm),
+                        headers: headers,
+                        success: function (result) {
+                            if (result == 'success') {
+                                $('#message').val('')
+                            }
                         }
-                    }
-                });
-                return false;
+                    });
+                    return false;
+                }
             }
         })
     });
@@ -219,13 +230,20 @@
 
         function handleChannel(incoming) {
             var message = JSON.parse(incoming.body);
-            $('#messages').append(
-                    $('<div>').attr('id', message.id).append(
-                            $('<strong>').text(message.user.username),
-                            $('<small>').text(message.receivedTime),
-                            $('<p>').text(message.message)
-                    )
-            )
+            var $messages = $('#messages');
+            $messages.append(
+                    $('<div>').attr('id', message.id).attr('class', 'panel panel-danger').append(
+                            $('<div>').attr('class', 'panel-body').append(
+                                    $('<strong>').text(message.user.username),
+                                    $('<small>').text(message.receivedTime),
+                                    $('<p>').text(message.message)
+                            )
+                    ).fadeIn(600).delay(5000).queue(function () {
+                        $(this).attr('class', 'panel panel-default').clearQueue()
+                    })
+            ).animate({
+                scrollTop: $messages.get(0).scrollHeight
+            }, 400)
         }
     });
     /*]]>*/
