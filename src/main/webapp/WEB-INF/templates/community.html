@@ -267,7 +267,7 @@
                         if (!$.isEmptyObject(messages)) {
                             $.each(messages.reverse(), function (i, message) {
                                 $('#messages').prepend(
-                                        $('<div>').attr('id', message.id).attr('class', 'panel panel-danger').append(
+                                        $('<div>').attr('id', message.id).attr('class', 'panel panel-default').append(
                                                 $('<div>').attr('class', 'panel-body').append(
                                                         $('<strong>').text(message.user.username),
                                                         $('<small>').text(message.receivedTime),
