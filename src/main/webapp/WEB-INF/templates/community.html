@@ -128,18 +128,15 @@
                     cache: false,
                     data: JSON.stringify(channelForm),
                     headers: headers,
-                    success: callback
+                    success: function (response) {
+                        if (response === 'success') {
+                            $('#myModal').modal("hide")
+                        }
+                    }
                 });
                 return false;
             }
         });
-
-        function callback(response) {
-            console.log(response);
-            if (response === 'success') {
-                $('#myModal').modal("hide")
-            }
-        }
 
         $("#title").on("keypress", function (event) {
             // Disallow anything not matching the regex pattern (A to Z uppercase, a to z lowercase, digits 0 to 9 and underscore ("_"))
@@ -165,9 +162,11 @@
         var stomp = Stomp.over(sock);
         var pathArray = $(location).attr('pathname').split('/');
         var currentCommunity = pathArray[1];
+        var currentChannel = pathArray[3];
 
         stomp.connect('guest', 'guest', function (frame) {
-            stomp.subscribe('/topic/' + currentCommunity + '/newchannel', handleNewChannel)
+            stomp.subscribe('/topic/' + currentCommunity + '/newchannel', handleNewChannel);
+            stomp.subscribe('/topic/' + currentCommunity + '/' + currentChannel, handleChat)
         });
 
         function handleNewChannel(incoming) {
@@ -177,6 +176,24 @@
                             $('<a>').attr('href', '#').text(channel.title)
                     )
             )
+        }
+
+        function handleChat(incoming) {
+            var message = JSON.parse(incoming.body);
+            var $messages = $('#messages');
+            $messages.append(
+                    $('<div>').attr('id', message.id).attr('class', 'panel panel-danger').append(
+                            $('<div>').attr('class', 'panel-body').append(
+                                    $('<strong>').text(message.user.username),
+                                    $('<small>').text(message.receivedTime),
+                                    $('<p>').text(message.message)
+                            )
+                    ).fadeIn(600).delay(5000).queue(function () {
+                        $(this).attr('class', 'panel panel-default').clearQueue()
+                    })
+            ).animate({
+                scrollTop: $messages.get(0).scrollHeight
+            }, 400)
         }
     });
     /*]]>*/
@@ -211,40 +228,6 @@
                 }
             }
         })
-    });
-    /*]]>*/
-</script>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function () {
-        var path = /*[[@{/websocket}]]*/ "";
-        var sock = new SockJS(path);
-        var stomp = Stomp.over(sock);
-        var pathArray = $(location).attr('pathname').split('/');
-        var currentCommunity = pathArray[1];
-        var currentChannel = pathArray[3];
-
-        stomp.connect('guest', 'guest', function (frame) {
-            stomp.subscribe('/topic/' + currentCommunity + '/' + currentChannel, handleChannel)
-        });
-
-        function handleChannel(incoming) {
-            var message = JSON.parse(incoming.body);
-            var $messages = $('#messages');
-            $messages.append(
-                    $('<div>').attr('id', message.id).attr('class', 'panel panel-danger').append(
-                            $('<div>').attr('class', 'panel-body').append(
-                                    $('<strong>').text(message.user.username),
-                                    $('<small>').text(message.receivedTime),
-                                    $('<p>').text(message.message)
-                            )
-                    ).fadeIn(600).delay(5000).queue(function () {
-                        $(this).attr('class', 'panel panel-default').clearQueue()
-                    })
-            ).animate({
-                scrollTop: $messages.get(0).scrollHeight
-            }, 400)
-        }
     });
     /*]]>*/
 </script>
