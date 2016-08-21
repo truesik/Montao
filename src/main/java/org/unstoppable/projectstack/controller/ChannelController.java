@@ -4,33 +4,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.entity.Community;
+import org.unstoppable.projectstack.entity.Message;
+import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.model.ChannelCreationForm;
 import org.unstoppable.projectstack.service.ChannelService;
 import org.unstoppable.projectstack.service.CommunityService;
 import org.unstoppable.projectstack.service.MessageService;
+import org.unstoppable.projectstack.service.UserService;
 import org.unstoppable.projectstack.validator.ChannelValidator;
 
 import javax.validation.Valid;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 public class ChannelController {
+    private static final int QUANTITY = 20;
+
     private final CommunityService communityService;
     private final ChannelService channelService;
     private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
+    private final UserService userService;
 
     @Autowired
     public ChannelController(CommunityService communityService,
                              ChannelService channelService,
                              MessageService messageService,
+                             UserService userService,
                              SimpMessagingTemplate messagingTemplate) {
         this.communityService = communityService;
         this.channelService = channelService;
         this.messageService = messageService;
+        this.userService = userService;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -77,10 +89,58 @@ public class ChannelController {
         return channelService.checkTitle(title, communityTitle).toString();
     }
 
-    @RequestMapping(value = "{communityTitle}/channels/{channel}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    @RequestMapping(value = "{communityTitle}/channels/{channelTitle}", method = RequestMethod.GET)
     public String channel(@PathVariable("communityTitle") String communityTitle,
-                          @PathVariable("channel") String channel) {
+                          @PathVariable("channelTitle") String channelTitle,
+                          Model model) {
+        Community community = communityService.getByTitle(communityTitle);
+        Channel currentChannel = community.getChannels().stream()
+                .filter(channel -> channel.getTitle().equals(channelTitle))
+                .findFirst()
+                .orElse(null);
+        model.addAttribute("channelList", community.getChannels());
+        // Loads only 20 latest messages
+        List<Message> messages = messageService.getByChannelWithLimitation(currentChannel, 0, QUANTITY);
+        model.addAttribute("messages", messages);
+        return "community";
+    }
 
+    @RequestMapping(value = "{communityTitle}/channels/{channelTitle}/messages/new", method = RequestMethod.POST)
+    @ResponseBody
+    public String newMessage(@PathVariable("communityTitle") String communityTitle,
+                             @PathVariable("channelTitle") String channelTitle,
+                             Principal principal,
+                             String newMessage) {
+        Community community = communityService.getByTitle(communityTitle);
+        Channel currentChannel = community.getChannels().stream()
+                .filter(channel -> channel.getTitle().equals(channelTitle))
+                .findFirst()
+                .orElse(null);
+        Message message = new Message();
+        message.setMessage(newMessage);
+        User user = userService.getByUsername(principal.getName());
+        message.setUser(user);
+        message.setChannel(currentChannel);
+        message.setReceivedTime(LocalDateTime.now());
+        // Adds message to database
+        messageService.add(message);
+        // Broadcast message to channel
+        messagingTemplate.convertAndSend("/topic/" + communityTitle + "/" + channelTitle, message);
+        return "success";
+    }
+
+    @RequestMapping(value = "{communityTitle}/channels/{channelTitle}/messages",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Message> getMessages(@PathVariable("communityTitle") String communityTitle,
+                                     @PathVariable("channelTitle") String channelTitle,
+                                     int startRowPosition) {
+        Community community = communityService.getByTitle(communityTitle);
+        Channel currentChannel = community.getChannels().stream()
+                .filter(channel -> channel.getTitle().equals(channelTitle))
+                .findFirst()
+                .orElse(null);
+        return messageService.getByChannelWithLimitation(currentChannel, startRowPosition, QUANTITY);
     }
 }
