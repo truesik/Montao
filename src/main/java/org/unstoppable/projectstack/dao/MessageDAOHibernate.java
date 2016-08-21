@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.entity.Message;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -38,4 +40,18 @@ public class MessageDAOHibernate implements MessageDAO {
         query.setParameter("channel", channel);
         return query.getResultList();
     }
+
+    @Override
+    public List<Message> getByChannelWithLimitation(Channel channel, int startRowPosition, int maxResult) {
+        String hql = "FROM Message WHERE channel = :channel ORDER BY id DESC";
+        Query<Message> query = sessionFactory.getCurrentSession().createQuery(hql, Message.class);
+        query.setParameter("channel", channel);
+        query.setFirstResult(startRowPosition);
+        query.setMaxResults(maxResult);
+        List<Message> list = query.getResultList();
+        Collections.reverse(list);
+        return list;
+    }
+
+
 }

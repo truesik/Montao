@@ -28,4 +28,8 @@ public class MessageService {
     public List<Message> getByChannel(Channel channel) {
         return messageDAO.getByChannel(channel);
     }
+
+    public List<Message> getByChannelWithLimitation(Channel channel, int startRowPosition, int maxResult) {
+        return messageDAO.getByChannelWithLimitation(channel, startRowPosition, maxResult);
+    }
 }
