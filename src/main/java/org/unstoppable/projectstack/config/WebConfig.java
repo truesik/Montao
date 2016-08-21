@@ -21,6 +21,7 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.unstoppable.projectstack.formatter.DateFormatter;
 import org.unstoppable.projectstack.formatter.UserFormatter;
 
 import java.util.Locale;
@@ -36,17 +37,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private UserFormatter userFormatter;
+    @Autowired
+    private DateFormatter dateFormatter;
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(userFormatter);
+        registry.addFormatter(dateFormatter);
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/css/");
-        registry.addResourceHandler("/bootstrap/**").addResourceLocations("/WEB-INF/bootstrap/");
-        registry.addResourceHandler("/angularjs/**").addResourceLocations("/WEB-INF/angularjs/");
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/js/");
     }
 

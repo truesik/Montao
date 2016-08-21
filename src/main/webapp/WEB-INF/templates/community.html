@@ -51,18 +51,41 @@
             </ul>
         </div>
         <!--CHAT-->
-        <div class="col-md-10">
-
+        <div class="col-md-offset-2 col-md-10">
+            <div class="chat" id="messages">
+                <div class="panel panel-default" th:each="message : ${messages}" th:id="${message.id}">
+                    <div class="panel-body">
+                        <strong th:text="${message.user.username}">username</strong>
+                        <small th:text="${{message.receivedTime}}">2016-04-05 21:05</small>
+                        <p th:text="${message.message}">Hello World!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="message-input">
+                <input type="text" autocomplete="false" class="form-control" id="message" name="message"
+                       onsubmit="return false;"
+                       th:disabled="${#authorization.expression('!isAuthenticated()')}">
+            </div>
         </div>
     </div>
 </div>
 
 <div th:replace="fragments/footer :: bootstrap-scripts"></div>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+<script src="//cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        // Scroll to bottom after page load
+        var $messages = $('#messages');
+        $messages.scrollTop($messages.get(0).scrollHeight)
+    })
+</script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
-        var currentCommunity = $(location).attr('pathname');
+        var pathArray = $(location).attr('pathname').split('/');
+        var currentCommunity = pathArray[1];
 
         $('#create').click(function () {
             $('#new-channel').submit()
@@ -74,7 +97,7 @@
                     required: true,
                     minlength: 4,
                     remote: {
-                        url: currentCommunity + "/channels/check_title",
+                        url: '/' + currentCommunity + "/channels/check_title",
                         type: "post",
                         data: {  // MUST send the CSRF Token Value
                             '_csrf': function () {
@@ -99,24 +122,21 @@
                 var headers = {};
                 headers[csrfHeader] = csrfToken;
                 $.ajax({
-                    url: currentCommunity + '/channels/new',
+                    url: '/' + currentCommunity + '/channels/new',
                     type: "post",
                     contentType: "application/json",
                     cache: false,
                     data: JSON.stringify(channelForm),
                     headers: headers,
-                    success: callback
+                    success: function (response) {
+                        if (response === 'success') {
+                            $('#myModal').modal("hide")
+                        }
+                    }
                 });
                 return false;
             }
         });
-
-        function callback(response) {
-            console.log(response);
-            if (response === 'success') {
-                $('#myModal').modal("hide")
-            }
-        }
 
         $("#title").on("keypress", function (event) {
             // Disallow anything not matching the regex pattern (A to Z uppercase, a to z lowercase, digits 0 to 9 and underscore ("_"))
@@ -134,19 +154,19 @@
     });
     /*]]>*/
 </script>
-
-<script src="//cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
-        var path = /*[[@{/projectstack}]]*/ "";
+        var path = /*[[@{/websocket}]]*/ "";
         var sock = new SockJS(path);
         var stomp = Stomp.over(sock);
-        var currentCommunity = $(location).attr('pathname');
+        var pathArray = $(location).attr('pathname').split('/');
+        var currentCommunity = pathArray[1];
+        var currentChannel = pathArray[3];
 
         stomp.connect('guest', 'guest', function (frame) {
-            stomp.subscribe('/topic/' + currentCommunity + '/newchannel', handleNewChannel)
+            stomp.subscribe('/topic/' + currentCommunity + '/newchannel', handleNewChannel);
+            stomp.subscribe('/topic/' + currentCommunity + '/' + currentChannel, handleChat)
         });
 
         function handleNewChannel(incoming) {
@@ -157,8 +177,98 @@
                     )
             )
         }
+
+        function handleChat(incoming) {
+            var message = JSON.parse(incoming.body);
+            var $messages = $('#messages');
+            $messages.append(
+                    $('<div>').attr('id', message.id).attr('class', 'panel panel-danger').append(
+                            $('<div>').attr('class', 'panel-body').append(
+                                    $('<strong>').text(message.user.username),
+                                    $('<small>').text(message.receivedTime),
+                                    $('<p>').text(message.message)
+                            )
+                    ).fadeIn(600).delay(5000).queue(function () {
+                        $(this).attr('class', 'panel panel-default').clearQueue()
+                    })
+            ).animate({
+                scrollTop: $messages.get(0).scrollHeight
+            }, 400)
+        }
     });
     /*]]>*/
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        $('#message').keypress(function (event) {
+            if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
+                if ($.trim($(this).val()).length > 0) {
+                    var messageForm = {
+                        newMessage: $(this).val()
+                    };
+                    var csrfToken = /*[[${_csrf.token}]]*/ '';
+                    var csrfHeader = 'X-CSRF-TOKEN';
+                    var headers = {};
+                    headers[csrfHeader] = csrfToken;
+                    $.ajax({
+                        url: $(location).attr('pathname') + '/messages/new',
+                        type: "post",
+                        cache: false,
+                        data: messageForm,
+                        headers: headers,
+                        success: function (result) {
+                            if (result == 'success') {
+                                $('#message').val('')
+                            }
+                        }
+                    });
+                    return false;
+                }
+            }
+        })
+    });
+    /*]]>*/
+</script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        var count = 20;
+        $('#messages').scroll(function () {
+            if ($('#messages').scrollTop() == 0) {
+                var scrollHeight = $(this).get(0).scrollHeight;
+                var csrfToken = /*[[${_csrf.token}]]*/ '';
+                var csrfHeader = 'X-CSRF-TOKEN';
+                var headers = {};
+                headers[csrfHeader] = csrfToken;
+                $.ajax({
+                    url: $(location).attr('pathname') + '/messages',
+                    type: 'post',
+                    data: {'startRowPosition': count},
+                    headers: headers,
+                    success: function (messages) {
+                        if (!$.isEmptyObject(messages)) {
+                            $.each(messages.reverse(), function (i, message) {
+                                $('#messages').prepend(
+                                        $('<div>').attr('id', message.id).attr('class', 'panel panel-default').append(
+                                                $('<div>').attr('class', 'panel-body').append(
+                                                        $('<strong>').text(message.user.username),
+                                                        $('<small>').text(message.receivedTime),
+                                                        $('<p>').text(message.message)
+                                                )
+                                        )
+                                )
+                            });
+                            var $messages = $('#messages');
+                            var currentScrollHeight = $messages.get(0).scrollHeight;
+                            var scrollPosition = currentScrollHeight - scrollHeight;
+                            $messages.scrollTop(scrollPosition);
+                            count = count + 20;
+                        }
+                    }
+                })
+            }
+        })
+    })
 </script>
 </body>
 </html>

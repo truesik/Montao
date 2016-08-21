@@ -52,7 +52,7 @@ public class RegistrationControllerTest {
         mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(redirectedUrl("/success"));
-        Mockito.verify(userService, Mockito.atLeastOnce()).registerNewUser(userForm);
+//        Mockito.verify(userService, Mockito.atLeastOnce()).registerNewUser(userForm.createUser());
     }
 
     private UserRegistrationForm createUserForm() {

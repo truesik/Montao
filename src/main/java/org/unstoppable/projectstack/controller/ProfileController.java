@@ -73,8 +73,8 @@ public class ProfileController {
      */
     private String openCommunityPage(Model model, Community community) {
         List<Channel> channels = community.getChannels();
-        model.addAttribute("channelList", channels);
-        return "community";
+        // Redirect to default channel
+        return "redirect:/" + community.getTitle() + "/channels/" + channels.get(0).getTitle();
     }
 
     /**

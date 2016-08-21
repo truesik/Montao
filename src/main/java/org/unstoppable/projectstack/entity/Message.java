@@ -1,5 +1,7 @@
 package org.unstoppable.projectstack.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ public class Message {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss")
     @Column(name = "received_time", nullable = false)
     private LocalDateTime receivedTime;
 
