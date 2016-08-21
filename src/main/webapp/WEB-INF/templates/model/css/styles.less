@@ -5,7 +5,7 @@
 body{
     font-size: 14px;
     font-family: Helvetica ,'Comic Sans MS';
-    background-image: url(../images/down-of-jupiter.jpg);
+    background-image: url(../images/Planet.jpg);
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -32,9 +32,9 @@ header{
         }
         div.button-contain{
             @button-color:#92d36e;
+            padding: 0px 10px;
             background-color: @button-color;
             border-radius: 100px;
-            width: 70px;
             text-align: center;
             cursor: pointer;
             border-style: solid;
@@ -57,6 +57,19 @@ header{
     }
     &:hover{
         background-color: rgba(33, 150, 243, 1);
+    }
+    #cover{
+        input{
+            display: block;
+            padding: 0 10px;
+            left: 60px;
+            width: 165px;
+        }
+        p{
+            font-weight: 700;
+            margin-bottom: -20px;
+            margin-top: 30px;
+        }
     }
 }
 footer{
@@ -93,7 +106,17 @@ a{
     text-align: center;
 }
 
-#popupWindow {
+#exit-area{
+    z-index:1001;
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+}
+
+#popup-window {
+    z-index:1002;
     width:300px;
     height:300px;
     background:#d6d6d6;
@@ -126,6 +149,6 @@ a{
     }
 }
 
-#popupWindow h2, #popupWindow p {
+#popup-window h2, #popup-window p {
    padding:20px;
 }

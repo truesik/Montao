@@ -5,10 +5,14 @@ $(function(){
 	 // $('#cover').fadeIn('slow');
 	 $('#cover').slideDown('slow');
   });
-  $('#cover').click(function(){
+  $('#exit-area').click(function(){
 	 // $('#cover').css('display','none'); 
-	 // $('#cover').hide('slow');
+     // $('#cover').hide('slow');
 	 // $('#cover').fadeOut('slow');
-	 $('#cover').slideUp('slow');
+     $('#cover').slideUp('slow');
   });
+  $('#create-account-button').click(function(){
+    $('#popup-window').fadeOut('fast');
+      
+    });
 });
