@@ -205,7 +205,7 @@
             if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
                 if ($.trim($(this).val()).length > 0) {
                     var messageForm = {
-                        message: $(this).val()
+                        newMessage: $(this).val()
                     };
                     var csrfToken = /*[[${_csrf.token}]]*/ '';
                     var csrfHeader = 'X-CSRF-TOKEN';
@@ -214,9 +214,8 @@
                     $.ajax({
                         url: $(location).attr('pathname') + '/messages/new',
                         type: "post",
-                        contentType: "application/json",
                         cache: false,
-                        data: JSON.stringify(messageForm),
+                        data: messageForm,
                         headers: headers,
                         success: function (result) {
                             if (result == 'success') {
