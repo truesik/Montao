@@ -6,7 +6,7 @@
 <div th:replace="fragments/navbar :: ${#authorization.expression('isAuthenticated()')}? 'signed-navbar' : 'notsigned-navbar'"></div>
 
 <div class="container-fluid" style="margin-top: 100px">
-    <div class="row">
+    <div class="row" id="communities">
         <div class="col-lg-3" th:each="community : ${communities}">
             <div class="panel panel-default">
                 <div class="panel-body" th:text="'&#8220' + ${community.description} + '&#8221'">
@@ -22,5 +22,11 @@
 </div>
 
 <div th:replace="fragments/footer :: bootstrap-scripts"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var csrf = /*[[${_csrf.token}]]*/ "";
+    /*]]>*/
+</script>
+<script th:src="@{/js/community-list-scroll.js}" src="../js/community-list-scroll.js"></script>
 </body>
 </html>
