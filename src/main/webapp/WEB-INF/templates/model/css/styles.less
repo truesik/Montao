@@ -46,7 +46,7 @@ header{
             }
             &:hover{
                 
-                border-color: black;    
+                border-color: black !important;    
                 //border-width: 1px;
                 //border-style: solid;
             }
@@ -69,6 +69,11 @@ header{
             font-weight: 700;
             margin-bottom: -20px;
             margin-top: 30px;
+        }
+        #create-account-button{
+            @button-color: #2196f3;
+            background-color: @button-color;
+            border-color: @button-color;
         }
     }
 }
@@ -116,19 +121,8 @@ a{
 }
 
 #popup-window {
-    z-index:1002;
     width:300px;
     height:300px;
-    background:#d6d6d6;
-    overflow:hidden;
-    box-sizing:border-box;
-    font-family:arial;
-    position:absolute;
-    left:50%;
-    top:50%;
-    margin-left:-150px;
-    margin-top:-150px;
-    border-radius: 20px;
     h2,
     input,
     input+input,
@@ -147,6 +141,26 @@ a{
         position: relative;
         bottom: 0px;
     }
+}
+
+#create-account-window{
+    width: 465px;
+    height: 225px;
+}
+
+#create-account-window,
+#popup-window{
+    z-index:1002;
+    background:#d6d6d6;
+    overflow:hidden;
+    box-sizing:border-box;
+    font-family:arial;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left:-150px;
+    margin-top:-150px;
+    border-radius: 20px;
 }
 
 #popup-window h2, #popup-window p {
