@@ -31,7 +31,7 @@ public class IndexController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String index(Model model) {
-        List<Community> communities = communityService.getPublicCommunities(0, 20);
+        List<Community> communities = communityService.getPublicCommunities(0, 40);
         model.addAttribute("communities", communities);
         return "index";
     }
