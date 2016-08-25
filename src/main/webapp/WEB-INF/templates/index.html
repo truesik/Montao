@@ -7,17 +7,6 @@
 
 <div class="container-fluid" style="margin-top: 100px">
     <div class="row" id="communities">
-        <div class="col-lg-3" th:each="community : ${communities}">
-            <div class="panel panel-default">
-                <div class="panel-body" th:text="'&#8220' + ${community.description} + '&#8221'">
-                    Panel content
-                </div>
-                <div class="panel-footer">
-                    <i class="material-icons">group</i>
-                    <a href="#" th:href="@{'/' + ${community.title}}" th:text="${community.title}"></a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
