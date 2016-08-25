@@ -14,13 +14,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class IndexControllerTest {
-    private CommunityService communityService;
     private MockMvc mockMvc;
 
     @Before
     public void setUp() throws Exception {
-        communityService = Mockito.mock(CommunityService.class);
-        IndexController controller = new IndexController(communityService);
+        IndexController controller = new IndexController();
         mockMvc = MockMvcBuilders.standaloneSetup(controller).setViewResolvers(getViewResolver()).build();
     }
 

@@ -1,6 +1,7 @@
 package org.unstoppable.projectstack.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import org.unstoppable.projectstack.validator.CommunityValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/communities")
@@ -88,5 +90,11 @@ public class CommunityController {
     @ResponseBody
     public String checkTitle(String title) {
         return communityService.checkTitle(title).toString();
+    }
+
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Community> getCommunities(int startRowPosition) {
+        return communityService.getPublicCommunities(startRowPosition, 40);
     }
 }
