@@ -5,9 +5,10 @@
 body{
     font-size: 14px;
     font-family: Helvetica ,'Comic Sans MS';
-    background-image: url(../images/Planet.jpg);
+    background-image: url(../images/Myaka.jpg);
     background-repeat: no-repeat;
     background-size: cover;
+    margin: 0px;
 }
 header{
     background-color: rgba(33, 150, 243, 0.5);
@@ -121,6 +122,7 @@ a{
 }
 
 #popup-window {
+    left:50%;
     width:300px;
     height:300px;
     h2,
@@ -129,12 +131,6 @@ a{
     div.button-countain,
     p{position: relative;}
     h2{bottom: 25px;} 
-    input{
-        border-radius: 1000px;
-        bottom: 30px;
-        border-style: solid;
-    }
-    input+input{bottom: 20px;}
     div.button-contain{top: 0px;}
     p{bottom: 20px;}
     p + div.button-countain{
@@ -146,6 +142,22 @@ a{
 #create-account-window{
     width: 465px;
     height: 225px;
+    left: 43.5%;
+    div{
+        display: block;
+    }
+    div.button-contain{
+        display: inline;
+    }
+    div:nth-of-type(1){
+        padding-left: 127px; 
+        padding-bottom: 10px;
+    }
+    div:nth-of-type(2){
+        padding-left: 88px;
+        padding-bottom: 10px;
+    }
+    input{display: inline !important;}
 }
 
 #create-account-window,
@@ -156,11 +168,18 @@ a{
     box-sizing:border-box;
     font-family:arial;
     position:absolute;
-    left:50%;
     top:50%;
     margin-left:-150px;
     margin-top:-150px;
     border-radius: 20px;
+    input{
+        border-radius: 1000px;
+        bottom: 30px;
+        border-style: solid;
+    }
+    input+input{bottom: 20px;}
+    span{font-weight: 600;}
+    //1st div padleft : 127px , 2nd div padlef : 88px;
 }
 
 #popup-window h2, #popup-window p {
