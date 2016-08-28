@@ -1,6 +1,7 @@
 package org.unstoppable.projectstack.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 
 @Entity
@@ -10,10 +11,12 @@ public class Subscription {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private BigInteger id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "community_id")
     private Community community;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
