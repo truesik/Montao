@@ -5,7 +5,7 @@ import java.math.BigInteger;
 
 @Entity
 @Table(name = "community_users")
-public class CommunityUser {
+public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private BigInteger id;
@@ -47,7 +47,7 @@ public class CommunityUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CommunityUser that = (CommunityUser) o;
+        Subscription that = (Subscription) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (community != null ? !community.equals(that.community) : that.community != null) return false;
