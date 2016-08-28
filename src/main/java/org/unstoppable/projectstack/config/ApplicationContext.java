@@ -7,10 +7,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.unstoppable.projectstack.dao.*;
 import org.unstoppable.projectstack.formatter.DateFormatter;
 import org.unstoppable.projectstack.formatter.UserFormatter;
-import org.unstoppable.projectstack.service.ChannelService;
-import org.unstoppable.projectstack.service.CommunityService;
-import org.unstoppable.projectstack.service.MessageService;
-import org.unstoppable.projectstack.service.UserService;
+import org.unstoppable.projectstack.service.*;
 
 import java.util.Properties;
 
@@ -37,6 +34,11 @@ public class ApplicationContext {
     }
 
     @Bean
+    public SubscriptionService subscriptionService() {
+        return new SubscriptionService();
+    }
+
+    @Bean
     public UserDAO userDAO() {
         return new UserDAOHibernate();
     }
@@ -54,6 +56,11 @@ public class ApplicationContext {
     @Bean
     public MessageDAO messageDAO() {
         return new MessageDAOHibernate();
+    }
+
+    @Bean
+    public SubscriptionDAO subscriptionDAO() {
+        return new SubscriptionDAOHibernate();
     }
 
     @Bean
