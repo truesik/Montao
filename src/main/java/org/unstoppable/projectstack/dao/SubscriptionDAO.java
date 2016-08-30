@@ -6,5 +6,8 @@ import org.unstoppable.projectstack.entity.User;
 
 public interface SubscriptionDAO {
     void add(Subscription subscription);
+
     Subscription getSubscription(Community community, User user);
+
+    void delete(Subscription subscription);
 }

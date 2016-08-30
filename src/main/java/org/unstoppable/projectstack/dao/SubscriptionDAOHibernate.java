@@ -28,4 +28,9 @@ public class SubscriptionDAOHibernate implements SubscriptionDAO {
         query.setParameter("user", user);
         return query.uniqueResult();
     }
+
+    @Override
+    public void delete(Subscription subscription) {
+        sessionFactory.getCurrentSession().delete(subscription);
+    }
 }
