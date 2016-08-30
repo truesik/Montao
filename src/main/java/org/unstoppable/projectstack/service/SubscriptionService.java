@@ -20,4 +20,12 @@ public class SubscriptionService {
         Subscription subscription = subscriptionDAO.getSubscription(community, user);
         return subscription != null;
     }
+
+    public Subscription getSubscription(Community community, User user) {
+        return subscriptionDAO.getSubscription(community, user);
+    }
+
+    public void delete(Subscription subscription) {
+        subscriptionDAO.delete(subscription);
+    }
 }
