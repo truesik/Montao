@@ -14,8 +14,59 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     var csrf = /*[[${_csrf.token}]]*/ "";
+    var isAuthorizated = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
     /*]]>*/
 </script>
 <script th:src="@{/js/community-list-scroll.js}" src="../js/community-list-scroll.js"></script>
+<script>
+    $(document).on('click', '.subscribe', function (event) {
+        if (isAuthorizated == true) {
+            var csrfToken = csrf;
+            var csrfHeader = 'X-CSRF-TOKEN';
+            var headers = {};
+            headers[csrfHeader] = csrfToken;
+            var id = event.target.id;
+            $.ajax({
+                url: '/communities/subscribe',
+                type: "post",
+                cache: false,
+                data: {'communityTitle': id},
+                headers: headers,
+                success: function (response) {
+                    if (response === 'success') {
+                        console.log(response);
+                        $(event.target).removeClass('subscribe').addClass('unsubscribe').text('Leave')
+                    }
+                }
+            });
+        } else {
+            $(location).attr('pathname', 'registration')
+        }
+        return false;
+    });
+    $(document).on('click', '.unsubscribe', function (event) {
+        if (isAuthorizated == true) {
+            var csrfToken = csrf;
+            var csrfHeader = 'X-CSRF-TOKEN';
+            var headers = {};
+            headers[csrfHeader] = csrfToken;
+            var id = event.target.id;
+            $.ajax({
+                url: '/communities/unsubscribe',
+                type: "post",
+                cache: false,
+                data: {'communityTitle': id},
+                headers: headers,
+                success: function (response) {
+                    if (response === 'success') {
+                        console.log(response);
+                        $(event.target).removeClass('unsubscribe').addClass('subscribe').text('Join')
+                    }
+                }
+            });
+        }
+        return false;
+    })
+</script>
 </body>
 </html>
