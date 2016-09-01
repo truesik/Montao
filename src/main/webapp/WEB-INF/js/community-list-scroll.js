@@ -30,8 +30,7 @@ $(document).ready(function () {
                                     $('<div>').attr('class', 'panel-footer').append(
                                         $('<i>').attr('class', 'material-icons').text('group').after(' '),
                                         $('<a>').attr('href', '/' + community.title).text(community.title),
-                                        $('<button>')
-                                            .attr('type', 'button')
+                                        $('<a>')
                                             .attr('class', 'btn btn-primary subscribe')
                                             .attr('id', community.title)
                                             .text('Join')
