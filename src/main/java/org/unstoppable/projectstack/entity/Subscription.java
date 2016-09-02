@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 
 @Entity
-@Table(name = "community_users")
+@Table(name = "subscriptions")
 public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
