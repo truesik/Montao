@@ -6,6 +6,9 @@ import org.unstoppable.projectstack.dao.SubscriptionDAO;
 import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.Subscription;
 import org.unstoppable.projectstack.entity.User;
+import org.unstoppable.projectstack.model.CommunityUser;
+
+import java.util.List;
 
 @Service
 public class SubscriptionService {
@@ -21,11 +24,19 @@ public class SubscriptionService {
         return subscription != null;
     }
 
-    public Subscription getSubscription(Community community, User user) {
+    public Subscription get(Community community, User user) {
         return subscriptionDAO.getSubscription(community, user);
     }
 
     public void delete(Subscription subscription) {
         subscriptionDAO.delete(subscription);
+    }
+
+    public List<Subscription> getByUser(User user) {
+        return subscriptionDAO.getByUser(user);
+    }
+
+    public List<CommunityUser> getCommunitySubscriptions(User user, int startRowPosition, int maxResult) {
+        return subscriptionDAO.getCommunitySubscriptions(user, startRowPosition, maxResult);
     }
 }
