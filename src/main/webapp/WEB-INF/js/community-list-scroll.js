@@ -31,9 +31,10 @@ $(document).ready(function () {
                                         $('<i>').attr('class', 'material-icons').text('group').after(' '),
                                         $('<a>').attr('href', '/' + community.title).text(community.title),
                                         $('<a>')
-                                            .attr('class', 'btn btn-primary subscribe')
+                                            .attr('class', 'btn btn-primary')
+                                            .addClass(community.subscribed ? 'unsubscribe' : 'subscribe')
                                             .attr('id', community.title)
-                                            .text('Join')
+                                            .text(community.subscribed ? 'Leave' : 'Join')
                                             .attr('style', 'float: right;')
                                     )
                                 )
