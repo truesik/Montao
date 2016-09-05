@@ -11,7 +11,7 @@ import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.Subscription;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.model.CommunityCreationForm;
-import org.unstoppable.projectstack.model.CommunityUser;
+import org.unstoppable.projectstack.model.CommunitySubscription;
 import org.unstoppable.projectstack.service.ChannelService;
 import org.unstoppable.projectstack.service.CommunityService;
 import org.unstoppable.projectstack.service.SubscriptionService;
@@ -100,21 +100,21 @@ public class CommunityController {
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<CommunityUser> getCommunities(int startRowPosition, Principal principal) {
+    public List<CommunitySubscription> getCommunities(int startRowPosition, Principal principal) {
         if (principal != null) {
             User user = userService.getByUsername(principal.getName());
-            return subscriptionService.getCommunitySubscriptions(user, startRowPosition, 40);
+            return subscriptionService.getCommunitiesWithSubscriptionsByUser(user, startRowPosition, 40);
         }
         List<Community> communities = communityService.getPublicCommunities(startRowPosition, 40);
-        List<CommunityUser> communityUsers = new ArrayList<>();
+        List<CommunitySubscription> communitySubscriptions = new ArrayList<>();
         for (Community community : communities) {
-            CommunityUser communityUser = new CommunityUser();
-            communityUser.setTitle(community.getTitle());
-            communityUser.setDescription(community.getDescription());
-            communityUser.setSubscribed(false);
-            communityUsers.add(communityUser);
+            CommunitySubscription communitySubscription = new CommunitySubscription();
+            communitySubscription.setTitle(community.getTitle());
+            communitySubscription.setDescription(community.getDescription());
+            communitySubscription.setSubscribed(false);
+            communitySubscriptions.add(communitySubscription);
         }
-        return communityUsers;
+        return communitySubscriptions;
     }
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
