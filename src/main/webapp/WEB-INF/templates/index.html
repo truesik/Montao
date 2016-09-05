@@ -14,8 +14,10 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     var csrf = /*[[${_csrf.token}]]*/ "";
+    var isAuthorizated = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
     /*]]>*/
 </script>
 <script th:src="@{/js/community-list-scroll.js}" src="../js/community-list-scroll.js"></script>
+<script th:src="@{/js/subscription.js}" src="../js/subscription.js"></script>
 </body>
 </html>

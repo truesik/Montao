@@ -29,7 +29,13 @@ $(document).ready(function () {
                                         .html('&#8220' + community.description + '&#8221'),
                                     $('<div>').attr('class', 'panel-footer').append(
                                         $('<i>').attr('class', 'material-icons').text('group').after(' '),
-                                        $('<a>').attr('href', '/' + community.title).text(community.title)
+                                        $('<a>').attr('href', '/' + community.title).text(community.title),
+                                        $('<a>')
+                                            .attr('class', 'btn btn-primary')
+                                            .addClass(community.subscribed ? 'unsubscribe' : 'subscribe')
+                                            .attr('id', community.title)
+                                            .text(community.subscribed ? 'Leave' : 'Join')
+                                            .attr('style', 'float: right;')
                                     )
                                 )
                             )

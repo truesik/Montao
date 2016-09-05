@@ -1,19 +1,22 @@
 package org.unstoppable.projectstack.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 
 @Entity
-@Table(name = "community_users")
-public class CommunityUser {
+@Table(name = "subscriptions")
+public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private BigInteger id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "community_id")
     private Community community;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -47,7 +50,7 @@ public class CommunityUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CommunityUser that = (CommunityUser) o;
+        Subscription that = (Subscription) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (community != null ? !community.equals(that.community) : that.community != null) return false;

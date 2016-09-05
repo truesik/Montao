@@ -8,15 +8,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.entity.Community;
+import org.unstoppable.projectstack.entity.Subscription;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.model.CommunityCreationForm;
+import org.unstoppable.projectstack.model.CommunitySubscription;
 import org.unstoppable.projectstack.service.ChannelService;
 import org.unstoppable.projectstack.service.CommunityService;
+import org.unstoppable.projectstack.service.SubscriptionService;
 import org.unstoppable.projectstack.service.UserService;
 import org.unstoppable.projectstack.validator.CommunityValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,14 +29,16 @@ public class CommunityController {
     private final UserService userService;
     private final CommunityService communityService;
     private final ChannelService channelService;
+    private final SubscriptionService subscriptionService;
 
     @Autowired
     public CommunityController(UserService userService,
                                CommunityService communityService,
-                               ChannelService channelService) {
+                               ChannelService channelService, SubscriptionService subscriptionService) {
         this.userService = userService;
         this.communityService = communityService;
         this.channelService = channelService;
+        this.subscriptionService = subscriptionService;
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
@@ -94,7 +100,52 @@ public class CommunityController {
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Community> getCommunities(int startRowPosition) {
-        return communityService.getPublicCommunities(startRowPosition, 40);
+    public List<CommunitySubscription> getCommunities(int startRowPosition, Principal principal) {
+        if (principal != null) {
+            User user = userService.getByUsername(principal.getName());
+            return subscriptionService.getCommunitiesWithSubscriptionsByUser(user, startRowPosition, 40);
+        }
+        List<Community> communities = communityService.getPublicCommunities(startRowPosition, 40);
+        List<CommunitySubscription> communitySubscriptions = new ArrayList<>();
+        for (Community community : communities) {
+            CommunitySubscription communitySubscription = new CommunitySubscription();
+            communitySubscription.setTitle(community.getTitle());
+            communitySubscription.setDescription(community.getDescription());
+            communitySubscription.setSubscribed(false);
+            communitySubscriptions.add(communitySubscription);
+        }
+        return communitySubscriptions;
+    }
+
+    @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
+    @ResponseBody
+    public String subscribe(String communityTitle, Principal principal) {
+        if (principal != null) {
+            Community community = communityService.getByTitle(communityTitle);
+            User user = userService.getByUsername(principal.getName());
+            subscriptionService.subscribe(createSubscription(community, user));
+            return "success";
+        }
+        return "failure";
+    }
+
+    private Subscription createSubscription(Community community, User user) {
+        Subscription subscription = new Subscription();
+        subscription.setCommunity(community);
+        subscription.setUser(user);
+        return subscription;
+    }
+
+    @RequestMapping(value = "/unsubscribe", method = RequestMethod.POST)
+    @ResponseBody
+    public String unsubscribe(String communityTitle, Principal principal) {
+        if (principal != null) {
+            Community community = communityService.getByTitle(communityTitle);
+            User user = userService.getByUsername(principal.getName());
+            Subscription subscription = subscriptionService.get(community, user);
+            subscriptionService.delete(subscription);
+            return "success";
+        }
+        return "failure";
     }
 }
