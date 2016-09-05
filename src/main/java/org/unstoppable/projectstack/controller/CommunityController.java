@@ -11,6 +11,7 @@ import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.Subscription;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.model.CommunityCreationForm;
+import org.unstoppable.projectstack.model.CommunityUser;
 import org.unstoppable.projectstack.service.ChannelService;
 import org.unstoppable.projectstack.service.CommunityService;
 import org.unstoppable.projectstack.service.SubscriptionService;
@@ -19,6 +20,7 @@ import org.unstoppable.projectstack.validator.CommunityValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -98,8 +100,21 @@ public class CommunityController {
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Community> getCommunities(int startRowPosition) {
-        return communityService.getPublicCommunities(startRowPosition, 40);
+    public List<CommunityUser> getCommunities(int startRowPosition, Principal principal) {
+        if (principal != null) {
+            User user = userService.getByUsername(principal.getName());
+            return subscriptionService.getCommunitySubscriptions(user, startRowPosition, 40);
+        }
+        List<Community> communities = communityService.getPublicCommunities(startRowPosition, 40);
+        List<CommunityUser> communityUsers = new ArrayList<>();
+        for (Community community : communities) {
+            CommunityUser communityUser = new CommunityUser();
+            communityUser.setTitle(community.getTitle());
+            communityUser.setDescription(community.getDescription());
+            communityUser.setSubscribed(false);
+            communityUsers.add(communityUser);
+        }
+        return communityUsers;
     }
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
@@ -127,7 +142,7 @@ public class CommunityController {
         if (principal != null) {
             Community community = communityService.getByTitle(communityTitle);
             User user = userService.getByUsername(principal.getName());
-            Subscription subscription = subscriptionService.getSubscription(community, user);
+            Subscription subscription = subscriptionService.get(community, user);
             subscriptionService.delete(subscription);
             return "success";
         }
