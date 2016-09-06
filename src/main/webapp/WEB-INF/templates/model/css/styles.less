@@ -2,12 +2,12 @@
     font-family:Helvetica;
     src:url(fonts/Helvetica_CE_Regular.ttf);
 }
-html,
-body{height: 100%;}
+html{height: 100%;}
 body{
     font-size: 14px;
     font-family: Helvetica ,'Comic Sans MS';
     background-image: url(../images/Planet.jpg);
+    background-size: cover;
     background-repeat: no-repeat;
     background-size: cover;
     margin: 0px;
@@ -80,10 +80,14 @@ header{
             @button-color: #2196f3;
             background-color: @button-color;
             border-color: @button-color;
+            &:active{
+                background-color: #0c59cf;
+            }
         }
     }
 }
 article{
+    height: 100%;
     .community{
         width: 450px;
         height: 220px;
@@ -94,10 +98,15 @@ article{
         text-align: center;
         vertical-align: middle;
         display: table;
-        border-width: 1px;
+        border-width: 2px;
         border-style: solid;
         border-color: #000000;
+        cursor: pointer;
         &:hover{
+            border-color: #2196f3;
+        }
+        &:active{
+            background-color: #848484;
         }
         span{
             display: table-cell;
@@ -109,6 +118,7 @@ article{
         width: 100%;
         bottom: 0;
         position: absolute;
+        z-index: -1;
     }
 }
 footer{
