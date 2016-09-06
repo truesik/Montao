@@ -12,10 +12,7 @@ import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.Message;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.model.ChannelCreationForm;
-import org.unstoppable.projectstack.service.ChannelService;
-import org.unstoppable.projectstack.service.CommunityService;
-import org.unstoppable.projectstack.service.MessageService;
-import org.unstoppable.projectstack.service.UserService;
+import org.unstoppable.projectstack.service.*;
 import org.unstoppable.projectstack.validator.ChannelValidator;
 
 import javax.validation.Valid;
@@ -32,18 +29,21 @@ public class ChannelController {
     private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
     private final UserService userService;
+    private final SubscriptionService subscriptionService;
 
     @Autowired
     public ChannelController(CommunityService communityService,
                              ChannelService channelService,
                              MessageService messageService,
                              UserService userService,
-                             SimpMessagingTemplate messagingTemplate) {
+                             SimpMessagingTemplate messagingTemplate,
+                             SubscriptionService subscriptionService) {
         this.communityService = communityService;
         this.channelService = channelService;
         this.messageService = messageService;
         this.userService = userService;
         this.messagingTemplate = messagingTemplate;
+        this.subscriptionService = subscriptionService;
     }
 
     /**
@@ -92,7 +92,8 @@ public class ChannelController {
     @RequestMapping(value = "{communityTitle}/channels/{channelTitle}", method = RequestMethod.GET)
     public String channel(@PathVariable("communityTitle") String communityTitle,
                           @PathVariable("channelTitle") String channelTitle,
-                          Model model) {
+                          Model model,
+                          Principal principal) {
         Community community = communityService.getByTitle(communityTitle);
         Channel currentChannel = community.getChannels().stream()
                 .filter(channel -> channel.getTitle().equals(channelTitle))
@@ -102,6 +103,14 @@ public class ChannelController {
         // Loads only 20 latest messages
         List<Message> messages = messageService.getByChannelWithLimitation(currentChannel, 0, QUANTITY);
         model.addAttribute("messages", messages);
+        if (principal != null) {
+            User user = userService.getByUsername(principal.getName());
+            Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
+            System.out.println(isSubscribed.toString());
+            model.addAttribute("subscribed", isSubscribed);
+        } else {
+            model.addAttribute("subscribed", false);
+        }
         return "community";
     }
 
