@@ -42,8 +42,8 @@
     <div class="row">
         <!--SIDEBAR-->
         <div class="col-md-2 sidebar">
-            <span>Channels </span><a class="glyphicon glyphicon-plus" data-toggle="modal" href="#myModal"
-                                     th:if="${#authorization.expression('isAuthenticated()')}"></a>
+            <span>Channels </span><a th:if="${subscribed}"
+                                     class="glyphicon glyphicon-plus" data-toggle="modal" href="#myModal"></a>
             <ul class="nav nav-sidebar" id="channelList">
                 <li th:each="channel : ${channelList}">
                     <a href="#" th:text="${channel.title}">Channel</a>
