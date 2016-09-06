@@ -105,11 +105,12 @@ public class ChannelController {
         model.addAttribute("messages", messages);
         if (principal != null) {
             User user = userService.getByUsername(principal.getName());
-            Boolean subscription = subscriptionService.checkSubscription(community, user);
-            System.out.println(subscription.toString());
-            model.addAttribute("subscription", subscription);
+            Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
+            System.out.println(isSubscribed.toString());
+            model.addAttribute("subscribed", isSubscribed);
+        } else {
+            model.addAttribute("subscribed", false);
         }
-        model.addAttribute("subscription", false);
         return "community";
     }
 
