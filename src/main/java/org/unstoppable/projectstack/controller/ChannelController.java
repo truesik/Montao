@@ -7,10 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.unstoppable.projectstack.entity.Channel;
-import org.unstoppable.projectstack.entity.Community;
-import org.unstoppable.projectstack.entity.Message;
-import org.unstoppable.projectstack.entity.User;
+import org.unstoppable.projectstack.entity.*;
 import org.unstoppable.projectstack.model.ChannelCreationForm;
 import org.unstoppable.projectstack.service.*;
 import org.unstoppable.projectstack.validator.ChannelValidator;
@@ -100,6 +97,9 @@ public class ChannelController {
                 .findFirst()
                 .orElse(null);
         model.addAttribute("channelList", community.getChannels());
+        // Fill subscribed user list
+        List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
+        model.addAttribute("userList", subscriptions);
         // Loads only 20 latest messages
         List<Message> messages = messageService.getByChannelWithLimitation(currentChannel, 0, QUANTITY);
         model.addAttribute("messages", messages);
