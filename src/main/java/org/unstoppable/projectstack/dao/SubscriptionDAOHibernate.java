@@ -48,6 +48,14 @@ public class SubscriptionDAOHibernate implements SubscriptionDAO {
     }
 
     @Override
+    public List<Subscription> getByCommunity(Community community) {
+        String hql = "FROM Subscription WHERE community = :community";
+        Query<Subscription> query = sessionFactory.getCurrentSession().createQuery(hql, Subscription.class);
+        query.setParameter("community", community);
+        return query.getResultList();
+    }
+
+    @Override
     public List<CommunitySubscription> getCommunitiesWithSubscriptionsByUser(User user,
                                                                              int startRowPosition,
                                                                              int maxResult) {
