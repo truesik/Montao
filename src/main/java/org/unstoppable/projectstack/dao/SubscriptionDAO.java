@@ -16,5 +16,7 @@ public interface SubscriptionDAO {
 
     List<Subscription> getByUser(User user);
 
+    List<Subscription> getByCommunity(Community community);
+
     List<CommunitySubscription> getCommunitiesWithSubscriptionsByUser(User user, int startRowPosition, int maxResult);
 }

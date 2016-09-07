@@ -41,4 +41,8 @@ public class SubscriptionService {
                                                                              int maxResult) {
         return subscriptionDAO.getCommunitiesWithSubscriptionsByUser(user, startRowPosition, maxResult);
     }
+
+    public List<Subscription> getByCommunity(Community community) {
+        return subscriptionDAO.getByCommunity(community);
+    }
 }
