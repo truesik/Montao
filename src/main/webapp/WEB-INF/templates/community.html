@@ -49,6 +49,12 @@
                     <a href="#" th:text="${channel.title}">Channel</a>
                 </li>
             </ul>
+            <span>Users </span>
+            <ul class="nav nav-sidebar" id="userList">
+                <li th:each="user : ${userList}">
+                    <a href="#" th:text="${user.user.username}">Username</a>
+                </li>
+            </ul>
         </div>
         <!--CHAT-->
         <div class="col-md-offset-2 col-md-10">
