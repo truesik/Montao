@@ -74,6 +74,9 @@ public class CommunityController {
             // After community creation we should add default channel
             Channel channel = createDefaultChannel(community);
             channelService.add(channel);
+            // And subscribe creator to that community
+            User user = userService.getByUsername(principal.getName());
+            subscriptionService.subscribe(createSubscription(community, user));
             return "redirect:/" + community.getTitle();
         }
     }
