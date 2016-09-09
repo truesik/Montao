@@ -14,7 +14,7 @@ $(function(){
      
      $('#cover').slideUp('slow');
   });
-  $('#create-account-button').click(function(){
+  $('#call-create-account-window-button').click(function(){
     $('#popup-window').fadeOut('fast',function(){
         $('#create-account-window').fadeIn('fast');
     });
