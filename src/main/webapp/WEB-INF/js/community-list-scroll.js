@@ -39,9 +39,9 @@ $(document).ready(function () {
                                     )
                                 )
                             )
-                        )
+                        );
+                        count++;
                     });
-                    count = count + 40;
                 }
             }
         })
