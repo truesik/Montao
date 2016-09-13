@@ -8,11 +8,15 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.unstoppable.projectstack.entity.Channel;
+import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.service.CommunityService;
 import org.unstoppable.projectstack.service.UserService;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -79,4 +83,31 @@ public class ProfileControllerTest {
         return user;
     }
 
+    @Test
+    public void getCommunity() throws Exception {
+        Community community = createCommunity();
+        List<Channel> channels = community.getChannels();
+        Mockito.when(communityService.getByTitle("communityTest")).thenReturn(community);
+        RequestBuilder request = get("/communityTest");
+        mockMvc.perform(request)
+                .andExpect(redirectedUrl("/" + community.getTitle() + "/channels/" + channels.get(0).getTitle()));
+    }
+
+    private Channel createChannel(Community community) {
+        Channel channel = new Channel();
+        channel.setTitle("channelTest");
+        channel.setCommunity(community);
+        return channel;
+    }
+
+    private Community createCommunity() {
+        Community community = new Community();
+        community.setTitle("communityTest");
+        community.setVisible(true);
+        List<Channel> channels = new ArrayList<>();
+        Channel channel = createChannel(community);
+        channels.add(channel);
+        community.setChannels(channels);
+        return community;
+    }
 }
