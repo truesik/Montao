@@ -2,17 +2,38 @@
     font-family:Helvetica;
     src:url(fonts/Helvetica_CE_Regular.ttf);
 }
-@max-mobile-scrin-size: 700px;
+@max-mobile-scrin-size: 710px;
 @max-tablet-scrin-size: 992px;
 @media (max-width: @max-mobile-scrin-size){
     nav{
         max-width: 320px;
-        padding: 0 5px;
+        height: 75px;
         div.search{display: none;}
         &>div.button-contain,
-        div.mobile-search{position: absolute;}
+        div#mobile-search{position: absolute;}
         &>div.button-contain{right: 5px;}
-        div.mobile-search{left: 47%;}
+        div#mobile-search{
+            position: absolute;
+            left: 5px;
+        }
+        div.logo{
+            position: absolute;
+            left: 39%;
+        }
+        #create-account-window{
+            left: 50.5%;
+            width: 300px;
+            height: 240px;
+            div{
+                padding-left: 0px;
+                span{display: block;}
+            }
+            div#create-account-button{
+                position: relative;
+                top: 10px;
+                padding-left: 5px;
+            }
+        }
     }
     article{
         .community{
@@ -24,9 +45,15 @@
 @media (min-width:(@max-mobile-scrin-size+1)){
     header{
         nav{
-            div.mobile-search{display: none;}
+            div#mobile-search{display: none;}
             div.search,
             div.button-contain{position: relative;}
+            #create-account-window{
+                div{
+                    &:nth-of-type(1){padding-left: 133px;}
+                    &:nth-of-type(2){padding-left: 90px;}
+                }
+            }
         }
     }
     article{
@@ -70,8 +97,11 @@ header{
         div.search{
             min-width: 550px;
             text-align: center;
+            input{
+                width: 250px;
+            }
         }
-        div.mobile-search{
+        div#mobile-search{
             font-size: 40px;
             top: 15px;
             cursor: pointer;
@@ -241,12 +271,8 @@ a{
     div.button-contain{
         display: inline-block;
     }
-    div:nth-of-type(1){
-        padding-left: 133px; 
-        padding-bottom: 10px;
-    }
+    div:nth-of-type(1),
     div:nth-of-type(2){
-        padding-left: 90px;
         padding-bottom: 10px;
     }
     input{display: inline !important;}
@@ -260,9 +286,7 @@ a{
     box-sizing:border-box;
     font-family:arial;
     position:absolute;
-    top:50%;
-    margin-left:-150px;
-    margin-top:-150px;
+    top:25%;
     border-radius: 20px;
     span{font-weight: 600;}
 }
