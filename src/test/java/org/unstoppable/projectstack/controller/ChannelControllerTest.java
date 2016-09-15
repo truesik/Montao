@@ -105,8 +105,6 @@ public class ChannelControllerTest {
 
     @Test
     public void getMessages() throws Exception {
-        String COMMUNITY_TITLE = "communityTest";
-        String CHANNEL_TITLE = "channelTest";
         Community community = createCommunity();
         Channel channel = community.getChannels().get(0);
         Message message = createMessage(channel);
@@ -115,8 +113,11 @@ public class ChannelControllerTest {
 
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
         Mockito.when(messageService.getByChannelWithLimitation(channel, 0, 20)).thenReturn(messages);
-        RequestBuilder request = post("/" + COMMUNITY_TITLE + "/channels/" + CHANNEL_TITLE + "/messages").contentType(MediaType.APPLICATION_JSON_VALUE).param("startRowPosition", "0");
-        mockMvc.perform(request).andExpect(jsonPath("$.id", ))
+        RequestBuilder request = post("/" + community.getTitle() + "/channels/" + channel.getTitle() + "/messages").contentType(MediaType.APPLICATION_JSON_VALUE).param("startRowPosition", "0");
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$[0].message").value(message.getMessage()));
     }
 
     private Community createCommunity() {
