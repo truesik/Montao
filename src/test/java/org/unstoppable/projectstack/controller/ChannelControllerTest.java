@@ -147,6 +147,30 @@ public class ChannelControllerTest {
     }
 
     @Test
+    public void newMessage() throws Exception {
+        Community community = createCommunity();
+        Channel channel = community.getChannels().get(0);
+        User user = createUser();
+        Subscription subscription = createSubscription(community, user);
+        List<Subscription> subscriptions = new ArrayList<>();
+        subscriptions.add(subscription);
+        Message message = createMessage(channel);
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
+
+        Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
+        Mockito.when(userService.getByUsername(user.getUsername())).thenReturn(user);
+
+        RequestBuilder request = post("/" + community.getTitle() + "/channels/" + channel.getTitle() + "/messages/new")
+                .principal(new UserPrincipal(user.getUsername()))
+                .param("newMessage", message.getMessage());
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("success"));
+    }
+
+    @Test
     public void getMessages() throws Exception {
         Community community = createCommunity();
         Channel channel = community.getChannels().get(0);
