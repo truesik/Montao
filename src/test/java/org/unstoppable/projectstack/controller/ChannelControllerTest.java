@@ -2,6 +2,7 @@ package org.unstoppable.projectstack.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.security.auth.UserPrincipal;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -13,9 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.unstoppable.projectstack.entity.Channel;
-import org.unstoppable.projectstack.entity.Community;
-import org.unstoppable.projectstack.entity.Message;
+import org.unstoppable.projectstack.entity.*;
 import org.unstoppable.projectstack.model.ChannelCreationForm;
 import org.unstoppable.projectstack.service.*;
 
@@ -99,8 +98,52 @@ public class ChannelControllerTest {
     }
 
     @Test
-    public void channel() throws Exception {
+    public void channelWithAuthorizedUser() throws Exception {
+        Community community = createCommunity();
+        Channel channel = community.getChannels().get(0);
+        User user = createUser();
+        Subscription subscription = createSubscription(community, user);
+        List<Subscription> subscriptions = new ArrayList<>();
+        subscriptions.add(subscription);
+        Message message = createMessage(channel);
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
 
+        Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
+        Mockito.when(subscriptionService.getByCommunity(community)).thenReturn(subscriptions);
+        Mockito.when(messageService.getByChannelWithLimitation(channel, 0, 20)).thenReturn(messages);
+        Mockito.when(userService.getByUsername("userTest")).thenReturn(user);
+        Mockito.when(subscriptionService.checkSubscription(community, user)).thenReturn(true);
+
+        RequestBuilder request = get("/" + community.getTitle() + "/channels/" + channel.getTitle())
+                .principal(new UserPrincipal(user.getUsername()));
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("community"));
+    }
+
+    @Test
+    public void channelWithNonAuthorizedUser() throws Exception {
+        Community community = createCommunity();
+        Channel channel = community.getChannels().get(0);
+        User user = createUser();
+        Subscription subscription = createSubscription(community, user);
+        List<Subscription> subscriptions = new ArrayList<>();
+        subscriptions.add(subscription);
+        Message message = createMessage(channel);
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
+
+        Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
+        Mockito.when(subscriptionService.getByCommunity(community)).thenReturn(subscriptions);
+        Mockito.when(messageService.getByChannelWithLimitation(channel, 0, 20)).thenReturn(messages);
+
+        RequestBuilder request = get("/" + community.getTitle() + "/channels/" + channel.getTitle());
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("community"));
     }
 
     @Test
@@ -113,11 +156,28 @@ public class ChannelControllerTest {
 
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
         Mockito.when(messageService.getByChannelWithLimitation(channel, 0, 20)).thenReturn(messages);
-        RequestBuilder request = post("/" + community.getTitle() + "/channels/" + channel.getTitle() + "/messages").contentType(MediaType.APPLICATION_JSON_VALUE).param("startRowPosition", "0");
+        RequestBuilder request = post("/" + community.getTitle() + "/channels/" + channel.getTitle() + "/messages")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .param("startRowPosition", "0");
         mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$[0].message").value(message.getMessage()));
+    }
+
+    private Subscription createSubscription(Community community, User user) {
+        Subscription subscription = new Subscription();
+        subscription.setUser(user);
+        subscription.setCommunity(community);
+        return subscription;
+    }
+
+    private User createUser() {
+        User user = new User();
+        user.setUsername("userTest");
+        user.setEmail("test@test.com");
+        user.setPassword("passwordTest");
+        return user;
     }
 
     private Community createCommunity() {
