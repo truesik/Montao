@@ -10,20 +10,21 @@
         height: 75px;
         div.search{display: none;}
         &>div.button-contain,
-        div#mobile-search{position: absolute;}
+        div#mobile-search-button{position: absolute;}
         &>div.button-contain{right: 5px;}
-        div#mobile-search{
+        div#mobile-search-button{
             position: absolute;
             left: 5px;
         }
         div.logo{
             position: absolute;
-            left: 39%;
+            left: 50%;
+            margin-left: -55px;
         }
         #create-account-window{
-            left: 50.5%;
             width: 300px;
             height: 240px;
+            margin-left: -149px;
             div{
                 padding-left: 0px;
                 span{display: block;}
@@ -45,15 +46,20 @@
 @media (min-width:(@max-mobile-scrin-size+1)){
     header{
         nav{
-            div#mobile-search{display: none;}
+            div#mobile-search-button,
+            input#mobile-search{display: none !important;}
+            div.logo,
+            div#log-in-button{display: inline-block !important;;}
             div.search,
             div.button-contain{position: relative;}
             #create-account-window{
+                margin-left: -233px;
                 div{
                     &:nth-of-type(1){padding-left: 133px;}
                     &:nth-of-type(2){padding-left: 90px;}
                 }
             }
+            #mobile-search{display: none;}
         }
     }
     article{
@@ -101,7 +107,7 @@ header{
                 width: 250px;
             }
         }
-        div#mobile-search{
+        div#mobile-search-button{
             font-size: 40px;
             top: 15px;
             cursor: pointer;
@@ -130,6 +136,15 @@ header{
             }
         }
         button {cursor: pointer;}
+        #mobile-search{
+            display: none;
+            top: 25px;
+            position: relative;
+            left: 40px;
+            height: 25px;
+            font-size: 18px;
+            width: 84%;
+        }
     }
     &:hover{
         background-color: rgba(33, 150, 243, 1);
@@ -239,6 +254,7 @@ a{
     left:50%;
     width:300px;
     height:260px;
+    margin-left: -149px;
     h2,
     input,
     input+input,
@@ -264,7 +280,7 @@ a{
 #create-account-window{
     width: 465px;
     height: 225px;
-    left: 43.5%;
+    margin-left: 1px;
     div{
         display: block;
     }
@@ -287,6 +303,7 @@ a{
     font-family:arial;
     position:absolute;
     top:25%;
+    left: 50%;
     border-radius: 20px;
     span{font-weight: 600;}
 }
