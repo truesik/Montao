@@ -23,7 +23,8 @@
         }
         #create-account-window{
             width: 300px;
-            height: 240px;
+            heig
+            span{display: none;}ht: 240px;
             margin-left: -149px;
             div{
                 padding-left: 0px;
@@ -35,6 +36,17 @@
                 padding-left: 5px;
             }
         }
+    }
+    .avatar-contain{
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        img:nth-child(2){
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+        span{display: none;}
     }
     article{
         .community{
@@ -67,6 +79,11 @@
             width: 450px;
             height: 220px;
         }
+    }
+    .avatar-contain{
+        position: relative;
+        left: 544px;
+        bottom: 71px;
     }
     @media (min-width:(@max-mobile-scrin-size+1))and(max-width:(@max-tablet-scrin-size - 1)){
 
@@ -151,9 +168,6 @@ header{
         background-color: rgba(33, 150, 243, 1);
     }
     div.avatar-contain{
-        position: relative;
-        left: 544px;
-        bottom: 71px;
         cursor: pointer;
         img{float: right;}
         span{
