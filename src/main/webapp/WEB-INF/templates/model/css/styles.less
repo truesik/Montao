@@ -93,6 +93,7 @@ header{
     nav{
         max-width: 720px;
         margin: 0 auto;
+        max-height: 75px;
         div{
             display: inline-block;
             vertical-align: top;
@@ -148,6 +149,17 @@ header{
     }
     &:hover{
         background-color: rgba(33, 150, 243, 1);
+    }
+    div.avatar-contain{
+        position: relative;
+        left: 544px;
+        bottom: 71px;
+        cursor: pointer;
+        img{float: right;}
+        span{
+            position: relative;
+            bottom: 38px;
+        }
     }
     #cover{
         input{
@@ -219,6 +231,9 @@ footer{
   -khtml-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+}
+.login-name{
+    color: azure;
 }
 a{
     text-decoration: none;
