@@ -2,6 +2,13 @@
     font-family:Helvetica;
     src:url(fonts/Helvetica_CE_Regular.ttf);
 }
+.transition-rule(@time){
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out; 
+}
 @max-mobile-scrin-size: 710px;
 @max-tablet-scrin-size: 992px;
 @media (max-width: @max-mobile-scrin-size){
@@ -41,7 +48,7 @@
         position: absolute;
         right: 5px;
         top: 5px;
-        img:nth-child(2){
+        i{
             position: absolute;
             bottom: 0;
             right: 0;
@@ -84,6 +91,16 @@
         position: relative;
         left: 544px;
         bottom: 71px;
+        i{
+            position: relative;
+            top: 48px;
+            right: -100px;
+        }
+        span{
+            position: relative;
+            bottom: -7px;
+            left: 15px;
+        }
     }
     @media (min-width:(@max-mobile-scrin-size+1))and(max-width:(@max-tablet-scrin-size - 1)){
 
@@ -170,10 +187,7 @@ header{
     div.avatar-contain{
         cursor: pointer;
         img{float: right;}
-        span{
-            position: relative;
-            bottom: 38px;
-        }
+        i{color: white;}
     }
     #cover{
         input{
