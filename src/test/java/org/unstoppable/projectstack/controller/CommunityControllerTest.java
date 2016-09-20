@@ -10,11 +10,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.unstoppable.projectstack.entity.Channel;
+import org.unstoppable.projectstack.entity.Community;
+import org.unstoppable.projectstack.entity.Subscription;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.service.ChannelService;
 import org.unstoppable.projectstack.service.CommunityService;
 import org.unstoppable.projectstack.service.SubscriptionService;
 import org.unstoppable.projectstack.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -83,8 +89,29 @@ public class CommunityControllerTest {
     }
 
     @Test
-    public void unsubscribe() throws Exception {
+    public void unsubscribeSuccess() throws Exception {
+        Community community = createCommunity();
+        User user = createUser();
+        Subscription subscription = createSubscription(community, user);
+        Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
+        Mockito.when(userService.getByUsername(user.getUsername())).thenReturn(user);
+        Mockito.when(subscriptionService.get(community, user)).thenReturn(subscription);
+        RequestBuilder request = post("/communities/unsubscribe")
+                .param("communityTitle", community.getTitle())
+                .principal(new UserPrincipal(user.getUsername()));
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().string("success"));
+    }
 
+    @Test
+    public void unsubscribeFailure() throws Exception {
+        Community community = createCommunity();
+        RequestBuilder request = post("/communities/unsubscribe")
+                .param("communityTitle", community.getTitle());
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().string("failure"));
     }
 
     private User createUser() {
@@ -93,5 +120,30 @@ public class CommunityControllerTest {
         user.setEmail("test@test.com");
         user.setPassword("passwordTest");
         return user;
+    }
+
+    private Channel createChannel(Community community) {
+        Channel channel = new Channel();
+        channel.setTitle("channelTest");
+        channel.setCommunity(community);
+        return channel;
+    }
+
+    private Subscription createSubscription(Community community, User user) {
+        Subscription subscription = new Subscription();
+        subscription.setUser(user);
+        subscription.setCommunity(community);
+        return subscription;
+    }
+
+    private Community createCommunity() {
+        Community community = new Community();
+        community.setTitle("communityTest");
+        community.setVisible(true);
+        List<Channel> channels = new ArrayList<>();
+        Channel channel = createChannel(community);
+        channels.add(channel);
+        community.setChannels(channels);
+        return community;
     }
 }
