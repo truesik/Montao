@@ -4,6 +4,9 @@ import com.sun.security.auth.UserPrincipal;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.format.Formatter;
+import org.springframework.format.support.FormattingConversionService;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -14,13 +17,17 @@ import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.Subscription;
 import org.unstoppable.projectstack.entity.User;
+import org.unstoppable.projectstack.model.CommunityCreationForm;
+import org.unstoppable.projectstack.model.CommunitySubscription;
 import org.unstoppable.projectstack.service.ChannelService;
 import org.unstoppable.projectstack.service.CommunityService;
 import org.unstoppable.projectstack.service.SubscriptionService;
 import org.unstoppable.projectstack.service.UserService;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -28,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CommunityControllerTest {
     private UserService userService;
     private CommunityService communityService;
-    private ChannelService channelService;
     private SubscriptionService subscriptionService;
     private MockMvc mockMvc;
 
@@ -36,13 +42,32 @@ public class CommunityControllerTest {
     public void setUp() throws Exception {
         userService = Mockito.mock(UserService.class);
         communityService = Mockito.mock(CommunityService.class);
-        channelService = Mockito.mock(ChannelService.class);
+        ChannelService channelService = Mockito.mock(ChannelService.class);
         subscriptionService = Mockito.mock(SubscriptionService.class);
         CommunityController controller = new CommunityController(userService,
                 communityService,
                 channelService,
                 subscriptionService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).setViewResolvers(getViewResolver()).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setConversionService(getConversionService(userService))
+                .setViewResolvers(getViewResolver())
+                .build();
+    }
+
+    private FormattingConversionService getConversionService(UserService userService) {
+        FormattingConversionService formattingConversionService = new FormattingConversionService();
+        formattingConversionService.addFormatterForFieldType(User.class, new Formatter<User>() {
+            @Override
+            public User parse(String text, Locale locale) throws ParseException {
+                return userService.getByUsername(text);
+            }
+
+            @Override
+            public String print(User object, Locale locale) {
+                return object != null ? object.getUsername() : "";
+            }
+        });
+        return formattingConversionService;
     }
 
     private ViewResolver getViewResolver() {
@@ -65,7 +90,38 @@ public class CommunityControllerTest {
 
     @Test
     public void createNewCommunity() throws Exception {
+        Community community = createCommunity();
+        User user = createUser();
+        CommunityCreationForm communityCreationForm = createCommunityCreationForm(community, user);
+        Mockito.when(communityService.checkTitle(community.getTitle())).thenReturn(true);
+        Mockito.when(userService.getByUsername(user.getUsername())).thenReturn(user);
+        RequestBuilder request = post("/communities/new")
+                .principal(new UserPrincipal(user.getUsername()))
+                .param("title", communityCreationForm.getTitle())
+                .param("description", communityCreationForm.getDescription())
+                .param("founder", communityCreationForm.getFounder().getUsername())
+                .param("visible", communityCreationForm.getVisible().toString());
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(redirectedUrl("/" + community.getTitle()));
+    }
 
+    @Test
+    public void tryToCreateWrongCommunity() throws Exception {
+        Community community = createCommunity();
+        User user = createUser();
+        CommunityCreationForm communityCreationForm = createCommunityCreationForm(community, user);
+        Mockito.when(communityService.checkTitle(community.getTitle())).thenReturn(true);
+        Mockito.when(userService.getByUsername(user.getUsername())).thenReturn(user);
+        RequestBuilder request = post("/communities/new")
+                .principal(new UserPrincipal(user.getUsername()))
+                .param("title", "")
+                .param("description", communityCreationForm.getDescription())
+                .param("founder", communityCreationForm.getFounder().getUsername())
+                .param("visible", communityCreationForm.getVisible().toString());
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(view().name("newcommunity"));
     }
 
     @Test
@@ -79,13 +135,75 @@ public class CommunityControllerTest {
     }
 
     @Test
-    public void getCommunities() throws Exception {
+    public void getCommunitiesByPrincipal() throws Exception {
+        Community community = createCommunity();
+        User user = createUser();
+        CommunitySubscription communitySubscription = createCommunitySubscription(community);
+        List<CommunitySubscription> communitySubscriptions = new ArrayList<>();
+        communitySubscriptions.add(communitySubscription);
 
+        Mockito.when(userService.getByUsername(user.getUsername())).thenReturn(user);
+        Mockito.when(subscriptionService.getCommunitiesWithSubscriptionsByUser(user, 0, 40))
+                .thenReturn(communitySubscriptions);
+        RequestBuilder request = post("/communities")
+                .param("startRowPosition", "0")
+                .principal(new UserPrincipal(user.getUsername()));
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$[0].title").value(communitySubscription.getTitle()))
+                .andExpect(jsonPath("$[0].description").value(communitySubscription.getDescription()))
+                .andExpect(jsonPath("$[0].subscribed").value(communitySubscription.getSubscribed()));
     }
 
     @Test
-    public void subscribe() throws Exception {
+    public void getCommunitiesWithoutPrincipal() throws Exception {
+        Community community = createCommunity();
+        List<Community> communities = new ArrayList<>();
+        communities.add(community);
+        CommunitySubscription communitySubscription = createCommunitySubscription(community);
 
+        Mockito.when(communityService.getPublicCommunities(0, 40)).thenReturn(communities);
+        RequestBuilder request = post("/communities")
+                .param("startRowPosition", "0");
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$[0].title").value(communitySubscription.getTitle()))
+                .andExpect(jsonPath("$[0].description").value(communitySubscription.getDescription()))
+                .andExpect(jsonPath("$[0].subscribed").value(false));
+    }
+
+    private CommunitySubscription createCommunitySubscription(Community community) {
+        CommunitySubscription communitySubscription = new CommunitySubscription();
+        communitySubscription.setTitle(community.getTitle());
+        communitySubscription.setDescription(community.getDescription());
+        communitySubscription.setSubscribed(true);
+        return communitySubscription;
+    }
+
+    @Test
+    public void subscribeSuccess() throws Exception {
+        Community community = createCommunity();
+        User user = createUser();
+        Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
+        Mockito.when(userService.getByUsername(user.getUsername())).thenReturn(user);
+        RequestBuilder request = post("/communities/subscribe")
+                .param("communityTitle", community.getTitle())
+                .principal(new UserPrincipal(user.getUsername()));
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().string("success"));
+    }
+
+    @Test
+    public void subscribeFailure() throws Exception {
+        Community community = createCommunity();
+        RequestBuilder request = post("/communities/subscribe")
+                .param("communityTitle", community.getTitle());
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().string("failure"));
     }
 
     @Test
@@ -145,5 +263,14 @@ public class CommunityControllerTest {
         channels.add(channel);
         community.setChannels(channels);
         return community;
+    }
+
+    private CommunityCreationForm createCommunityCreationForm(Community community, User user) {
+        CommunityCreationForm communityCreationForm = new CommunityCreationForm();
+        communityCreationForm.setTitle(community.getTitle());
+        communityCreationForm.setDescription(community.getDescription());
+        communityCreationForm.setFounder(user);
+        communityCreationForm.setVisible(true);
+        return communityCreationForm;
     }
 }
