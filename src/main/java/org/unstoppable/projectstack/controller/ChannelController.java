@@ -106,7 +106,6 @@ public class ChannelController {
         if (principal != null) {
             User user = userService.getByUsername(principal.getName());
             Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
-            System.out.println(isSubscribed.toString());
             model.addAttribute("subscribed", isSubscribed);
         } else {
             model.addAttribute("subscribed", false);
