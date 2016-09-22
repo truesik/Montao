@@ -2,9 +2,15 @@ $(document).ready(function () {
     var path = websocketPath;
     var sock;
     var stomp;
-    var pathArray = $(location).attr('pathname').split('/');
-    var currentCommunity = pathArray[1];
-    var currentChannel = pathArray[3];
+    var newChannelSubscription;
+    var currentCommunity = function () {
+        var pathArray = $(location).attr('pathname').split('/');
+        return pathArray[1];
+    };
+    var currentChannel = function () {
+        var pathArray = $(location).attr('pathname').split('/');
+        return pathArray[3];
+    };
 
     stompConnect();
 
@@ -15,8 +21,11 @@ $(document).ready(function () {
     }
 
     function stompSuccessCallback(frame) {
-        stomp.subscribe('/topic/' + currentCommunity + '/newchannel', handleNewChannel);
-        stomp.subscribe('/topic/' + currentCommunity + '/' + currentChannel, handleChat)
+        newChannelSubscription = stomp.subscribe('/topic/' + currentCommunity() + '/newchannel', handleNewChannel);
+        chatSubscribe = function () {
+            chatSubscription = stomp.subscribe('/topic/' + currentCommunity() + '/' + currentChannel(), handleChat)
+        };
+        chatSubscribe();
     }
 
     function stompFailureCallback(error) {
