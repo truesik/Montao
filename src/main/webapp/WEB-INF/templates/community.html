@@ -96,12 +96,20 @@
     $(document).ready(function () {
         $('#channelList').find('a').click(function () {
             var url = $(this).attr('href');
-            window.history.pushState({}, '', url);
-            $('#messages').load(url + ' #messages>div');
+            window.history.pushState({url: url}, '', url);
+            $('#messages').load(url + ' #messages > div');
             chatSubscription.unsubscribe();
             chatSubscribe();
             return false;
-        })
+        });
+        window.onpopstate = function (e) {
+            if (e.state) {
+                console.log(e.state.url);
+                $('#messages').load(e.state.url + ' #messages > div');
+                chatSubscription.unsubscribe();
+                chatSubscribe();
+            }
+        }
     })
 </script>
 </body>
