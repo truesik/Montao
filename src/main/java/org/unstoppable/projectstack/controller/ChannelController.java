@@ -100,9 +100,6 @@ public class ChannelController {
         // Fill subscribed user list
         List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
         model.addAttribute("userList", subscriptions);
-        // Loads only 20 latest messages
-        List<Message> messages = messageService.getByChannelWithLimitation(currentChannel, 0, QUANTITY);
-        model.addAttribute("messages", messages);
         if (principal != null) {
             User user = userService.getByUsername(principal.getName());
             Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
