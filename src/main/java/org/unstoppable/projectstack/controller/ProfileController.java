@@ -6,24 +6,30 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.entity.Community;
+import org.unstoppable.projectstack.entity.Subscription;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.service.CommunityService;
+import org.unstoppable.projectstack.service.SubscriptionService;
 import org.unstoppable.projectstack.service.UserService;
 
 import java.math.BigInteger;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class ProfileController {
     private final UserService userService;
     private final CommunityService communityService;
+    private final SubscriptionService subscriptionService;
 
     @Autowired
-    public ProfileController(UserService userService, CommunityService communityService) {
+    public ProfileController(UserService userService,
+                             CommunityService communityService,
+                             SubscriptionService subscriptionService) {
         this.userService = userService;
         this.communityService = communityService;
+        this.subscriptionService = subscriptionService;
     }
 
     /**
@@ -52,13 +58,14 @@ public class ProfileController {
      */
     @RequestMapping(value = "/{usernameOrCommunityTitle}", method = RequestMethod.GET)
     public String getUserProfileByUsername(@PathVariable("usernameOrCommunityTitle") String usernameOrTitle,
-                                           Model model) {
+                                           Model model,
+                                           Principal principal) {
         User user = userService.getByUsername(usernameOrTitle);
         Community community = communityService.getByTitle(usernameOrTitle);
         if (user != null) {
             return openUserProfilePage(model, user);
         } else if (community != null) {
-            return openCommunityPage(model, community);
+            return openCommunityPage(model, community, principal);
         } else {
             return "redirect:/";
         }
@@ -71,10 +78,22 @@ public class ProfileController {
      * @param community Community which page should be opened.
      * @return Page.
      */
-    private String openCommunityPage(Model model, Community community) {
-        List<Channel> channels = community.getChannels();
-        // Redirect to default channel
-        return "redirect:/" + community.getTitle() + "/channels/" + channels.get(0).getTitle();
+    private String openCommunityPage(Model model, Community community, Principal principal) {
+//        List<Channel> channels = community.getChannels();
+//        // Redirect to default channel
+//        return "redirect:/" + community.getTitle() + "/channels/" + channels.get(0).getTitle();
+        model.addAttribute("channelList", community.getChannels());
+        // Fill subscribed user list
+        List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
+        model.addAttribute("userList", subscriptions);
+        if (principal != null) {
+            User user = userService.getByUsername(principal.getName());
+            Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
+            model.addAttribute("subscribed", isSubscribed);
+        } else {
+            model.addAttribute("subscribed", false);
+        }
+        return "community";
     }
 
     /**
