@@ -79,9 +79,6 @@ public class ProfileController {
      * @return Page.
      */
     private String openCommunityPage(Model model, Community community, Principal principal) {
-//        List<Channel> channels = community.getChannels();
-//        // Redirect to default channel
-//        return "redirect:/" + community.getTitle() + "/channels/" + channels.get(0).getTitle();
         model.addAttribute("channelList", community.getChannels());
         // Fill subscribed user list
         List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
