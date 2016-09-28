@@ -46,7 +46,8 @@
                                      class="glyphicon glyphicon-plus" data-toggle="modal" href="#myModal"></a>
             <ul class="nav nav-sidebar" id="channelList">
                 <li th:each="channel : ${channelList}">
-                    <a href="#" th:href="@{'/' + ${channel.community.title} + '/channels/' + ${channel.title}}" th:text="${channel.title}">Channel</a>
+                    <a href="#" th:href="@{'/' + ${channel.community.title} + '/channels/' + ${channel.title}}"
+                       th:text="${channel.title}">Channel</a>
                 </li>
             </ul>
             <span>Users </span>
@@ -77,33 +78,10 @@
     /*<![CDATA[*/
     var csrf = /*[[${_csrf.token}]]*/ "";
     var websocketPath = /*[[@{/websocket}]]*/ "";
-    var chatSubscription;
-    var chatSubscribe;
     /*]]>*/
 </script>
-<script th:src="@{/js/chat-connection.js}" src="../js/chat-connection.js"></script>
+<script th:src="@{/js/chat.js}" src="../js/chat.js"></script>
 <script th:src="@{/js/new-channel-submit.js}" src="../js/new-channel-submit.js"></script>
 <script th:src="@{/js/message-submit.js}" src="../js/message-submit.js"></script>
-<script th:src="@{/js/messages-scroll.js}" src="../js/messages-scroll.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#channelList').find('a').click(function () {
-            var url = $(this).attr('href');
-            chatSubscription.unsubscribe();
-            $('#messages').load(url + ' #messages > div');
-            chatSubscribe();
-            window.history.pushState({url: url}, '', url);
-            return false;
-        });
-        window.onpopstate = function (e) {
-            if (e.state) {
-                console.log(e.state.url);
-                chatSubscription.unsubscribe();
-                $('#messages').load(e.state.url + ' #messages > div');
-                chatSubscribe();
-            }
-        }
-    })
-</script>
 </body>
 </html>
