@@ -96,18 +96,7 @@ public class ChannelController {
                 .filter(channel -> channel.getTitle().equals(channelTitle))
                 .findFirst()
                 .orElse(null);
-        model.addAttribute("channelList", community.getChannels());
-        // Fill subscribed user list
-        List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
-        model.addAttribute("userList", subscriptions);
-        if (principal != null) {
-            User user = userService.getByUsername(principal.getName());
-            Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
-            model.addAttribute("subscribed", isSubscribed);
-        } else {
-            model.addAttribute("subscribed", false);
-        }
-        return "community";
+        return "channel";
     }
 
     @RequestMapping(value = "{communityTitle}/channels/{channelTitle}/messages/new", method = RequestMethod.POST)
@@ -148,4 +137,15 @@ public class ChannelController {
                 .orElse(null);
         return messageService.getByChannelWithLimitation(currentChannel, startRowPosition, QUANTITY);
     }
+
+    @RequestMapping(value = "{communityTitle}/get_last_channel",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Channel getLastOpenedChannel(@PathVariable("communityTitle") String communityTitle) {
+        Community community = communityService.getByTitle(communityTitle);
+        Channel channel = community.getChannels().get(0);
+        return channel;
+    }
+
 }
