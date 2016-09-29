@@ -46,7 +46,8 @@
                                      class="glyphicon glyphicon-plus" data-toggle="modal" href="#myModal"></a>
             <ul class="nav nav-sidebar" id="channelList">
                 <li th:each="channel : ${channelList}">
-                    <a href="#" th:text="${channel.title}">Channel</a>
+                    <a href="#" th:href="@{'/' + ${channel.community.title} + '/channels/' + ${channel.title}}"
+                       th:text="${channel.title}">Channel</a>
                 </li>
             </ul>
             <span>Users </span>
@@ -59,13 +60,6 @@
         <!--CHAT-->
         <div class="col-md-offset-2 col-md-10">
             <div class="chat" id="messages">
-                <div class="panel panel-default" th:each="message : ${messages}" th:id="${message.id}">
-                    <div class="panel-body">
-                        <strong th:text="${message.user.username}">username</strong>
-                        <small th:text="${{message.receivedTime}}">2016-04-05 21:05</small>
-                        <p th:text="${message.message}">Hello World!</p>
-                    </div>
-                </div>
             </div>
             <div class="message-input">
                 <input type="text" autocomplete="false" class="form-control" id="message" name="message"
@@ -86,9 +80,8 @@
     var websocketPath = /*[[@{/websocket}]]*/ "";
     /*]]>*/
 </script>
-<script th:src="@{/js/chat-connection.js}" src="../js/chat-connection.js"></script>
+<script th:src="@{/js/chat.js}" src="../js/chat.js"></script>
 <script th:src="@{/js/new-channel-submit.js}" src="../js/new-channel-submit.js"></script>
 <script th:src="@{/js/message-submit.js}" src="../js/message-submit.js"></script>
-<script th:src="@{/js/messages-scroll.js}" src="../js/messages-scroll.js"></script>
 </body>
 </html>

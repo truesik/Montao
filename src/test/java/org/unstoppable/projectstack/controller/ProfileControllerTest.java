@@ -12,6 +12,7 @@ import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.service.CommunityService;
+import org.unstoppable.projectstack.service.SubscriptionService;
 import org.unstoppable.projectstack.service.UserService;
 
 import java.math.BigInteger;
@@ -30,7 +31,8 @@ public class ProfileControllerTest {
     public void setUp() throws Exception {
         userService = Mockito.mock(UserService.class);
         communityService = Mockito.mock(CommunityService.class);
-        ProfileController controller = new ProfileController(userService, communityService);
+        SubscriptionService subscriptionService = Mockito.mock(SubscriptionService.class);
+        ProfileController controller = new ProfileController(userService, communityService, subscriptionService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).setViewResolvers(getViewResolver()).build();
     }
 
