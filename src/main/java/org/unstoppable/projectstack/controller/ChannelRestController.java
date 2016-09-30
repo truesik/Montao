@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.model.ChannelCreationForm;
 import org.unstoppable.projectstack.service.*;
@@ -55,5 +52,18 @@ public class ChannelRestController {
                     channel);
             return "success";
         }
+    }
+
+    /**
+     * Returns false if channel title already exist and true if not.
+     *
+     * @param channelTitle   Channel title.
+     * @param communityTitle Community title.
+     * @return String "true" or "false".
+     */
+    @RequestMapping(value = "/check_title", method = RequestMethod.POST)
+    public String checkTitle(@RequestParam(name = "channelTitle") String channelTitle,
+                             @RequestParam(name = "communityTitle") String communityTitle) {
+        return channelService.checkTitle(channelTitle, communityTitle).toString();
     }
 }
