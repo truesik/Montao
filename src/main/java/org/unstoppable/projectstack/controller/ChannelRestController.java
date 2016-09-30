@@ -6,11 +6,13 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.unstoppable.projectstack.entity.Channel;
+import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.model.ChannelCreationForm;
 import org.unstoppable.projectstack.service.*;
 import org.unstoppable.projectstack.validator.ChannelValidator;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/api/channel")
@@ -65,5 +67,15 @@ public class ChannelRestController {
     public String checkTitle(@RequestParam(name = "channelTitle") String channelTitle,
                              @RequestParam(name = "communityTitle") String communityTitle) {
         return channelService.checkTitle(channelTitle, communityTitle).toString();
+    }
+
+    @RequestMapping(value = "/get_last_opened_channel",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Channel getLastOpenedChannel(@RequestParam(name = "communityTitle") String communityTitle,
+                                        Principal principal) {
+        Community community = communityService.getByTitle(communityTitle);
+        Channel channel = community.getChannels().get(0);
+        return channel;
     }
 }
