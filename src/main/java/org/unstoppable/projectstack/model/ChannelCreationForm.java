@@ -13,6 +13,7 @@ public class ChannelCreationForm {
     @Size(min = MIN_TITLE_LENGTH)
     private String title;
     private String description;
+    @NotEmpty
     private String community;
 
     public String getTitle() {
