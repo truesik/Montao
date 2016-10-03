@@ -13,6 +13,7 @@ import org.unstoppable.projectstack.validator.ChannelValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/channel")
@@ -74,8 +75,24 @@ public class ChannelRestController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Channel getLastOpenedChannel(@RequestParam(name = "communityTitle") String communityTitle,
                                         Principal principal) {
+        if (principal == null) {
+            // If principal is null then get default channel (general)
+            Community community = communityService.getByTitle(communityTitle);
+            return community.getChannels().get(0);
+        } else {
+            // Else get last opened channel
+            // TODO: 30.09.2016 fix this branch
+            Community community = communityService.getByTitle(communityTitle);
+            Channel channel = community.getChannels().get(0);
+            return channel;
+        }
+    }
+
+    @RequestMapping(value = "/get_channels",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Channel> getChannels(@RequestParam(name = "communityTitle") String communityTitle) {
         Community community = communityService.getByTitle(communityTitle);
-        Channel channel = community.getChannels().get(0);
-        return channel;
+        return community.getChannels();
     }
 }
