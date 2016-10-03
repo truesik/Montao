@@ -18,8 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/channel")
 public class ChannelRestController {
-    private static final int QUANTITY = 20;
-
     private final CommunityService communityService;
     private final ChannelService channelService;
     private final MessageService messageService;
