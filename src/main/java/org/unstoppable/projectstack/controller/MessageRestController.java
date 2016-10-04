@@ -37,8 +37,8 @@ public class MessageRestController {
         this.messageService = messageService;
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String newMessage(@RequestParam(value = "newMessage") String newMessage,
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String addMessage(@RequestParam(value = "newMessage") String newMessage,
                              @RequestParam(value = "communityTitle") String communityTitle,
                              @RequestParam(value = "channelTitle") String channelTitle,
                              Principal principal) {
@@ -67,8 +67,8 @@ public class MessageRestController {
 
     @RequestMapping(value = "/get_messages", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Message> getMessages(@RequestParam(value = "communityTitle") String communityTitle,
-                            @RequestParam(value = "channelTitle") String channelTitle,
-                            @RequestParam(value = "startRowPosition") int startRowPosition) {
+                                     @RequestParam(value = "channelTitle") String channelTitle,
+                                     @RequestParam(value = "startRowPosition") int startRowPosition) {
         Community community = communityService.getByTitle(communityTitle);
         Channel currentChannel = community.getChannels().stream()
                 .filter(channel -> channel.getTitle().equals(channelTitle))
