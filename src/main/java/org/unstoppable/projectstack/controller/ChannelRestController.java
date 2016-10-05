@@ -1,10 +1,14 @@
 package org.unstoppable.projectstack.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.unstoppable.projectstack.entity.Channel;
 import org.unstoppable.projectstack.entity.Community;
 import org.unstoppable.projectstack.model.ChannelCreationForm;
@@ -12,6 +16,7 @@ import org.unstoppable.projectstack.service.*;
 import org.unstoppable.projectstack.validator.ChannelValidator;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
@@ -40,18 +45,24 @@ public class ChannelRestController {
         this.subscriptionService = subscriptionService;
     }
 
-    @RequestMapping(value = "/add_new", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addChannel(@Valid @RequestBody ChannelCreationForm channelForm,
-                             BindingResult result) {
+    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> addChannel(@Valid @RequestBody ChannelCreationForm channelForm,
+                                           BindingResult result,
+                                           UriComponentsBuilder uriComponentsBuilder) {
         new ChannelValidator(channelService).validate(channelForm, result);
         if (result.hasErrors()) {
-            return "false";
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         } else {
-            Channel channel = channelForm.createChannel();
+            Community community = communityService.getByTitle(channelForm.getCommunityTitle());
+            Channel channel = channelForm.createChannel(community);
             channelService.add(channel);
             messagingTemplate.convertAndSend("/topic/" + channel.getCommunity().getTitle() + "/newChannelNotification",
                     channel);
-            return "success";
+            HttpHeaders headers = new HttpHeaders();
+            URI location = uriComponentsBuilder.path("/{communityTitle}/channels/{channelTitle}")
+                    .buildAndExpand(channel.getCommunity().getTitle(), channel.getTitle()).toUri();
+            headers.setLocation(location);
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
         }
     }
 
@@ -74,7 +85,7 @@ public class ChannelRestController {
     public Channel getLastOpenedChannel(@RequestParam(name = "communityTitle") String communityTitle,
                                         Principal principal) {
         if (principal == null) {
-            // If principal is null then get default channel (general)
+            // If principal is null, get default channel (general)
             Community community = communityService.getByTitle(communityTitle);
             return community.getChannels().get(0);
         } else {
@@ -89,8 +100,12 @@ public class ChannelRestController {
     @RequestMapping(value = "/get_channels",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Channel> getChannels(@RequestParam(name = "communityTitle") String communityTitle) {
+    public ResponseEntity<List<Channel>> getChannels(@RequestParam(name = "communityTitle") String communityTitle) {
         Community community = communityService.getByTitle(communityTitle);
-        return community.getChannels();
+        List<Channel> channels = community.getChannels();
+        if (!channels.isEmpty()) {
+            return new ResponseEntity<>(channels, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
