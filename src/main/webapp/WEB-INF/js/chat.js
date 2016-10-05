@@ -25,10 +25,10 @@ $(document).ready(function () {
         }
     });
 
-    $('#channelList').find('a').click(function () {
+    $('#channelList').on('click', 'a', function () {
         var url = $(this).attr('href');
         chatSubscription.unsubscribe();
-        window.history.pushState({url: url}, '', url);
+        window.history.pushState({url: url}, null, url);
         getMessagesFromChannel();
         chatSubscribe();
         return false;
@@ -36,7 +36,6 @@ $(document).ready(function () {
 
     window.onpopstate = function (e) {
         if (e.state) {
-            console.log(e.state.url);
             chatSubscription.unsubscribe();
             getMessagesFromChannel();
             chatSubscribe();
@@ -75,8 +74,8 @@ $(document).ready(function () {
             data: {'startRowPosition': count},
             headers: headers,
             success: function (messages) {
+                $messages.empty();
                 if (!$.isEmptyObject(messages)) {
-                    $messages.empty();
                     $.each(messages.reverse(), function (i, message) {
                         $messages.prepend(
                             $('<div>').attr('id', message.id).attr('class', 'panel panel-default').append(
@@ -153,7 +152,7 @@ $(document).ready(function () {
         var channel = JSON.parse(incoming.body);
         $('#channelList').append(
             $('<li>').append(
-                $('<a>').attr('href', '#').text(channel.title)
+                $('<a>').attr('href', '/' + currentCommunity() + '/channels/' + channel.title).text(channel.title)
             )
         )
     }
