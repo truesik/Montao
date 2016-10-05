@@ -8,11 +8,9 @@ import org.unstoppable.projectstack.service.ChannelService;
 
 public class ChannelValidator implements Validator {
     private final ChannelService channelService;
-    private final String communityTitle;
 
-    public ChannelValidator(ChannelService channelService, String communityTitle) {
+    public ChannelValidator(ChannelService channelService) {
         this.channelService = channelService;
-        this.communityTitle = communityTitle;
     }
 
     @Override
@@ -32,7 +30,7 @@ public class ChannelValidator implements Validator {
             errors.rejectValue("title", "channel.error.title.chars");
         }
         // Check title existence
-        if (!channelService.checkTitle(channelForm.getTitle(), communityTitle)) {
+        if (!channelService.checkTitle(channelForm.getTitle(), channelForm.getCommunityTitle())) {
             errors.reject("title", "channel.error.title_exist");
         }
     }
