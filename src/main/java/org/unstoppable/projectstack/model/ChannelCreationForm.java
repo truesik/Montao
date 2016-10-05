@@ -14,7 +14,7 @@ public class ChannelCreationForm {
     private String title;
     private String description;
     @NotEmpty
-    private String community;
+    private String communityTitle;
 
     public String getTitle() {
         return title;
@@ -32,12 +32,12 @@ public class ChannelCreationForm {
         this.description = description;
     }
 
-    public String getCommunity() {
-        return community;
+    public String getCommunityTitle() {
+        return communityTitle;
     }
 
-    public void setCommunity(String community) {
-        this.community = community;
+    public void setCommunityTitle(String communityTitle) {
+        this.communityTitle = communityTitle;
     }
 
     public Channel createChannel(Community community) {
