@@ -1,7 +1,9 @@
 package org.unstoppable.projectstack.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,10 +40,10 @@ public class MessageRestController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addMessage(@RequestParam(value = "newMessage") String newMessage,
-                             @RequestParam(value = "communityTitle") String communityTitle,
-                             @RequestParam(value = "channelTitle") String channelTitle,
-                             Principal principal) {
+    public ResponseEntity<Void> addMessage(@RequestParam(value = "newMessage") String newMessage,
+                                           @RequestParam(value = "communityTitle") String communityTitle,
+                                           @RequestParam(value = "channelTitle") String channelTitle,
+                                           Principal principal) {
         Community community = communityService.getByTitle(communityTitle);
         Channel currentChannel = community.getChannels().stream()
                 .filter(channel -> channel.getTitle().equals(channelTitle))
@@ -53,7 +55,7 @@ public class MessageRestController {
         messageService.add(message);
         // Broadcast message to channel
         messagingTemplate.convertAndSend("/topic/" + communityTitle + "/" + channelTitle, message);
-        return "success";
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     private Message createMessage(String text, User user, Channel channel) {
@@ -66,14 +68,19 @@ public class MessageRestController {
     }
 
     @RequestMapping(value = "/get_messages", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Message> getMessages(@RequestParam(value = "communityTitle") String communityTitle,
-                                     @RequestParam(value = "channelTitle") String channelTitle,
-                                     @RequestParam(value = "startRowPosition") int startRowPosition) {
+    public ResponseEntity<List<Message>> getMessages(@RequestParam(value = "communityTitle") String communityTitle,
+                                                     @RequestParam(value = "channelTitle") String channelTitle,
+                                                     @RequestParam(value = "startRowPosition") int startRowPosition) {
         Community community = communityService.getByTitle(communityTitle);
         Channel currentChannel = community.getChannels().stream()
                 .filter(channel -> channel.getTitle().equals(channelTitle))
                 .findFirst()
                 .orElse(null);
-        return messageService.getByChannelWithLimitation(currentChannel, startRowPosition, QUANTITY);
+        if (currentChannel == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(
+                messageService.getByChannelWithLimitation(currentChannel, startRowPosition, QUANTITY),
+                HttpStatus.OK);
     }
 }
