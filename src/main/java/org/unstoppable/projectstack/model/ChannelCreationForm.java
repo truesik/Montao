@@ -13,6 +13,8 @@ public class ChannelCreationForm {
     @Size(min = MIN_TITLE_LENGTH)
     private String title;
     private String description;
+    @NotEmpty
+    private String communityTitle;
 
     public String getTitle() {
         return title;
@@ -28,6 +30,14 @@ public class ChannelCreationForm {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCommunityTitle() {
+        return communityTitle;
+    }
+
+    public void setCommunityTitle(String communityTitle) {
+        this.communityTitle = communityTitle;
     }
 
     public Channel createChannel(Community community) {
