@@ -58,7 +58,7 @@ public class ChannelController {
     public String addChannel(@PathVariable("communityTitle") String communityTitle,
                              @Valid @RequestBody ChannelCreationForm channelForm,
                              BindingResult result) {
-        new ChannelValidator(channelService, communityTitle).validate(channelForm, result);
+        new ChannelValidator(channelService).validate(channelForm, result);
         // TODO: 23.07.2016 Сделать проверку пользователя, чтобы только авторизованный мог создавать новые каналы
         // TODO: 23.07.2016 Канал может создать только член данного сообщества
         if (result.hasErrors()) {
@@ -92,11 +92,18 @@ public class ChannelController {
                           Model model,
                           Principal principal) {
         Community community = communityService.getByTitle(communityTitle);
-        Channel currentChannel = community.getChannels().stream()
-                .filter(channel -> channel.getTitle().equals(channelTitle))
-                .findFirst()
-                .orElse(null);
-        return "channel";
+        model.addAttribute("channelList", community.getChannels());
+        // Fill subscribed user list
+        List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
+        model.addAttribute("userList", subscriptions);
+        if (principal != null) {
+            User user = userService.getByUsername(principal.getName());
+            Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
+            model.addAttribute("subscribed", isSubscribed);
+        } else {
+            model.addAttribute("subscribed", false);
+        }
+        return "community";
     }
 
     @RequestMapping(value = "{communityTitle}/channels/{channelTitle}/messages/new", method = RequestMethod.POST)
