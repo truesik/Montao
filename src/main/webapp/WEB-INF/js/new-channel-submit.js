@@ -30,7 +30,8 @@ $(document).ready(function () {
         submitHandler: function () {
             var channelForm = {
                 title: $('#title').val(),
-                description: $('#description').val()
+                description: $('#description').val(),
+                communityTitle: currentCommunity
             };
             var csrfToken = csrf;
             var csrfHeader = 'X-CSRF-TOKEN';
