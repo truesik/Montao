@@ -51,7 +51,7 @@
         i{
             position: absolute;
             bottom: 0;
-            right: 0;
+            left: 57px;
         }
         span{display: none;}
     }
@@ -91,16 +91,7 @@
         position: relative;
         left: 544px;
         bottom: 71px;
-        i{
-            position: relative;
-            top: 48px;
-            right: -100px;
-        }
-        span{
-            position: relative;
-            top: 28px;
-            &:nth-child(4){left: 15px;}
-        }
+        div{top: 37px;}
     }
     @media (min-width:(@max-mobile-scrin-size+1))and(max-width:(@max-tablet-scrin-size - 1)){
 
@@ -190,7 +181,9 @@ header{
             float: right;
             width: 70px;
             height: 65px;
+            margin-top: 3px;
         }
+        div{position: relative;}
         i{color: white;}
     }
     #cover{
