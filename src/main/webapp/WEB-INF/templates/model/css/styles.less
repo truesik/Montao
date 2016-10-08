@@ -1,6 +1,6 @@
 @font-face{
     font-family:Helvetica;
-    src:url(fonts/Helvetica_CE_Regular.ttf);
+    src:url(../fonts/Helvetica_CE_Regular.ttf);
 }
 .transition-rule(@time){
     -webkit-transition: all .2s ease-in-out;
@@ -11,6 +11,8 @@
 }
 @max-mobile-scrin-size: 710px;
 @max-tablet-scrin-size: 992px;
+@media screen and (-webkit-min-device-pixel-ratio:0) and (max-width: @max-mobile-scrin-size)//only for chrome cruch
+{.avatar-contain i {top:-14px !important;}}
 @media (max-width: @max-mobile-scrin-size){
     nav{
         max-width: 320px;
@@ -45,12 +47,10 @@
         }
     }
     .avatar-contain{
-        position: absolute;
         right: 5px;
-        top: 5px;
+        position: absolute;
         i{
-            position: absolute;
-            bottom: 0;
+            top: 55px;
             left: 57px;
         }
         span{display: none;}
@@ -90,8 +90,12 @@
     .avatar-contain{
         position: relative;
         left: 544px;
-        bottom: 71px;
-        div{top: 37px;}
+        bottom: 75px;
+        div{top: 33px;}
+        i{
+            right: 0px;
+            bottom: 4px;
+        }
     }
     @media (min-width:(@max-mobile-scrin-size+1))and(max-width:(@max-tablet-scrin-size - 1)){
 
@@ -184,7 +188,10 @@ header{
             margin-top: 3px;
         }
         div{position: relative;}
-        i{color: white;}
+        i{
+            position: absolute;
+            color: white;
+        }
     }
     #cover{
         input{
