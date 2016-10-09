@@ -79,6 +79,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var csrf = /*[[${_csrf.token}]]*/ "";
+var websocketPath = /*[[@{/websocket}]]*/ "";
+/*]]>*/
+</script>
 <script type="text/babel">
     var NavBar = React.createClass({
         render: function () {
@@ -158,25 +164,57 @@
         }
     });
     var Channel = React.createClass({
+        handleClick: function (event) {
+            event.preventDefault();
+            console.log('channel click')
+        },
         render: function () {
             var channel = this.props.channel;
+            var path = $(location).attr('pathname');
             return (
-                    <li key={channel.id}>
-                        <a href={'/' + (channel.community.title) + '/channels/' + (channel.title)}>{channel.title}</a>
-                    </li>
+                    <a
+                            href={`${(path)}/channels/${(channel.title)}`}
+                            onClick={this.handleClick}
+                    >{channel.title}</a>
             )
         }
     });
     var ChannelList = React.createClass({
+        getInitialState: function () {
+            return {
+                channels: []
+            }
+        },
         componentDidMount: function() {
-
+            var csrfToken = csrf;
+            var csrfHeader = 'X-CSRF-TOKEN';
+            var headers = {};
+            headers[csrfHeader] = csrfToken;
+            $.ajax({
+                url: '/api/channel/get_channels?communityTitle=' + $(location).attr('pathname').substring(1, $(location).attr('pathname').length),
+                type: 'post',
+                headers: headers,
+                success: function (result) {
+                    this.setState({
+                        channels: result
+                    })
+                }.bind(this)
+            });
         },
         render: function () {
+            var channels = this.state.channels;
+            var channelListTemplate = channels.map(function (channel, index) {
+                return (
+                        <li key={channel.id}>
+                            <Channel channel={channel}/>
+                        </li>
+                )
+            });
             return (
                     <div>
                         <span>Channels </span>
                         <ul className="nav nav-sidebar" id="channelList">
-                            <Channel/>
+                            {channelListTemplate}
                         </ul>
                     </div>
             )
@@ -186,18 +224,50 @@
         render: function () {
             var user = this.props.user;
             return (
-                  <li key={user.id}>
-                      <a href="#">{user.user.username}</a>
-                  </li>
+                    <a href={`/${(user.user.username)}`}>{user.user.username}</a>
             )
         }
     });
     var UserList = React.createClass({
+        getInitialState: function () {
+            return {
+                users: []
+            }
+        },
+        componentDidMount: function () {
+            this.getSubscribedUsers()
+        },
+        getSubscribedUsers: function () {
+            var csrfToken = csrf;
+            var csrfHeader = 'X-CSRF-TOKEN';
+            var headers = {};
+            headers[csrfHeader] = csrfToken;
+            $.ajax({
+                url: '/api/user/get_subscribed_users?communityTitle=' + $(location).attr('pathname').substring(1, $(location).attr('pathname').length),
+                type: 'post',
+                headers: headers,
+                success: function (result) {
+                    this.setState({
+                        users: result
+                    })
+                }.bind(this)
+            });
+        },
         render: function () {
+            var users = this.state.users;
+            var userListTemplate = users.map(function (user, index) {
+                return (
+                        <li key={user.id}>
+                            <User user={user}/>
+                        </li>
+                )
+            });
             return (
                     <div>
                         <span>Users</span>
-                        <ul className="nav nav-sidebar" id="userList"></ul>
+                        <ul className="nav nav-sidebar" id="userList">
+                            {userListTemplate}
+                        </ul>
                     </div>
             )
         }
@@ -216,24 +286,117 @@
         render: function () {
             var message = this.props.message;
             return (
-                    <div key={message.id} id={message.id} className="panel panel-danger">
-                        <div className="panel-body">
-                            <strong>{message.user.username}</strong>
-                            <small>{message.receivedTime}</small>
-                            <p>{message.message}</p>
-                        </div>
+                    <div className="panel-body">
+                        <strong>{message.user.username}</strong>
+                        <small>{message.receivedTime}</small>
+                        <p>{message.message}</p>
                     </div>
             )
         }
     });
     var MessageBox = React.createClass({
+        getInitialState: function () {
+            return {
+                startRowPosition: 0,
+                messages: []
+            }
+        },
+        componentDidMount: function () {
+            // Set event listener to message box scroll
+            window.addEventListener('scroll', this.handleScroll);
+        },
+        componentWillReceiveProps: function (nextProps) {
+            if (this.props.channel !== nextProps.channel) {
+                // First messages load
+                this.getMessages(nextProps.channel)
+            }
+        },
+        componentWillUnmount: function () {
+            window.removeEventListener('scroll', this.handleScroll)
+        },
+        handleScroll: function (event) {
+            let scrollTop = event.srcElement.body.scrollTop;
+            if (scrollTop == 0) {
+                console.log('Scroll == 0')
+            }
+        },
+        getMessages: function (channelTitle) {
+            console.log('getmessage ' + channelTitle);
+            var csrfToken = csrf;
+            var csrfHeader = 'X-CSRF-TOKEN';
+            var headers = {};
+            headers[csrfHeader] = csrfToken;
+            $.ajax({
+                url: '/api/message/get_messages?communityTitle=' + $(location).attr('pathname').substring(1, $(location).attr('pathname').length) + '&channelTitle=' + channelTitle + '&startRowPosition=0',
+                type: 'post',
+                headers: headers,
+                success: function (result) {
+                    this.setState({
+                        messages: result
+                    })
+                }.bind(this)
+            });
+        },
         render: function () {
+            console.log('render ' + this.props.channel);
+            var messages = this.state.messages;
+            var messagesTemplate = messages.map(function (message) {
+                return (
+                        <div key={message.id} id={message.id} className="panel panel-danger">
+                            <Message message={message}/>
+                        </div>
+                )
+            });
             return (
-
+                <div className="chat" id="messages">
+                    {messagesTemplate}
+                </div>
             )
         }
     });
     var Chat = React.createClass({
+        getInitialState: function () {
+            return {
+                currentChannelTitle: ''
+            }
+        },
+        componentDidMount: function () {
+            this.getLastOpenedChannel();
+            // Connect to websocket
+            this.connectToWebSocket()
+        },
+        getLastOpenedChannel: function () {
+            var csrfToken = csrf;
+            var csrfHeader = 'X-CSRF-TOKEN';
+            var headers = {};
+            headers[csrfHeader] = csrfToken;
+            $.ajax({
+                url: '/api/channel/get_last_opened_channel?communityTitle=' + $(location).attr('pathname').substring(1, $(location).attr('pathname').length),
+                type: 'post',
+                headers: headers,
+                success: function (channel) {
+                    console.log('Chat ' + channel.title);
+                    this.setState({
+                        currentChannelTitle: channel.title
+                    })
+                }.bind(this)
+            });
+        },
+        connectToWebSocket: function () {
+            var sock = new SockJS('/websocket');
+            var stomp = Stomp.over(sock);
+            stomp.connect(
+                    'guest',
+                    'guest',
+                    this.handleWebSocketSuccessConnection,
+                    this.handleWebSocketFailureConnection)
+        },
+        handleWebSocketSuccessConnection: function () {
+
+        },
+        handleWebSocketFailureConnection: function () {
+
+        },
         render: function () {
             return (
                     <div className="container-fluid">
@@ -242,7 +405,7 @@
                                 <SideBar/>
                             </div>
                             <div className="col-md-offset-2 col-md-10">
-                                <MessageBox/>
+                                <MessageBox channel={this.state.currentChannelTitle}/>
                             </div>
                         </div>
                     </div>
@@ -250,10 +413,16 @@
         }
     });
     var App = React.createClass({
+        getInitialState: function () {
+            return {
+                isAuthorized: false,
+                username: ''
+            }
+        },
         render: function () {
             return (
                     <div>
-                        <NavBar/>
+                        <NavBar isAuthorized={this.state.isAuthorized} username={this.state.username}/>
                         <Chat/>
                     </div>
             );
@@ -265,12 +434,7 @@
     );
 </script>
 
-<!--<script th:inline="javascript">-->
-    <!--/*<![CDATA[*/-->
-    <!--var csrf = /*[[${_csrf.token}]]*/ "";-->
-    <!--var websocketPath = /*[[@{/websocket}]]*/ "";-->
-    <!--/*]]>*/-->
-<!--</script>-->
+
 <!--<script th:src="@{/js/chat.js}" src="../js/chat.js"></script>-->
 <!--<script th:src="@{/js/new-channel-submit.js}" src="../js/new-channel-submit.js"></script>-->
 <!--<script th:src="@{/js/message-submit.js}" src="../js/message-submit.js"></script>-->
