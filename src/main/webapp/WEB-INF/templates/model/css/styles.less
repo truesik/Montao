@@ -12,7 +12,7 @@
 @max-mobile-scrin-size: 710px;
 @max-tablet-scrin-size: 992px;
 @media screen and (-webkit-min-device-pixel-ratio:0) and (max-width: @max-mobile-scrin-size)//only for chrome cruch
-{.avatar-contain i {top:-14px !important;}}
+{#avatar-contain i {top:-14px !important;}}
 @media (max-width: @max-mobile-scrin-size){
     nav{
         max-width: 320px;
@@ -32,8 +32,8 @@
         }
         #create-account-window{
             width: 300px;
-            heig
-            span{display: none;}ht: 240px;
+            height: 240px;
+            span{display: none;};
             margin-left: -149px;
             div{
                 padding-left: 0px;
@@ -46,7 +46,7 @@
             }
         }
     }
-    .avatar-contain{
+    #avatar-contain{
         right: 5px;
         position: absolute;
         i{
@@ -87,7 +87,7 @@
             height: 220px;
         }
     }
-    .avatar-contain{
+    #avatar-contain{
         position: relative;
         left: 544px;
         bottom: 75px;
@@ -179,7 +179,7 @@ header{
     &:hover{
         background-color: rgba(33, 150, 243, 1);
     }
-    div.avatar-contain{
+    div#avatar-contain{
         cursor: pointer;
         img{
             float: right;
