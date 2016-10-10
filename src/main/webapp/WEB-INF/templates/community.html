@@ -76,13 +76,15 @@
 <script src="//cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.17.0/babel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/5.1.0/EventEmitter.min.js"></script>
 <script th:inline="javascript">
 /*<![CDATA[*/
 var csrf = /*[[${_csrf.token}]]*/ "";
 var websocketPath = /*[[@{/websocket}]]*/ "";
+window.ee = new EventEmitter();
 /*]]>*/
 </script>
 <script type="text/babel">
@@ -166,16 +168,18 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
     var Channel = React.createClass({
         handleClick: function (event) {
             event.preventDefault();
-            console.log('channel click')
+            window.ee.emit('Channel.changed', this.props.channel.title)
         },
         render: function () {
             var channel = this.props.channel;
             var path = $(location).attr('pathname');
             return (
-                    <a
-                            href={`${(path)}/channels/${(channel.title)}`}
-                            onClick={this.handleClick}
-                    >{channel.title}</a>
+                    <li>
+                        <a
+                                href={`${(path)}/channels/${(channel.title)}`}
+                                onClick={this.handleClick}
+                        >{channel.title}</a>
+                    </li>
             )
         }
     });
@@ -205,9 +209,7 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
             var channels = this.state.channels;
             var channelListTemplate = channels.map(function (channel, index) {
                 return (
-                        <li key={channel.id}>
-                            <Channel channel={channel}/>
-                        </li>
+                        <Channel key={channel.id} channel={channel}/>
                 )
             });
             return (
@@ -224,7 +226,9 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
         render: function () {
             var user = this.props.user;
             return (
-                    <a href={`/${(user.user.username)}`}>{user.user.username}</a>
+                    <li>
+                        <a href={`/${(user.user.username)}`}>{user.user.username}</a>
+                    </li>
             )
         }
     });
@@ -257,9 +261,7 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
             var users = this.state.users;
             var userListTemplate = users.map(function (user, index) {
                 return (
-                        <li key={user.id}>
-                            <User user={user}/>
-                        </li>
+                        <User key={user.id} user={user}/>
                 )
             });
             return (
@@ -273,23 +275,25 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
         }
     });
     var SideBar = React.createClass({
-       render: function () {
-           return (
-                   <div>
-                       <ChannelList/>
-                       <UserList/>
-                   </div>
-           )
-       }
+        render: function () {
+            return (
+                    <div>
+                        <ChannelList/>
+                        <UserList/>
+                    </div>
+            )
+        }
     });
     var Message = React.createClass({
         render: function () {
             var message = this.props.message;
             return (
-                    <div className="panel-body">
-                        <strong>{message.user.username}</strong>
-                        <small>{message.receivedTime}</small>
-                        <p>{message.message}</p>
+                    <div id={message.id} className="panel panel-danger">
+                        <div className="panel-body">
+                            <strong>{message.user.username}</strong>
+                            <small>{message.receivedTime}</small>
+                            <p>{message.message}</p>
+                        </div>
                     </div>
             )
         }
@@ -303,7 +307,12 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
         },
         componentDidMount: function () {
             // Set event listener to message box scroll
-            window.addEventListener('scroll', this.handleScroll);
+            var node = this.findDOMNode;
+//            this.addEventListener('scroll', this.handleScroll);
+//            window.addEventListener('scroll', this.handleScroll)
+            node.addEventListener('scroll', this.handleScroll)
+        },
+        componentDidUpdate: function () {
         },
         componentWillReceiveProps: function (nextProps) {
             if (this.props.channel !== nextProps.channel) {
@@ -312,16 +321,16 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
             }
         },
         componentWillUnmount: function () {
-            window.removeEventListener('scroll', this.handleScroll)
+            this.removeEventListener('scroll', this.handleScroll)
         },
         handleScroll: function (event) {
-            let scrollTop = event.srcElement.body.scrollTop;
+            console.log(event.target.scroll);
+            let scrollTop = this.findDOMNode.scrollTop;
             if (scrollTop == 0) {
                 console.log('Scroll == 0')
             }
         },
         getMessages: function (channelTitle) {
-            console.log('getmessage ' + channelTitle);
             var csrfToken = csrf;
             var csrfHeader = 'X-CSRF-TOKEN';
             var headers = {};
@@ -338,19 +347,16 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
             });
         },
         render: function () {
-            console.log('render ' + this.props.channel);
             var messages = this.state.messages;
             var messagesTemplate = messages.map(function (message) {
                 return (
-                        <div key={message.id} id={message.id} className="panel panel-danger">
-                            <Message message={message}/>
-                        </div>
+                        <Message key={message.id} message={message}/>
                 )
             });
             return (
-                <div className="chat" id="messages">
-                    {messagesTemplate}
-                </div>
+                    <div className="chat" id="messages">
+                        {messagesTemplate}
+                    </div>
             )
         }
     });
@@ -363,7 +369,13 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
         componentDidMount: function () {
             this.getLastOpenedChannel();
             // Connect to websocket
-            this.connectToWebSocket()
+            this.connectToWebSocket();
+            window.ee.addListener('Channel.changed', (channelTitle) => {
+                this.setState({currentChannelTitle: channelTitle})
+            })
+        },
+        componentWillUnmount: function () {
+            window.ee.removeListener('Channel.changed')
         },
         getLastOpenedChannel: function () {
             var csrfToken = csrf;
@@ -375,7 +387,6 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
                 type: 'post',
                 headers: headers,
                 success: function (channel) {
-                    console.log('Chat ' + channel.title);
                     this.setState({
                         currentChannelTitle: channel.title
                     })
@@ -383,13 +394,13 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
             });
         },
         connectToWebSocket: function () {
-            var sock = new SockJS('/websocket');
-            var stomp = Stomp.over(sock);
-            stomp.connect(
-                    'guest',
-                    'guest',
-                    this.handleWebSocketSuccessConnection,
-                    this.handleWebSocketFailureConnection)
+//            var sock = new SockJS('/websocket');
+//            var stomp = Stomp.over(sock);
+//            stomp.connect(
+//                    'guest',
+//                    'guest',
+//                    this.handleWebSocketSuccessConnection,
+//                    this.handleWebSocketFailureConnection)
         },
         handleWebSocketSuccessConnection: function () {
 
@@ -412,22 +423,23 @@ var websocketPath = /*[[@{/websocket}]]*/ "";
             )
         }
     });
-    var App = React.createClass({
-        getInitialState: function () {
-            return {
+    class App extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
                 isAuthorized: false,
                 username: ''
             }
-        },
-        render: function () {
+        }
+        render() {
             return (
                     <div>
                         <NavBar isAuthorized={this.state.isAuthorized} username={this.state.username}/>
                         <Chat/>
                     </div>
-            );
+            )
         }
-    });
+    }
     ReactDOM.render(
             <App/>,
             document.getElementById('root')
