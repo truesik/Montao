@@ -307,28 +307,43 @@ window.ee = new EventEmitter();
         },
         componentDidMount: function () {
             // Set event listener to message box scroll
-            var node = this.findDOMNode;
-//            this.addEventListener('scroll', this.handleScroll);
-//            window.addEventListener('scroll', this.handleScroll)
+            var node = ReactDOM.findDOMNode(this);
             node.addEventListener('scroll', this.handleScroll)
-        },
-        componentDidUpdate: function () {
         },
         componentWillReceiveProps: function (nextProps) {
             if (this.props.channel !== nextProps.channel) {
                 // First messages load
-                this.getMessages(nextProps.channel)
+                this.getMessages(nextProps.channel);
+                var node = ReactDOM.findDOMNode(this);
+                console.log(node.scrollTop);
+                console.log(node.scrollHeight);
+                node.scrollTop = node.scrollHeight;
+                console.log(node.scrollTop)
+            }
+            if (this.props.webSocket !== nextProps.webSocket) {
+                // Subscribe to websocket topic
+                this.subscribeToTopic(nextProps.webSocket);
             }
         },
         componentWillUnmount: function () {
             this.removeEventListener('scroll', this.handleScroll)
+            if (this.props.webSocket != null) {
+                this.props.webSocket.unsubscribe();
+            }
+        },
+        subscribeToTopic: function (webSocket) {
+            console.log('hello')
+            var communityTitle = $(location).attr('pathname').substring(1, $(location).attr('pathname').length);
+            webSocket.subscribe('/topic/' + communityTitle + '/' + this.props.channel, this.newMessageHandler)
+        },
+        newMessageHandler: function (incoming) {
+            var message = JSON.parse(incoming.body);
+            var nextMessage = message.append(this.state.messages);
+            this.setState({
+                messages: nextMessage
+            })
         },
         handleScroll: function (event) {
-            console.log(event.target.scroll);
-            let scrollTop = this.findDOMNode.scrollTop;
-            if (scrollTop == 0) {
-                console.log('Scroll == 0')
-            }
         },
         getMessages: function (channelTitle) {
             var csrfToken = csrf;
@@ -336,17 +351,19 @@ window.ee = new EventEmitter();
             var headers = {};
             headers[csrfHeader] = csrfToken;
             $.ajax({
-                url: '/api/message/get_messages?communityTitle=' + $(location).attr('pathname').substring(1, $(location).attr('pathname').length) + '&channelTitle=' + channelTitle + '&startRowPosition=0',
+                url: '/api/message/get_messages?communityTitle=' + $(location).attr('pathname').substring(1, $(location).attr('pathname').length) + '&channelTitle=' + channelTitle + '&startRowPosition=' + this.state.startRowPosition,
                 type: 'post',
                 headers: headers,
                 success: function (result) {
                     this.setState({
-                        messages: result
+                        messages: result,
+                        startRowPosition: 40
                     })
                 }.bind(this)
             });
         },
         render: function () {
+            console.log(this);
             var messages = this.state.messages;
             var messagesTemplate = messages.map(function (message) {
                 return (
@@ -363,13 +380,14 @@ window.ee = new EventEmitter();
     var Chat = React.createClass({
         getInitialState: function () {
             return {
-                currentChannelTitle: ''
+                currentChannelTitle: '',
+                stomp: null
             }
         },
         componentDidMount: function () {
-            this.getLastOpenedChannel();
             // Connect to websocket
             this.connectToWebSocket();
+            this.getLastOpenedChannel();
             window.ee.addListener('Channel.changed', (channelTitle) => {
                 this.setState({currentChannelTitle: channelTitle})
             })
@@ -394,18 +412,20 @@ window.ee = new EventEmitter();
             });
         },
         connectToWebSocket: function () {
-//            var sock = new SockJS('/websocket');
-//            var stomp = Stomp.over(sock);
-//            stomp.connect(
-//                    'guest',
-//                    'guest',
-//                    this.handleWebSocketSuccessConnection,
-//                    this.handleWebSocketFailureConnection)
+            var sock = new SockJS('/websocket');
+            var stomp = Stomp.over(sock);
+            stomp.connect(
+                    'guest',
+                    'guest',
+                    this.handleWebSocketSuccessConnection(stomp),
+                    this.handleWebSocketFailureConnection(stomp))
         },
-        handleWebSocketSuccessConnection: function () {
-
+        handleWebSocketSuccessConnection: function (stomp) {
+            this.setState({
+                stomp: stomp
+            })
         },
-        handleWebSocketFailureConnection: function () {
+        handleWebSocketFailureConnection: function (stomp) {
 
         },
         render: function () {
@@ -416,7 +436,7 @@ window.ee = new EventEmitter();
                                 <SideBar/>
                             </div>
                             <div className="col-md-offset-2 col-md-10">
-                                <MessageBox channel={this.state.currentChannelTitle}/>
+                                <MessageBox channel={this.state.currentChannelTitle} webSocket={this.state.stomp}/>
                             </div>
                         </div>
                     </div>
