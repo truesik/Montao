@@ -1,6 +1,7 @@
 import * as React from "react";
-import MessageBox from './message.component'
-import SideBar from './sidebar.component'
+import MessageBox from './MessageBox'
+import MessageForm from './MessageForm'
+import SideBar from './SideBar'
 import {Stomp} from "stompjs/lib/stomp";
 import SockJS from 'sockjs-client'
 import $ from 'jquery'
@@ -77,6 +78,7 @@ export default class Chat extends React.Component {
                     </div>
                     <div className="col-md-offset-2 col-md-10">
                         <MessageBox channel={this.state.currentChannelTitle} webSocket={this.state.stomp}/>
+                        <MessageForm/>
                     </div>
                 </div>
             </div>

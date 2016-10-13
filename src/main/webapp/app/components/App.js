@@ -1,6 +1,6 @@
 import React from 'react'
-import NavBar from './navbar.component'
-import Chat from './chat.component'
+import NavBar from './NavBar'
+import Chat from './Chat'
 
 export default class App extends React.Component {
     constructor(props) {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import User from './user.component'
+import User from './User'
 import $ from 'jquery'
 
 export default class UserList extends React.Component {

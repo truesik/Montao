@@ -1,5 +1,5 @@
 import * as React from "react";
-import Channel from './channel.component'
+import Channel from './Channel'
 import $ from 'jquery'
 
 export default class ChannelList extends React.Component {

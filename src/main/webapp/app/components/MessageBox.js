@@ -1,8 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react/lib/ReactDOM";
-import Message from './message.component'
+import Message from './Message'
 import $ from 'jquery'
-import {Stomp} from 'stompjs'
 
 export default class MessageBox extends React.Component {
     constructor(props) {
@@ -87,7 +86,7 @@ export default class MessageBox extends React.Component {
         });
         return (
             <div className="chat" id="messages">
-
+                {messagesTemplate}
             </div>
         )
     }
