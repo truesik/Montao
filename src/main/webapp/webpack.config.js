@@ -1,7 +1,10 @@
 const path = require('path');
 
 module.exports = {
-    entry: './app/index.js',
+    entry: [
+        './app/index.js',
+        'babel-polyfill'
+    ],
     devtool: 'source-map',
     cache: true,
     debug: true,
@@ -21,7 +24,10 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
-                loader: "babel-loader"
+                loaders: [
+                    'babel-loader'
+                ],
+                plugins: ['transform-runtime']
             }
         ]
     }
