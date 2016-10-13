@@ -88,11 +88,10 @@ public class ProfileControllerTest {
     @Test
     public void getCommunity() throws Exception {
         Community community = createCommunity();
-        List<Channel> channels = community.getChannels();
         Mockito.when(communityService.getByTitle("communityTest")).thenReturn(community);
         RequestBuilder request = get("/communityTest");
         mockMvc.perform(request)
-                .andExpect(redirectedUrl("/" + community.getTitle() + "/channels/" + channels.get(0).getTitle()));
+                .andExpect(view().name("community"));
     }
 
     private Channel createChannel(Community community) {
