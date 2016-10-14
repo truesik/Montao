@@ -20,6 +20,7 @@
     <script src="js/jquery-3.0.0.min.js" type='text/javascript'></script>
     <script src="js/popup-window.js" type='text/javascript'></script>
     <script src="js/popup-search.js" type='text/javascript'></script>
+    <script src="js/popup-avatar-menu.js" type='text/javascript'></script>
 </head>
 <body>
     <header>
@@ -41,13 +42,6 @@
             <img src="images/Myaka.jpg" alt="">
             <i class="fa fa-chevron-circle-down" onclick="this.className=(this.className=='fa fa-chevron-circle-down' ? 'fa fa-chevron-circle-up' : 'fa fa-chevron-circle-down')"></i>
            </div>
-           <ul id="popup-menu">
-               <li>Приветствую <span id="user-login">User name</span></li>
-               <li>Профиль</li> 
-               <li>Новые сообщества</li>
-               <li>Настройки</li>
-               <li>Выйти</li> 
-           </ul>
            <div id="cover">
                 <div id="popup-window">
                    <h2>Авторизация</h2>
@@ -78,6 +72,14 @@
         </nav>
     </header>
     <article>
+    <div>
+        <ul id="popup-menu" class="unselectable">
+           <li>Профиль</li> 
+           <li>Новые сообщества</li>
+           <li>Настройки</li>
+           <li>Выйти</li> 
+        </ul>
+    </div>
         <table>
             <tr>
                 <td><div class="community"><span class="unselectable">Main</span></div></td>
