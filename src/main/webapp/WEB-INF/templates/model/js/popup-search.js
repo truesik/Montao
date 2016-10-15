@@ -1,6 +1,8 @@
 $(function(){ 
     var isClicked =false;
     $('#mobile-search-button').click(function(){
+        $( "#mobile-search-button i" ).toggleClass( "fa-search" );
+        $( "#mobile-search-button i" ).toggleClass( "fa-close" );
         if(isClicked == false){
             isClicked = true;
             $(".logo , #log-in-button , #avatar-contain").css('display','none');
