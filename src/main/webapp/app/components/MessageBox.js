@@ -31,7 +31,6 @@ export default class MessageBox extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.channel !== nextProps.channel) {
-            console.log('balafdgsfgdf');
             // First messages load
             this.getMessages(nextProps.channel);
             var node = ReactDOM.findDOMNode(this);
