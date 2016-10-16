@@ -2,9 +2,9 @@ import * as React from "react";
 import MessageBox from './MessageBox'
 import MessageForm from './MessageForm'
 import SideBar from './SideBar'
-import {Stomp} from "stompjs/lib/stomp";
 import SockJS from 'sockjs-client'
 import $ from 'jquery'
+import {Stomp} from "stompjs/lib/stomp";
 
 export default class Chat extends React.Component {
     constructor(props) {
@@ -15,14 +15,12 @@ export default class Chat extends React.Component {
         };
         this.getLastOpenedChannel = this.getLastOpenedChannel.bind(this);
         this.connectToWebSocket = this.connectToWebSocket.bind(this);
-        this.handleWebSocketSuccessConnection = this.handleWebSocketSuccessConnection.bind(this);
-        this.handleWebSocketFailureConnection = this.handleWebSocketFailureConnection.bind(this);
     }
 
     componentDidMount() {
+        this.getLastOpenedChannel();
         // Connect to websocket
         this.connectToWebSocket();
-        this.getLastOpenedChannel();
         window.ee.addListener('Channel.changed', (channelTitle) => {
             this.setState({currentChannelTitle: channelTitle})
         })
@@ -55,18 +53,17 @@ export default class Chat extends React.Component {
         stomp.connect(
             'guest',
             'guest',
-            this.handleWebSocketSuccessConnection(stomp),
-            this.handleWebSocketFailureConnection(stomp))
-    }
-
-    handleWebSocketSuccessConnection(stomp) {
-        this.setState({
-            stomp: stomp
-        })
-    }
-
-    handleWebSocketFailureConnection(stomp) {
-
+            () => {
+                this.setState({
+                    stomp: stomp
+                })
+            },
+            (error) => {
+                console.log('STOMP: ' + error);
+                setTimeout(this.connectToWebSocket, 10000);
+                console.log('STOMP: Reconnecting in 10 seconds');
+            }
+        )
     }
 
     render() {
