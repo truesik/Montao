@@ -1,42 +1,20 @@
 import * as React from "react";
 import User from './User'
-import $ from 'jquery'
+import {connect} from "react-redux";
+import {getUsers} from "../actions/UserActions";
+import {bindActionCreators} from 'redux';
 
-export default class UserList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            users: []
-        };
-        this.getSubscribedUsers = this.getSubscribedUsers.bind(this);
-    }
-
+class UserList extends React.Component {
     componentDidMount() {
-        this.getSubscribedUsers()
-    }
-
-    getSubscribedUsers() {
-        var csrfToken = csrf;
-        var csrfHeader = 'X-CSRF-TOKEN';
-        var headers = {};
-        headers[csrfHeader] = csrfToken;
-        $.ajax({
-            url: '/api/user/get_subscribed_users?communityTitle=' + $(location).attr('pathname').substring(1, $(location).attr('pathname').length),
-            type: 'post',
-            headers: headers,
-            success: function (result) {
-                this.setState({
-                    users: result
-                })
-            }.bind(this)
-        });
+        const getUsers = this.props.getUsers;
+        getUsers();
     }
 
     render() {
-        var users = this.state.users;
-        var userListTemplate = users.map(function (user, index) {
+        const subscribers = this.props.subscribers;
+        const userListTemplate = subscribers.map(subscriber => {
             return (
-                <User key={user.id} user={user}/>
+                <User key={subscriber.user.id} user={subscriber.user}/>
             )
         });
         return (
@@ -49,3 +27,19 @@ export default class UserList extends React.Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        subscribers: state.usersReducer.subscribers,
+        error: state.usersReducer.error
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        getUsers: bindActionCreators(getUsers, dispatch)
+    }
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserList);
