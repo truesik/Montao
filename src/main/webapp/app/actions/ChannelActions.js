@@ -1,9 +1,9 @@
-import {GET_USERS_REQUEST, GET_USERS_SUCCESS, GET_USERS_FAILURE} from "../constants/User";
+import {GET_CHANNELS_REQUEST, GET_CHANNELS_SUCCESS, GET_CHANNELS_FAILURE} from "../constants/Channel";
 
-export const getUsers = () => {
+export const getChannels = () => {
     return (dispatch) => {
         dispatch({
-            type: GET_USERS_REQUEST
+            type: GET_CHANNELS_REQUEST
         });
         var csrfToken = csrf;
         var csrfHeader = 'X-CSRF-TOKEN';
@@ -11,21 +11,21 @@ export const getUsers = () => {
         headers[csrfHeader] = csrfToken;
         $
             .ajax({
-                url: '/api/user/get_subscribed_users?communityTitle=' + $(location).attr('pathname').substring(1),
+                url: '/api/channel/get_channels?communityTitle=' + $(location).attr('pathname').substring(1),
                 type: 'post',
                 headers: headers
             })
             .then(response => {
                 dispatch({
-                    type: GET_USERS_SUCCESS,
+                    type:GET_CHANNELS_SUCCESS,
                     payload: response
                 })
             })
             .fail(error => {
                 dispatch({
-                    type: GET_USERS_FAILURE,
+                    type: GET_CHANNELS_FAILURE,
                     payload: error
                 })
             })
-    };
+    }
 };
