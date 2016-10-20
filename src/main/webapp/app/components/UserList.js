@@ -1,10 +1,7 @@
 import * as React from "react";
 import User from './User'
-import {connect} from "react-redux";
-import {getUsers} from "../actions/UserActions";
-import {bindActionCreators} from 'redux';
 
-class UserList extends React.Component {
+export default class UserList extends React.Component {
     componentDidMount() {
         const getUsers = this.props.getUsers;
         getUsers();
@@ -27,19 +24,3 @@ class UserList extends React.Component {
         )
     }
 }
-
-const mapStateToProps = state => {
-    return {
-        subscribers: state.usersReducer.subscribers,
-        error: state.usersReducer.error
-    }
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        getUsers: bindActionCreators(getUsers, dispatch)
-    }
-
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserList);
