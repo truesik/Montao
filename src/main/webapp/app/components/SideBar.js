@@ -1,13 +1,13 @@
 import * as React from "react";
-import ChannelList from './ChannelList'
-import UserList from './UserList'
+import ChannelListContainer from '../containers/ChannelListContainer'
+import UserListContainer from '../containers/UserListContainer'
 
 export default class SideBar extends React.Component {
     render() {
         return (
             <div>
-                <ChannelList/>
-                <UserList/>
+                <ChannelListContainer/>
+                <UserListContainer/>
             </div>
         )
     }
