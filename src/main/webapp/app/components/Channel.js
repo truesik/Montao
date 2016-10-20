@@ -1,14 +1,9 @@
 import * as React from "react";
 
 export default class Channel extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-
     handleClick(event) {
         event.preventDefault();
-        window.ee.emit('Channel.changed', this.props.channel.title)
+        console.log("someday... someday")
     }
 
     render() {
@@ -18,7 +13,7 @@ export default class Channel extends React.Component {
             <li>
                 <a
                     href={`${(path)}/channels/${(channel.title)}`}
-                    onClick={this.handleClick}
+                    onClick={::this.handleClick}
                 >{channel.title}</a>
             </li>
         )
