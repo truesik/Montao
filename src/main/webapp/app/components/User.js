@@ -1,12 +1,11 @@
-import * as React from "react";
+import React from "react";
 
-export default class User extends React.Component {
-    render() {
-        var user = this.props.user;
-        return (
-            <li>
-                <a href={`/${(user.user.username)}`}>{user.user.username}</a>
-            </li>
-        )
-    }
-}
+const User = ({user}) => {
+    return (
+        <li>
+            <a href={`/${(user.username)}`}>{user.username}</a>
+        </li>
+    )
+};
+
+export default User
