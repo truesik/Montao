@@ -14,7 +14,7 @@ export default class App extends React.Component {
         return (
             <div>
                 <NavBar isAuthorized={this.state.isAuthorized} username={this.state.username}/>
-                <ChatContainer/>
+                <ChatContainer currentCommunityTitle={$(location).attr('pathname').substring(1)}/>
             </div>
         )
     }
