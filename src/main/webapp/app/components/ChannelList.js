@@ -9,9 +9,10 @@ export default class ChannelList extends React.Component {
 
     render() {
         const channels = this.props.channels;
+        var setCurrentChannel = this.props.setCurrentChannel;
         const channelListTemplate = channels.map(channel => {
             return (
-                <Channel key={channel.id} channel={channel}/>
+                <Channel key={channel.id} channel={channel} onClick={setCurrentChannel}/>
             )
         });
         return (
