@@ -1,4 +1,4 @@
-import {getChannels} from "../actions/ChannelActions";
+import * as channelActions from "../actions/ChannelActions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import ChannelList from "../components/ChannelList"
@@ -11,7 +11,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getChannels: bindActionCreators(getChannels, dispatch)
+        getChannels: bindActionCreators(channelActions.getChannels, dispatch),
+        setCurrentChannel: bindActionCreators(channelActions.setCurrentChannel, dispatch)
     }
 };
 
