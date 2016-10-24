@@ -1,29 +1,29 @@
-import {GET_USERS_REQUEST, GET_USERS_SUCCESS, GET_USERS_FAILURE} from "../constants/User";
+import * as constants from "../constants/userConstants";
 
 const initialState = {
     subscribers: [],
     error: '',
-    isFetching: false
+    userListFetching: false
 };
 
 const usersReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_USERS_REQUEST:
+        case constants.GET_USERS_REQUEST:
             return {
                 ...state,
-                isFetching: true
+                userListFetching: true
             };
-        case GET_USERS_SUCCESS:
+        case constants.GET_USERS_SUCCESS:
             return {
                 ...state,
                 subscribers: action.payload,
-                isFetching: false
+                userListFetching: false
             };
-        case GET_USERS_FAILURE:
+        case constants.GET_USERS_FAILURE:
             return {
                 ...state,
                 error: action.payload,
-                isFetching: false
+                userListFetching: false
             };
         default:
             return state;
