@@ -1,5 +1,4 @@
-import $ from 'jquery'
-import {GET_USERS_REQUEST, GET_USERS_SUCCESS, GET_USERS_FAILURE} from "../constants/User";
+import {GET_USERS_REQUEST, GET_USERS_SUCCESS, GET_USERS_FAILURE} from "../constants/userConstants";
 
 export const getUsers = () => {
     return (dispatch) => {
