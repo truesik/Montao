@@ -1,84 +1,52 @@
 import * as React from "react";
-import * as ReactDOM from "react/lib/ReactDOM";
 import Message from './Message'
-import $ from 'jquery'
+import * as ReactDOM from "react/lib/ReactDOM";
 
 export default class MessageBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            startRowPosition: 0,
-            messages: []
-        };
-        this.subscribeToTopic = this.subscribeToTopic.bind(this);
-        this.newMessageHandler = this.subscribeToTopic.bind(this);
-        this.handleScroll = this.handleScroll.bind(this);
-        this.getMessages = this.getMessages.bind(this);
+            scrollHeight: 0
+        }
     }
-
     componentDidMount() {
-        // Set event listener to message box scroll
         var node = ReactDOM.findDOMNode(this);
-        node.addEventListener('scroll', this.handleScroll)
-    }
-
-    componentWillUnmount() {
-        this.removeEventListener('scroll', this.handleScroll);
-        if (this.props.webSocket != null) {
-            this.props.webSocket.unsubscribe();
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.channel !== nextProps.channel) {
-            // First messages load
-            this.getMessages(nextProps.channel);
-            var node = ReactDOM.findDOMNode(this);
-            node.scrollTop = node.scrollHeight;
-        }
-        if (this.props.webSocket !== nextProps.webSocket) {
-            // Subscribe to websocket topic
-            this.subscribeToTopic(nextProps.webSocket);
-        }
-    }
-
-    subscribeToTopic(websocket) {
-        var communityTitle = $(location).attr('pathname').substring(1, $(location).attr('pathname').length);
-        websocket.subscribe('/topic/' + communityTitle + '/' + this.props.channel, this.newMessageHandler)
-    }
-
-    newMessageHandler(incoming) {
-        var message = JSON.parse(incoming.body);
-        var nextMessage = message.append(this.state.messages);
-        this.setState({
-            messages: nextMessage
+        node.addEventListener('scroll', () => {
+            // When scroll top equal 0
+            if (node.scrollTop == 0) {
+                // Store current scroll height
+                this.state.scrollHeight = node.scrollHeight;
+                let currentCommunityTitle = $(location).attr('pathname').substring(1);
+                let channelTitle = this.props.channel;
+                let startRowPosition = this.props.startRowPosition;
+                // Get oldest messages
+                this.props.getOldestMessages(currentCommunityTitle, channelTitle, startRowPosition)
+            }
         })
     }
-
-    handleScroll(event) {
+    componentWillReceiveProps(nextProps) {
+        // When channel changed
+        if (this.props.channel !== nextProps.channel) {
+            var currentCommunityTitle = $(location).attr('pathname').substring(1);
+            // Get messages
+            this.props.getMessages(currentCommunityTitle, nextProps.channel, 0)
+        }
     }
 
-    getMessages(channelTitle) {
-        var csrfToken = csrf;
-        var csrfHeader = 'X-CSRF-TOKEN';
-        var headers = {};
-        headers[csrfHeader] = csrfToken;
-        $.ajax({
-            url: '/api/message/get_messages?communityTitle=' + $(location).attr('pathname').substring(1, $(location).attr('pathname').length) + '&channelTitle=' + channelTitle + '&startRowPosition=' + this.state.startRowPosition,
-            type: 'post',
-            headers: headers,
-            success: function (result) {
-                this.setState({
-                    messages: result,
-                    startRowPosition: 40
-                })
-            }.bind(this)
-        });
+    componentDidUpdate() {
+        var node = ReactDOM.findDOMNode(this);
+        if (this.props.scrollBottom) {
+            // Scroll to bottom
+            node.scrollTop = node.scrollHeight;
+        } else {
+            // Stay on position
+            node.scrollTop = node.scrollHeight - this.state.scrollHeight;
+        }
     }
 
     render() {
-        var messages = this.state.messages;
-        var messagesTemplate = messages.map(function (message) {
+        var messages = this.props.messages;
+        var messagesTemplate = messages.map(message => {
             return (
                 <Message key={message.id} message={message}/>
             )
