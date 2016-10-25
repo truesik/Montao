@@ -17,7 +17,6 @@ export default class ChannelList extends React.Component {
         });
         return (
             <div>
-                <span>Channels </span>
                 <ul className="nav nav-sidebar" id="channelList">
                     {channelListTemplate}
                 </ul>

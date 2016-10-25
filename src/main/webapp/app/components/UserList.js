@@ -16,7 +16,6 @@ export default class UserList extends React.Component {
         });
         return (
             <div>
-                <span>Users</span>
                 <ul className="nav nav-sidebar" id="userList">
                     {userListTemplate}
                 </ul>
