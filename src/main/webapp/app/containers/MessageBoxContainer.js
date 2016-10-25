@@ -6,13 +6,16 @@ import * as messageActions from '../actions/MessageActions'
 const mapStateToProps = (state) => {
     return {
         messages: state.messagesReducer.messages,
-        error: state.messagesReducer.error
+        error: state.messagesReducer.error,
+        scrollBottom: state.messagesReducer.scrollBottom,
+        startRowPosition: state.messagesReducer.startRowPosition
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getMessages: bindActionCreators(messageActions.getMessages, dispatch)
+        getMessages: bindActionCreators(messageActions.getMessages, dispatch),
+        getOldestMessages: bindActionCreators(messageActions.getOldestMessages, dispatch)
     }
 };
 
