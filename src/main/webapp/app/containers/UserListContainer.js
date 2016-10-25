@@ -7,7 +7,7 @@ const mapStateToProps = state => {
     return {
         subscribers: state.usersReducer.subscribers,
         error: state.usersReducer.error,
-        isFetching: state.usersReducer.isFetching
+        channelListFetching: state.usersReducer.channelListFetching
     }
 };
 
