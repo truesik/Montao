@@ -1,14 +1,16 @@
-import {GET_CHANNELS_REQUEST, GET_CHANNELS_SUCCESS, GET_CHANNELS_FAILURE} from "../constants/Channel";
+// import $ from 'jquery'
+import * as constants from "../constants/channelConstants";
+
+var csrfToken = csrf;
+var csrfHeader = 'X-CSRF-TOKEN';
+var headers = {};
+headers[csrfHeader] = csrfToken;
 
 export const getChannels = () => {
     return (dispatch) => {
         dispatch({
-            type: GET_CHANNELS_REQUEST
+            type: constants.GET_CHANNELS_REQUEST
         });
-        var csrfToken = csrf;
-        var csrfHeader = 'X-CSRF-TOKEN';
-        var headers = {};
-        headers[csrfHeader] = csrfToken;
         $
             .ajax({
                 url: '/api/channel/get_channels?communityTitle=' + $(location).attr('pathname').substring(1),
@@ -17,15 +19,50 @@ export const getChannels = () => {
             })
             .then(response => {
                 dispatch({
-                    type:GET_CHANNELS_SUCCESS,
+                    type: constants.GET_CHANNELS_SUCCESS,
                     payload: response
                 })
             })
             .fail(error => {
                 dispatch({
-                    type: GET_CHANNELS_FAILURE,
+                    type: constants.GET_CHANNELS_FAILURE,
                     payload: error
                 })
             })
+    }
+};
+
+export const getLastOpenedChannel = () => {
+    return dispatch => {
+        dispatch({
+            type: constants.GET_LAST_OPENED_CHANNEL_REQUEST
+        });
+        $
+            .ajax({
+                url: '/api/channel/get_last_opened_channel?communityTitle=' + $(location).attr('pathname').substring(1),
+                type: 'post',
+                headers: headers
+            })
+            .then(channel => {
+                dispatch({
+                    type: constants.GET_LAST_OPENED_CHANNEL_SUCCESS,
+                    payload: channel.title
+                })
+            })
+            .fail(error => {
+                dispatch({
+                    type: constants.GET_LAST_OPENED_CHANNEL_FAILURE,
+                    payload: error
+                })
+            })
+    }
+};
+
+export const setCurrentChannel = (channelTitle) => {
+    return dispatch => {
+        dispatch({
+            type: constants.SET_CURRENT_CHANNEL,
+            payload: channelTitle
+        })
     }
 };
