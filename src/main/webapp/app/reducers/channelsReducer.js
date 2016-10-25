@@ -1,28 +1,49 @@
-import {GET_CHANNELS_REQUEST, GET_CHANNELS_SUCCESS, GET_CHANNELS_FAILURE} from "../constants/Channel";
+import * as constants from "../constants/channelConstants";
+
 const initialState = {
     channels: [],
+    currentChannelTitle: '',
     error: '',
-    isFetching: false
+    channelListFetching: false
 };
 
 const channelsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_CHANNELS_REQUEST:
+        case constants.GET_CHANNELS_REQUEST:
             return {
                 ...state,
-                isFetching: true
+                channelListFetching: true
             };
-        case GET_CHANNELS_SUCCESS:
+        case constants.GET_CHANNELS_SUCCESS:
             return {
                 ...state,
                 channels: action.payload,
-                isFetching: false
+                channelListFetching: false
             };
-        case GET_CHANNELS_FAILURE:
+        case constants.GET_CHANNELS_FAILURE:
             return {
                 ...state,
                 error: action.payload,
-                isFetching: false
+                channelListFetching: false
+            };
+        case constants.GET_LAST_OPENED_CHANNEL_REQUEST:
+            return {
+                ...state
+            };
+        case constants.GET_LAST_OPENED_CHANNEL_SUCCESS:
+            return {
+                ...state,
+                currentChannelTitle: action.payload
+            };
+        case constants.GET_LAST_OPENED_CHANNEL_FAILURE:
+            return {
+                ...state,
+                error: action.payload
+            };
+        case constants.SET_CURRENT_CHANNEL:
+            return {
+                ...state,
+                currentChannelTitle: action.payload
             };
         default:
             return state;
