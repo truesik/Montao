@@ -27,6 +27,7 @@
     "react-redux": "4.4.5",
     "redux": "3.6.0",
     "redux-thunk": "^2.1.0",
+    "redux-logger": "2.7.0",
     "sockjs-client": "1.1.1",
     "stompjs": "^2.3.3",
     "webpack": "^1.13.2",
