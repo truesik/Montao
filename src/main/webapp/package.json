@@ -25,7 +25,8 @@
     "react": "15.3.2",
     "react-dom": "15.3.2",
     "react-redux": "4.4.5",
-    "react-addons-css-transition-group":"15.3.2",
+    "react-addons-css-transition-group": "15.3.2",
+    "react-addons-transition-group": "15.3.2",
     "redux": "3.6.0",
     "redux-thunk": "^2.1.0",
     "redux-logger": "2.7.0",
@@ -33,7 +34,8 @@
     "stompjs": "^2.3.3",
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.5.1",
-    "webpack-hot-middleware": "^2.6.4"
+    "webpack-hot-middleware": "^2.6.4",
+    "gsap": "1.19.0"
   },
   "scripts": {
     "watch": "webpack --watch -d"
