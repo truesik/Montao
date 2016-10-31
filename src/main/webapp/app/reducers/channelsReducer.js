@@ -45,6 +45,19 @@ const channelsReducer = (state = initialState, action) => {
                 ...state,
                 currentChannelTitle: action.payload
             };
+        case constants.ADD_CHANNEL_REQUEST:
+            return {
+                ...state
+            };
+        case constants.ADD_CHANNEL_SUCCESS:
+            return {
+                ...state
+            };
+        case constants.ADD_CHANNEL_FAILURE:
+            return {
+                ...state,
+                error: action.payload
+            };
         default:
             return state;
     }
