@@ -1,6 +1,7 @@
-import * as React from "react";
+import React from "react";
+import ReactDOM from "react-dom";
+import ReactTransitionGroup from 'react-addons-transition-group'
 import Message from './Message'
-import * as ReactDOM from "react/lib/ReactDOM";
 
 export default class MessageBox extends React.Component {
     constructor(props) {
@@ -9,21 +10,31 @@ export default class MessageBox extends React.Component {
             scrollHeight: 0
         }
     }
+
     componentDidMount() {
         var node = ReactDOM.findDOMNode(this);
-        node.addEventListener('scroll', () => {
-            // When scroll top equal 0
-            if (node.scrollTop == 0) {
-                // Store current scroll height
-                this.state.scrollHeight = node.scrollHeight;
-                let currentCommunityTitle = $(location).attr('pathname').substring(1);
-                let channelTitle = this.props.channel;
-                let startRowPosition = this.props.startRowPosition;
-                // Get oldest messages
-                this.props.getOldestMessages(currentCommunityTitle, channelTitle, startRowPosition)
-            }
-        })
+        node.addEventListener('scroll', this.handleScrollEvent.bind(this, node));
     }
+
+    componentWillUnmount() {
+        var node = ReactDOM.findDOMNode(this);
+        node.removeEventListener('scroll', this.handleScrollEvent.bind(this, node));
+    }
+
+    handleScrollEvent(node) {
+        // When scroll top equal 0
+        if (node.scrollTop == 0) {
+            // Store current scroll height
+            this.state.scrollHeight = node.scrollHeight;
+
+            let currentCommunityTitle = $(location).attr('pathname').substring(1);
+            let channelTitle = this.props.channel;
+            let startRowPosition = this.props.startRowPosition;
+            // Get oldest messages
+            this.props.getOldestMessages(currentCommunityTitle, channelTitle, startRowPosition)
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         // When channel changed
         if (this.props.channel !== nextProps.channel) {
@@ -52,8 +63,11 @@ export default class MessageBox extends React.Component {
             )
         });
         return (
-            <div className="chat" id="messages">
-                {messagesTemplate}
+            <div className="chat">
+                {messages.length > 0 &&
+                <ReactTransitionGroup>
+                    {messagesTemplate}
+                </ReactTransitionGroup>}
             </div>
         )
     }
