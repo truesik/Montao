@@ -66,3 +66,30 @@ export const setCurrentChannel = (channelTitle) => {
         })
     }
 };
+
+export const addChannel = (channel) => {
+    return dispatch => {
+        dispatch({
+            type: constants.ADD_CHANNEL_REQUEST
+        });
+        $
+            .ajax({
+                url: "/api/channel/add",
+                type: "post",
+                contentType: "application/json",
+                date: JSON.stringify(channel),
+                headers: headers
+            })
+            .then(response => {
+                dispatch({
+                    type: constants.ADD_CHANNEL_SUCCESS
+                })
+            })
+            .fail(error => {
+                dispatch({
+                    type: constants.ADD_CHANNEL_FAILURE,
+                    payload: error
+                })
+            })
+    }
+};
