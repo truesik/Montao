@@ -11,7 +11,8 @@ const messagesReducer = (state = initialState, action) => {
     switch (action.type) {
         case constants.GET_MESSAGES_REQUEST:
             return {
-                ...state
+                ...state,
+                messages: []
             };
         case constants.GET_MESSAGES_SUCCESS:
             return {
@@ -25,19 +26,10 @@ const messagesReducer = (state = initialState, action) => {
                 ...state,
                 error: action.payload
             };
-        case constants.GET_MESSAGE_REQUEST:
-            return {
-                ...state
-            };
         case constants.GET_MESSAGE_SUCCESS:
             return {
                 ...state,
-                message: state.messages.concat(action.payload)
-            };
-        case constants.GET_MESSAGE_FAILURE:
-            return {
-                ...state,
-                error: action.payload
+                messages: state.messages.concat(action.payload)
             };
         case constants.GET_OLDEST_MESSAGES_REQUEST:
             return {
