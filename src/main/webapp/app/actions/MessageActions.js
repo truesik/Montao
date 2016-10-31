@@ -58,9 +58,12 @@ export const getOldestMessages = (communityTitle, channelTitle, startRowPosition
     }
 };
 
-export const getMessage = () => {
+export const getMessage = (message) => {
     return (dispatch) => {
-
+        dispatch({
+            type: constants.GET_MESSAGE_SUCCESS,
+            payload: message
+        })
     }
 };
 
