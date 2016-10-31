@@ -1,12 +1,22 @@
-import * as React from "react";
+import React from "react";
 import MessageBoxContainer from '../containers/MessageBoxContainer'
 import MessageForm from './MessageForm'
 import SideBar from './SideBar'
 
 export default class Chat extends React.Component {
     componentDidMount() {
-        var lastOpenedChannel = this.props.getLastOpenedChannel;
-        lastOpenedChannel();
+        var connectToWebSocket = this.props.connectToWebSocket;
+        connectToWebSocket();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.isConnected !== nextProps.isConnected && nextProps.isConnected) {
+            this.props.getLastOpenedChannel();
+        }
+        if (this.props.currentChannelTitle != nextProps.currentChannelTitle && this.props.isConnected) {
+            this.props.unsubscribe();
+            this.props.subscribeToTopic(this.props.currentCommunityTitle, nextProps.currentChannelTitle);
+        }
     }
 
     render() {
