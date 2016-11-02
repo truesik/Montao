@@ -60,7 +60,7 @@ public class ChannelControllerTest {
     @Test
     public void addChannel() throws Exception {
         Community community = createCommunity();
-        ChannelCreationForm channelForm = createChannelForm();
+        ChannelCreationForm channelForm = createChannelForm(community.getTitle());
         Mockito.when(channelService.checkTitle(channelForm.getTitle(), community.getTitle())).thenReturn(true);
         RequestBuilder request = post("/" + community.getTitle() + "/channels/new")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -74,7 +74,7 @@ public class ChannelControllerTest {
     @Test
     public void addWrongChannel() throws Exception {
         Community community = createCommunity();
-        ChannelCreationForm channelForm = createChannelForm();
+        ChannelCreationForm channelForm = createChannelForm(community.getTitle());
         Mockito.when(channelService.checkTitle(channelForm.getTitle(), community.getTitle())).thenReturn(false);
         RequestBuilder request = post("/" + community.getTitle() + "/channels/new")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -222,10 +222,11 @@ public class ChannelControllerTest {
         return channel;
     }
 
-    private ChannelCreationForm createChannelForm() {
+    private ChannelCreationForm createChannelForm(String communityTitle) {
         ChannelCreationForm channelForm = new ChannelCreationForm();
         channelForm.setTitle("channelTest");
         channelForm.setDescription("descriptionTest");
+        channelForm.setCommunityTitle(communityTitle);
         return channelForm;
     }
 

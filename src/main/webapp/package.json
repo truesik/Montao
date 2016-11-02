@@ -1,0 +1,44 @@
+{
+  "name": "montao",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:truesik/Montao.git"
+  },
+  "keywords": [
+    "rest",
+    "spring",
+    "react",
+    "websocket",
+    "stompjs"
+  ],
+  "homepage": "https://github.com/truesik/Montao",
+  "dependencies": {
+    "babel-core": "6.16.0",
+    "babel-loader": "6.2.5",
+    "babel-plugin-transform-runtime": "6.12.0",
+    "babel-polyfill": "6.16.0",
+    "babel-preset-es2015": "6.16.0",
+    "babel-preset-react": "6.16.0",
+    "babel-preset-stage-0": "6.16.0",
+    "babel-runtime": "6.9.2",
+    "babel-plugin-transform-decorators-legacy": "1.3.4",
+    "react": "15.3.2",
+    "react-dom": "15.3.2",
+    "react-redux": "4.4.5",
+    "react-addons-css-transition-group": "15.3.2",
+    "react-addons-transition-group": "15.3.2",
+    "redux": "3.6.0",
+    "redux-thunk": "^2.1.0",
+    "redux-logger": "2.7.0",
+    "sockjs-client": "1.1.1",
+    "stompjs": "^2.3.3",
+    "webpack": "^1.13.2",
+    "webpack-dev-middleware": "^1.5.1",
+    "webpack-hot-middleware": "^2.6.4",
+    "gsap": "1.19.0"
+  },
+  "scripts": {
+    "watch": "webpack --watch -d"
+  }
+}
