@@ -16,7 +16,7 @@ export default class CommunitiesBox extends React.Component {
         });
 
         return (
-            <div className="container-fluid" style="margin-top: 100px">
+            <div className="container-fluid" style={{marginTop: 100 + 'px'}}>
                 <div className="row" id="communities">
                     {communitiesTemplate}
                 </div>
