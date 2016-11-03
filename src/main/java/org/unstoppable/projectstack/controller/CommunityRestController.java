@@ -129,6 +129,7 @@ public class CommunityRestController {
 
     private CommunitySubscription createCommunitySubscription(Community community) {
         CommunitySubscription communitySubscription = new CommunitySubscription();
+        communitySubscription.setId(community.getId());
         communitySubscription.setTitle(community.getTitle());
         communitySubscription.setDescription(community.getDescription());
         communitySubscription.setSubscribed(false);
