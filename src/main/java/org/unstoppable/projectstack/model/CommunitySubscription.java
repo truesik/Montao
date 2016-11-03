@@ -1,9 +1,20 @@
 package org.unstoppable.projectstack.model;
 
+import java.math.BigInteger;
+
 public class CommunitySubscription {
+    private BigInteger id;
     private String title;
     private String description;
     private Boolean isSubscribed;
+
+    public BigInteger getId() {
+        return id;
+    }
+
+    public void setId(BigInteger id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
