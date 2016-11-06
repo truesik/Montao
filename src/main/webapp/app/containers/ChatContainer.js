@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {getLastOpenedChannel} from "../actions/ChannelActions";
 import {sendMessage} from "../actions/MessageActions";
-import {connectToWebsocket, subscribeToTopic, unsubscribe} from "../actions/WebSocketActions";
+import {connectToWebsocket, subscribeToTopic, unsubscribe, disconnect} from "../actions/WebSocketActions";
 
 const mapStateToProps = state => {
     return {
@@ -18,7 +18,8 @@ const mapDispatchToProps = dispatch => {
         sendMessage: bindActionCreators(sendMessage, dispatch),
         connectToWebSocket: bindActionCreators(connectToWebsocket, dispatch),
         subscribeToTopic: bindActionCreators(subscribeToTopic, dispatch),
-        unsubscribe: bindActionCreators(unsubscribe, dispatch)
+        unsubscribe: bindActionCreators(unsubscribe, dispatch),
+        disconnect: bindActionCreators(disconnect, dispatch)
     }
 };
 

@@ -22,6 +22,15 @@ const websocketReducer = (state = initialState, action) => {
                 isConnected: false,
                 error: action.payload
             };
+        case actionTypes.DISCONNECT_REQUEST:
+            return {
+                ...state
+            };
+        case actionTypes.DISCONNECT_SUCCESS:
+            return {
+                ...state,
+                isConnected: false
+            };
         default:
             return state;
     }
