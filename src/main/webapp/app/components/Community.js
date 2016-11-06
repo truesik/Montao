@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 
 const Community = ({community}) => {
     return (
@@ -9,7 +10,7 @@ const Community = ({community}) => {
                 </div>
                 <div className="panel-footer">
                     <i className="material-icons">group</i>
-                    <a href="#">{community.title}</a>
+                    <Link to={`/community/${community.title}`}>{community.title}</Link>
                     <a className="btn btn-primary"
                        style={{float: 'right'}}>
                         {community.subscribed ? "Leave" : "Join"}
