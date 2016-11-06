@@ -4,7 +4,7 @@ import User from './User'
 export default class UserList extends React.Component {
     componentDidMount() {
         const getUsers = this.props.getUsers;
-        getUsers();
+        getUsers(this.props.communityTitle);
     }
 
     render() {

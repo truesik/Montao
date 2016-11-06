@@ -4,7 +4,7 @@ import Channel from './Channel'
 export default class ChannelList extends React.Component {
     componentDidMount() {
         const getChannels = this.props.getChannels;
-        getChannels();
+        getChannels(this.props.communityTitle);
     }
 
     render() {
