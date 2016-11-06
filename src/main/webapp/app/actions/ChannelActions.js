@@ -6,14 +6,14 @@ var csrfHeader = 'X-CSRF-TOKEN';
 var headers = {};
 headers[csrfHeader] = csrfToken;
 
-export const getChannels = () => {
+export const getChannels = (communityTitle) => {
     return (dispatch) => {
         dispatch({
             type: constants.GET_CHANNELS_REQUEST
         });
         $
             .ajax({
-                url: '/api/channel/get_channels?communityTitle=' + $(location).attr('pathname').substring(1),
+                url: '/api/channel/get_channels?communityTitle=' + communityTitle,
                 type: 'post',
                 headers: headers
             })
@@ -32,14 +32,14 @@ export const getChannels = () => {
     }
 };
 
-export const getLastOpenedChannel = () => {
+export const getLastOpenedChannel = (communityTitle) => {
     return dispatch => {
         dispatch({
             type: constants.GET_LAST_OPENED_CHANNEL_REQUEST
         });
         $
             .ajax({
-                url: '/api/channel/get_last_opened_channel?communityTitle=' + $(location).attr('pathname').substring(1),
+                url: '/api/channel/get_last_opened_channel?communityTitle=' + communityTitle,
                 type: 'post',
                 headers: headers
             })
