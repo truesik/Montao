@@ -8,11 +8,11 @@ import org.unstoppable.projectstack.model.CommunitySubscription;
 import java.util.List;
 
 public interface SubscriptionDAO {
-    void add(Subscription subscription);
+    Subscription add(Subscription subscription);
 
     Subscription getSubscription(Community community, User user);
 
-    void delete(Subscription subscription);
+    Subscription delete(Subscription subscription);
 
     List<Subscription> getByUser(User user);
 
