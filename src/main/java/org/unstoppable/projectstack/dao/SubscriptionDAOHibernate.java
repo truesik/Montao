@@ -27,9 +27,9 @@ public class SubscriptionDAOHibernate implements SubscriptionDAO {
     public Subscription add(Subscription subscription) {
         Serializable id = sessionFactory.getCurrentSession().save(subscription);
         Subscription newSubscription = new Subscription();
-        subscription.setId((BigInteger) id);
-        subscription.setCommunity(subscription.getCommunity());
-        subscription.setUser(subscription.getUser());
+        newSubscription.setId((BigInteger) id);
+        newSubscription.setCommunity(subscription.getCommunity());
+        newSubscription.setUser(subscription.getUser());
         return newSubscription;
     }
 
