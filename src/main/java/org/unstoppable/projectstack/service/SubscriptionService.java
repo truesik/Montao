@@ -15,8 +15,8 @@ public class SubscriptionService {
     @Autowired
     private SubscriptionDAO subscriptionDAO;
 
-    public void subscribe(Subscription newSubscription) {
-        subscriptionDAO.add(newSubscription);
+    public Subscription subscribe(Subscription newSubscription) {
+        return subscriptionDAO.add(newSubscription);
     }
 
     public Boolean checkSubscription(Community community, User user) {
@@ -28,8 +28,8 @@ public class SubscriptionService {
         return subscriptionDAO.getSubscription(community, user);
     }
 
-    public void delete(Subscription subscription) {
-        subscriptionDAO.delete(subscription);
+    public Subscription delete(Subscription subscription) {
+        return subscriptionDAO.delete(subscription);
     }
 
     public List<Subscription> getByUser(User user) {
