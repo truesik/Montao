@@ -1,7 +1,6 @@
 package org.unstoppable.projectstack.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -90,7 +89,7 @@ public class CommunityRestController {
             List<Community> communities = communityService.getPublicCommunities(startRowPosition, QUANTITY);
             List<CommunitySubscription> communitySubscriptions = new ArrayList<>();
             for (Community community : communities) {
-                CommunitySubscription communitySubscription = createCommunitySubscription(community);
+                CommunitySubscription communitySubscription = createCommunitySubscription(community, false);
                 communitySubscriptions.add(communitySubscription);
             }
             return communitySubscriptions;
@@ -102,8 +101,8 @@ public class CommunityRestController {
         if (principal != null) {
             Community community = communityService.getByTitle(communityTitle);
             User user = userService.getByUsername(principal.getName());
-            Subscription subscription = subscriptionService.subscribe(createSubscription(community, user));
-            return ResponseEntity.ok(createCommunitySubscriptionBySubscription(subscription));
+            subscriptionService.subscribe(createSubscription(community, user));
+            return ResponseEntity.ok(createCommunitySubscription(community, true));
         }
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
@@ -116,7 +115,7 @@ public class CommunityRestController {
             Subscription subscription = subscriptionService.get(community, user);
             if (subscription != null) {
                 subscriptionService.delete(subscription);
-                return ResponseEntity.ok(createCommunitySubscriptionBySubscription(subscription));
+                return ResponseEntity.ok(createCommunitySubscription(community, false));
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -124,21 +123,12 @@ public class CommunityRestController {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
-    private CommunitySubscription createCommunitySubscriptionBySubscription(Subscription subscription) {
-        CommunitySubscription communitySubscription = new CommunitySubscription();
-        communitySubscription.setId(subscription.getCommunity().getId());
-        communitySubscription.setTitle(subscription.getCommunity().getTitle());
-        communitySubscription.setDescription(subscription.getCommunity().getDescription());
-        communitySubscription.setSubscribed(true);
-        return communitySubscription;
-    }
-
-    private CommunitySubscription createCommunitySubscription(Community community) {
+    private CommunitySubscription createCommunitySubscription(Community community, boolean isSubscribed) {
         CommunitySubscription communitySubscription = new CommunitySubscription();
         communitySubscription.setId(community.getId());
         communitySubscription.setTitle(community.getTitle());
         communitySubscription.setDescription(community.getDescription());
-        communitySubscription.setSubscribed(false);
+        communitySubscription.setSubscribed(isSubscribed);
         return communitySubscription;
     }
 
