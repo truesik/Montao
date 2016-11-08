@@ -11,7 +11,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getCommunities: bindActionCreators(communityActions.getCommunities, dispatch)
+        getCommunities: bindActionCreators(communityActions.getCommunities, dispatch),
+        join: bindActionCreators(communityActions.join, dispatch),
+        leave: bindActionCreators(communityActions.leave, dispatch)
     }
 };
 
