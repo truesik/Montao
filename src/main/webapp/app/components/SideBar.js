@@ -38,11 +38,11 @@ export default class SideBar extends React.Component {
                 <div>
                     <span>Channels </span>
                     <a className="glyphicon glyphicon-plus" onClick={::this.handleShowModal}></a>
-                    <ChannelListContainer/>
+                    <ChannelListContainer communityTitle={this.props.communityTitle}/>
                 </div>
                 <div>
                     <span>Users</span>
-                    <UserListContainer/>
+                    <UserListContainer communityTitle={this.props.communityTitle}/>
                 </div>
             </div>
         )

@@ -1,7 +1,6 @@
 package org.unstoppable.projectstack.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,13 +47,13 @@ public class CommunityRestController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<Void> addCommunity(@Valid @RequestBody CommunityCreationForm communityForm,
+    public ResponseEntity addCommunity(@Valid @RequestBody CommunityCreationForm communityForm,
                                              BindingResult result,
                                              Principal principal,
                                              UriComponentsBuilder uriComponentsBuilder) {
         new CommunityValidator(communityService).validate(communityForm, result);
         if (result.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
             Community community = communityForm.createCommunity();
             communityService.save(community);
@@ -64,12 +63,9 @@ public class CommunityRestController {
             // Subscribe creator to that community
             User user = userService.getByUsername(principal.getName());
             subscriptionService.subscribe(createSubscription(community, user));
-            // Create header
-            HttpHeaders headers = new HttpHeaders();
-            // And header location
+            // And create location
             URI location = uriComponentsBuilder.path("/{communityTitle}").buildAndExpand(community.getTitle()).toUri();
-            headers.setLocation(location);
-            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+            return ResponseEntity.created(location).build();
         }
     }
 
@@ -93,7 +89,7 @@ public class CommunityRestController {
             List<Community> communities = communityService.getPublicCommunities(startRowPosition, QUANTITY);
             List<CommunitySubscription> communitySubscriptions = new ArrayList<>();
             for (Community community : communities) {
-                CommunitySubscription communitySubscription = createCommunitySubscription(community);
+                CommunitySubscription communitySubscription = createCommunitySubscription(community, false);
                 communitySubscriptions.add(communitySubscription);
             }
             return communitySubscriptions;
@@ -101,37 +97,38 @@ public class CommunityRestController {
     }
 
     @RequestMapping(value = "/join", method = RequestMethod.POST)
-    public ResponseEntity<Void> subscribe(String communityTitle, Principal principal) {
+    public ResponseEntity subscribe(String communityTitle, Principal principal) {
         if (principal != null) {
             Community community = communityService.getByTitle(communityTitle);
             User user = userService.getByUsername(principal.getName());
             subscriptionService.subscribe(createSubscription(community, user));
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok(createCommunitySubscription(community, true));
         }
-        return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
     @RequestMapping(value = "/leave", method = RequestMethod.POST)
-    public ResponseEntity<Void> unsubscribe(String communityTitle, Principal principal) {
+    public ResponseEntity unsubscribe(String communityTitle, Principal principal) {
         if (principal != null) {
             Community community = communityService.getByTitle(communityTitle);
             User user = userService.getByUsername(principal.getName());
             Subscription subscription = subscriptionService.get(community, user);
             if (subscription != null) {
                 subscriptionService.delete(subscription);
-                return new ResponseEntity<>(HttpStatus.OK);
+                return ResponseEntity.ok(createCommunitySubscription(community, false));
             } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return ResponseEntity.notFound().build();
             }
         }
-        return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
-    private CommunitySubscription createCommunitySubscription(Community community) {
+    private CommunitySubscription createCommunitySubscription(Community community, boolean isSubscribed) {
         CommunitySubscription communitySubscription = new CommunitySubscription();
+        communitySubscription.setId(community.getId());
         communitySubscription.setTitle(community.getTitle());
         communitySubscription.setDescription(community.getDescription());
-        communitySubscription.setSubscribed(false);
+        communitySubscription.setSubscribed(isSubscribed);
         return communitySubscription;
     }
 

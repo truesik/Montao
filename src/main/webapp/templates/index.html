@@ -3,13 +3,8 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/head :: head('Montao')"></head>
 <body>
-<div th:replace="fragments/navbar :: ${#authorization.expression('isAuthenticated()')}? 'signed-navbar' : 'notsigned-navbar'"></div>
-
-<div class="container-fluid" style="margin-top: 100px">
-    <div class="row" id="communities">
-    </div>
-</div>
-
+<link href="../css/community.css" rel="stylesheet" th:href="@{/css/community.css}">
+<div id="root">Loading...</div>
 <div th:replace="fragments/footer :: bootstrap-scripts"></div>
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -17,7 +12,6 @@
     var isAuthorizated = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
     /*]]>*/
 </script>
-<script th:src="@{/js/community-list-scroll.js}" src="../js/community-list-scroll.js"></script>
-<script th:src="@{/js/subscription.js}" src="../js/subscription.js"></script>
+<script src="../build/bundle.js"></script>
 </body>
 </html>

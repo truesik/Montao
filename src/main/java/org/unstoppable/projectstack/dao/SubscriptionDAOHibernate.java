@@ -11,6 +11,9 @@ import org.unstoppable.projectstack.entity.Subscription;
 import org.unstoppable.projectstack.entity.User;
 import org.unstoppable.projectstack.model.CommunitySubscription;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +64,8 @@ public class SubscriptionDAOHibernate implements SubscriptionDAO {
                                                                              int maxResult) {
         List<CommunitySubscription> communitySubscriptions = new ArrayList<>();
         String sql = "" +
-                "SELECT c.title         AS title, " +
+                "SELECT c.id            AS id, " +
+                "       c.title         AS title, " +
                 "       c.description   AS description, " +
                 "       CASE " +
                 "           WHEN s.community_id IS NULL " +
@@ -79,9 +83,10 @@ public class SubscriptionDAOHibernate implements SubscriptionDAO {
         List<Object[]> list = nativeQuery.list();
         for (Object[] row : list) {
             CommunitySubscription communitySubscription = new CommunitySubscription();
-            communitySubscription.setTitle(row[0].toString());
-            communitySubscription.setDescription(row[1].toString());
-            communitySubscription.setSubscribed((Boolean) row[2]);
+            communitySubscription.setId(((BigDecimal) row[0]).toBigInteger());
+            communitySubscription.setTitle(row[1].toString());
+            communitySubscription.setDescription(row[2].toString());
+            communitySubscription.setSubscribed((Boolean) row[3]);
             communitySubscriptions.add(communitySubscription);
         }
         return communitySubscriptions;

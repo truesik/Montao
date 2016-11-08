@@ -1,6 +1,6 @@
 import {GET_USERS_REQUEST, GET_USERS_SUCCESS, GET_USERS_FAILURE} from "../constants/userConstants";
 
-export const getUsers = () => {
+export const getUsers = (communityTitle) => {
     return (dispatch) => {
         dispatch({
             type: GET_USERS_REQUEST
@@ -11,7 +11,7 @@ export const getUsers = () => {
         headers[csrfHeader] = csrfToken;
         $
             .ajax({
-                url: '/api/user/get_subscribed_users?communityTitle=' + $(location).attr('pathname').substring(1),
+                url: '/api/user/get_subscribed_users?communityTitle=' + communityTitle,
                 type: 'post',
                 headers: headers
             })

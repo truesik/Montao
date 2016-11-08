@@ -19,8 +19,16 @@ export const subscribeToTopic = (currentCommunityTitle, currentChannelTitle) => 
 
 export const unsubscribe = () => {
     return (dispatch) => {
-        dispatch ({
+        dispatch({
             type: actionTypes.UNSUBSCRIBE_REQUEST
+        })
+    }
+};
+
+export const disconnect = () => {
+    return dispatch => {
+        dispatch({
+            type: actionTypes.DISCONNECT_REQUEST
         })
     }
 };

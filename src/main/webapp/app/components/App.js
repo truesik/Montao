@@ -1,6 +1,5 @@
-import React from 'react'
-import NavBar from './NavBar'
-import ChatContainer from '../containers/ChatContainer'
+import React from 'react';
+import NavBar from './NavBar';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -14,7 +13,7 @@ export default class App extends React.Component {
         return (
             <div>
                 <NavBar isAuthorized={this.state.isAuthorized} username={this.state.username}/>
-                <ChatContainer currentCommunityTitle={$(location).attr('pathname').substring(1)}/>
+                {this.props.children}
             </div>
         )
     }

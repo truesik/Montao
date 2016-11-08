@@ -35,6 +35,13 @@ export function websocketMiddleware(store) {
                 messageBoxSubscription.unsubscribe();
             }
         }
+        if (stomp && action.type === actionType.DISCONNECT_REQUEST) {
+            stomp.disconnect(() => {
+                store.dispatch({
+                    type: actionType.DISCONNECT_SUCCESS
+                })
+            })
+        }
         return next(action);
     };
 }

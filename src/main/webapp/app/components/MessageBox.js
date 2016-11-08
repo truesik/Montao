@@ -27,7 +27,7 @@ export default class MessageBox extends React.Component {
             // Store current scroll height
             this.state.scrollHeight = node.scrollHeight;
 
-            let currentCommunityTitle = $(location).attr('pathname').substring(1);
+            let currentCommunityTitle = this.props.path.currentCommunityTitle;
             let channelTitle = this.props.channel;
             let startRowPosition = this.props.startRowPosition;
             // Get oldest messages
@@ -38,7 +38,7 @@ export default class MessageBox extends React.Component {
     componentWillReceiveProps(nextProps) {
         // When channel changed
         if (this.props.channel !== nextProps.channel) {
-            var currentCommunityTitle = $(location).attr('pathname').substring(1);
+            var currentCommunityTitle = this.props.path.currentCommunityTitle;
             // Get messages
             this.props.getMessages(currentCommunityTitle, nextProps.channel, 0)
         }
