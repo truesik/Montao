@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router";
+import {Link} from "react-router";
 
-const Community = ({community}) => {
+const Community = ({community, action}) => {
     return (
         <div className="col-lg-3">
             <div className="panel panel-default">
@@ -12,7 +12,8 @@ const Community = ({community}) => {
                     <i className="material-icons">group</i>
                     <Link to={`/community/${community.title}`}>{community.title}</Link>
                     <a className="btn btn-primary"
-                       style={{float: 'right'}}>
+                       style={{float: 'right'}}
+                       onClick={() => action(community.title)}>
                         {community.subscribed ? "Leave" : "Join"}
                     </a>
                 </div>
