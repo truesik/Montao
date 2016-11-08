@@ -24,13 +24,8 @@ public class SubscriptionDAOHibernate implements SubscriptionDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public Subscription add(Subscription subscription) {
-        Serializable id = sessionFactory.getCurrentSession().save(subscription);
-        Subscription newSubscription = new Subscription();
-        newSubscription.setId((BigInteger) id);
-        newSubscription.setCommunity(subscription.getCommunity());
-        newSubscription.setUser(subscription.getUser());
-        return newSubscription;
+    public void add(Subscription subscription) {
+        sessionFactory.getCurrentSession().save(subscription);
     }
 
     @Override
@@ -43,9 +38,8 @@ public class SubscriptionDAOHibernate implements SubscriptionDAO {
     }
 
     @Override
-    public Subscription delete(Subscription subscription) {
+    public void delete(Subscription subscription) {
         sessionFactory.getCurrentSession().delete(subscription);
-        return subscription;
     }
 
     @Override
