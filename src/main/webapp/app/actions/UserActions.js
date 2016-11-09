@@ -1,9 +1,14 @@
-import {GET_USERS_REQUEST, GET_USERS_SUCCESS, GET_USERS_FAILURE} from "../constants/userConstants";
+import * as actionTypes from "../constants/userConstants";
+
+var csrfToken = csrf;
+var csrfHeader = 'X-CSRF-TOKEN';
+var headers = {};
+headers[csrfHeader] = csrfToken;
 
 export const getUsers = (communityTitle) => {
     return (dispatch) => {
         dispatch({
-            type: GET_USERS_REQUEST
+            type: actionTypes.GET_USERS_REQUEST
         });
         var csrfToken = csrf;
         var csrfHeader = 'X-CSRF-TOKEN';
@@ -17,15 +22,67 @@ export const getUsers = (communityTitle) => {
             })
             .then(response => {
                 dispatch({
-                    type: GET_USERS_SUCCESS,
+                    type: actionTypes.GET_USERS_SUCCESS,
                     payload: response
                 })
             })
             .fail(error => {
                 dispatch({
-                    type: GET_USERS_FAILURE,
+                    type: actionTypes.GET_USERS_FAILURE,
                     payload: error
                 })
             })
     };
+};
+
+export const logIn = (userCredentials) => {
+    return dispatch => {
+        dispatch({
+            type: actionTypes.LOG_IN_REQUEST
+        });
+        let data = `username=${userCredentials.username}&password=${userCredentials.password}`;
+        $
+            .ajax({
+                url: '/login',
+                type: 'post',
+                data: data,
+                headers: headers
+            })
+            .then(response => {
+                dispatch({
+                    type: actionTypes.LOG_IN_SUCCESS
+                })
+            })
+            .fail(error => {
+                dispatch({
+                    type: actionTypes.LOG_IN_FAILURE,
+                    payload: error
+                })
+            })
+    }
+};
+
+export const logOut = () => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.LOG_OUT_REQUEST
+        });
+        $
+            .ajax({
+                url: '/logout',
+                type: 'post',
+                headers: headers
+            })
+            .then(response => {
+                dispatch({
+                    type: actionTypes.LOG_OUT_SUCCESS
+                })
+            })
+            .fail(error => {
+                dispatch({
+                    type: actionTypes.LOG_OUT_FAILURE,
+                    payload: error
+                })
+            })
+    }
 };
