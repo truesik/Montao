@@ -1,4 +1,5 @@
 import * as actionTypes from "../constants/userConstants";
+import * as viewActions from "./ViewActions";
 
 var csrfToken = csrf;
 var csrfHeader = 'X-CSRF-TOKEN';
@@ -51,7 +52,8 @@ export const logIn = (userCredentials) => {
             .then(response => {
                 dispatch({
                     type: actionTypes.LOG_IN_SUCCESS
-                })
+                });
+                dispatch(viewActions.hideLogInDialog())
             })
             .fail(error => {
                 dispatch({
