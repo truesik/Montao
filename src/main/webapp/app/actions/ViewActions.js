@@ -1,4 +1,4 @@
-import * as actionTypes from "../constants/appConstants";
+import * as actionTypes from "../constants/viewConstants";
 
 export const showLogInDialog = () => {
     return (dispatch) => {
