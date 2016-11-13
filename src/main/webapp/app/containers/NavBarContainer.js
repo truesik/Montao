@@ -7,8 +7,7 @@ import * as viewActions from "../actions/ViewActions";
 const mapStateToProps = (state) => {
     return {
         logInDialog: {
-            isShown: state.viewReducer.isShownLogInDialog,
-            isSubmitDisabled: state.viewReducer.isSubmitDisabled
+            isShown: state.viewReducer.isShownLogInDialog
         },
         signUpDialog: {
             isShown: state.viewReducer.isShownSignUpDialog
