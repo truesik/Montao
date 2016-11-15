@@ -44,10 +44,8 @@ public class UserRestController {
                                         UriComponentsBuilder uriComponentsBuilder) {
         new UserValidator(userService).validate(userForm, result);
         if (result.hasErrors()) {
-            System.out.println("bad");
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
-            System.out.println("good");
             User user = userForm.createUser();
             userService.registerNewUser(user);
             URI location = uriComponentsBuilder.path("/{username}").buildAndExpand(user.getUsername()).toUri();
