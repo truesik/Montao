@@ -48,9 +48,9 @@ public class CommunityRestController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity addCommunity(@Valid @RequestBody CommunityCreationForm communityForm,
-                                             BindingResult result,
-                                             Principal principal,
-                                             UriComponentsBuilder uriComponentsBuilder) {
+                                       BindingResult result,
+                                       Principal principal,
+                                       UriComponentsBuilder uriComponentsBuilder) {
         new CommunityValidator(communityService).validate(communityForm, result);
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
