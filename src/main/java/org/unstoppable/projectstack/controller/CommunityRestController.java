@@ -46,7 +46,7 @@ public class CommunityRestController {
         this.subscriptionService = subscriptionService;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping(value = "/add")
     public ResponseEntity addCommunity(@Valid @RequestBody CommunityCreationForm communityForm,
                                        BindingResult result,
                                        Principal principal,
