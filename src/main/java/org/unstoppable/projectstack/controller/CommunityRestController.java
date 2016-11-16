@@ -64,7 +64,7 @@ public class CommunityRestController {
             User user = userService.getByUsername(principal.getName());
             subscriptionService.subscribe(createSubscription(community, user));
             // And create location
-            URI location = uriComponentsBuilder.path("/{communityTitle}").buildAndExpand(community.getTitle()).toUri();
+            URI location = uriComponentsBuilder.path("/community/{communityTitle}").buildAndExpand(community.getTitle()).toUri();
             return ResponseEntity.created(location).build();
         }
     }
