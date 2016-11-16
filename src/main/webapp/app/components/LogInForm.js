@@ -5,7 +5,9 @@ export default class LogInForm extends React.Component {
     componentDidMount() {
         var node = ReactDOM.findDOMNode(this);
         $(node).on('hidden.bs.modal', () => {
-            this.props.hide();
+            if (this.props.isShown) {
+                this.props.hide();
+            }
         })
     }
 
@@ -30,8 +32,8 @@ export default class LogInForm extends React.Component {
     }
 
     handleLogIn() {
-        let username = ReactDOM.findDOMNode(this.refs.username).val;
-        let password = ReactDOM.findDOMNode(this.refs.password).val;
+        let username = ReactDOM.findDOMNode(this.refs.username).value;
+        let password = ReactDOM.findDOMNode(this.refs.password).value;
         let userCredentials = {
             username: username,
             password: password
