@@ -31,3 +31,35 @@ export const hideSignUpDialog = () => {
         })
     }
 };
+
+export const showAddCommunityDialog = () => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.SHOW_ADD_COMMUNITY_DIALOG
+        })
+    }
+};
+
+export const hideAddCommunityDialog = () => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.HIDE_ADD_COMMUNITY_DIALOG
+        })
+    }
+};
+
+export const showAddChannelDialog = () => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.SHOW_ADD_CHANNEL_DIALOG
+        })
+    }
+};
+
+export const hideAddChannelDialog = () => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.HIDE_ADD_CHANNEL_DIALOG
+        })
+    }
+};
