@@ -32,10 +32,17 @@ export default class SignUpForm extends React.Component {
     }
 
     handleSubmit() {
-        var username = ReactDOM.findDOMNode(this.refs.username).value;
-        var email = ReactDOM.findDOMNode(this.refs.email).value;
-        var password = ReactDOM.findDOMNode(this.refs.password).value;
-        var confirmPassword = ReactDOM.findDOMNode(this.refs.confirm_password).value;
+        let username = ReactDOM.findDOMNode(this.refs.username).value;
+        let email = ReactDOM.findDOMNode(this.refs.email).value;
+        let password = ReactDOM.findDOMNode(this.refs.password).value;
+        let confirmPassword = ReactDOM.findDOMNode(this.refs.confirm_password).value;
+        let user = {
+            username: username,
+            email: email,
+            password: password,
+            confirmPassword: confirmPassword
+        };
+        this.props.signUp(user);
     }
 
     render() {
@@ -92,7 +99,11 @@ export default class SignUpForm extends React.Component {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" className="btn btn-primary">Sign Up</button>
+                            <button type="submit"
+                                    className="btn btn-primary"
+                                    onClick={() => ::this.handleSubmit()}>
+                                Sign Up
+                            </button>
                         </div>
                     </div>
                 </div>
