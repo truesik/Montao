@@ -1,4 +1,5 @@
 import * as actionTypes from "../constants/communityConstants";
+import * as viewActions from "./ViewActions";
 
 var csrfToken = csrf;
 var csrfHeader = 'X-CSRF-TOKEN';
@@ -17,13 +18,13 @@ export const getCommunities = (startRowPosition) => {
                 data: {startRowPosition: startRowPosition},
                 headers: headers
             })
-            .then(communities => {
+            .then((communities, status, xhr) => {
                 dispatch({
                     type: actionTypes.GET_COMMUNITIES_SUCCESS,
                     payload: communities
                 })
             })
-            .fail(error => {
+            .fail((xhr, status, error) => {
                 dispatch({
                     type: actionTypes.GET_COMMUNITIES_FAILURE,
                     payload: error
@@ -45,13 +46,13 @@ export const join = (communityTitle) => {
                 data: {communityTitle: communityTitle},
                 headers: headers
             })
-            .then(response => {
+            .then((response, status, xhr) => {
                 dispatch({
                     type: actionTypes.JOIN_SUCCESS,
                     payload: response
                 })
             })
-            .fail(error => {
+            .fail((xhr, status, error) => {
                 dispatch({
                     type: actionTypes.JOIN_FAILURE,
                     payload: error
@@ -73,15 +74,45 @@ export const leave = (communityTitle) => {
                 data: {communityTitle: communityTitle},
                 headers: headers
             })
-            .then(response => {
+            .then((response, status, xhr) => {
                 dispatch({
                     type: actionTypes.LEAVE_SUCCESS,
                     payload: response
                 })
             })
-            .fail(error => {
+            .fail((xhr, status, error) => {
                 dispatch({
                     type: actionTypes.LEAVE_FAILURE,
+                    payload: error
+                })
+            })
+    }
+};
+
+export const add = (community) => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.ADD_COMMUNITY_REQUEST
+        });
+        $
+            .ajax({
+                url: '/api/community/add',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(community),
+                headers: headers
+            })
+            .then((response, status, xhr) => {
+                let location = xhr.getResponseHeader('location');
+                dispatch({
+                    type: actionTypes.ADD_COMMUNITY_SUCCESS,
+                    payload: location
+                });
+                dispatch(viewActions.hideAddCommunityDialog())
+            })
+            .fail((xhr, status, error) => {
+                dispatch({
+                    type: actionTypes.ADD_COMMUNITY_FAILURE,
                     payload: error
                 })
             })
