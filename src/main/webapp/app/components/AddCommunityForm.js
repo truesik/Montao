@@ -52,7 +52,7 @@ export default class AddCommunityForm extends React.Component {
             title: title,
             description: description,
             founder: founder,
-            isVisible: visible
+            visible: visible
         };
         this.props.addCommunity(community);
     }
@@ -106,7 +106,7 @@ export default class AddCommunityForm extends React.Component {
                                         <input type="radio"
                                                name="visible"
                                                checked={this.state.isVisible}
-                                               onClick={() => ::this.handlePrivacyChange(true)}/>
+                                               onChange={() => ::this.handlePrivacyChange(true)}/>
                                         Public
                                     </label>
                                 </div>
@@ -115,7 +115,7 @@ export default class AddCommunityForm extends React.Component {
                                         <input type="radio"
                                                name="visible"
                                                checked={!this.state.isVisible}
-                                               onClick={() => ::this.handlePrivacyChange(false)}/>
+                                               onChange={() => ::this.handlePrivacyChange(false)}/>
                                         Private
                                     </label>
                                 </div>
