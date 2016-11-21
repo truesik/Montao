@@ -49,20 +49,20 @@ public class CommunityRestController {
     @PostMapping(value = "/add")
     public ResponseEntity addCommunity(@Valid @RequestBody CommunityCreationForm communityForm,
                                        BindingResult result,
-                                       Principal principal,
                                        UriComponentsBuilder uriComponentsBuilder) {
         new CommunityValidator(communityService).validate(communityForm, result);
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
-            Community community = communityForm.createCommunity();
+            // Get User instance by founder username
+            User founder = userService.getByUsername(communityForm.getFounder());
+            Community community = communityForm.createCommunity(founder);
             communityService.save(community);
             // After community creation we should add default channel
             Channel defaultChannel = createDefaultChannel(community);
             channelService.add(defaultChannel);
             // Subscribe creator to that community
-            User user = userService.getByUsername(principal.getName());
-            subscriptionService.subscribe(createSubscription(community, user));
+            subscriptionService.subscribe(createSubscription(community, founder));
             // And create location
             URI location = uriComponentsBuilder.path("/community/{communityTitle}").buildAndExpand(community.getTitle()).toUri();
             return ResponseEntity.created(location).build();
