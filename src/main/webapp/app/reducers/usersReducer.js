@@ -4,7 +4,9 @@ const initialState = {
     subscribers: [],
     error: '',
     userListFetching: false,
-    isAuthorized: false
+    isAuthorized: false,
+    username: '',
+    userPath: ''
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -53,6 +55,36 @@ const usersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: action.payload
+            };
+        case constants.ADD_USER_REQUEST:
+            return {
+                ...state
+            };
+        case constants.ADD_USER_SUCCESS:
+            return {
+                ...state,
+                userPath: action.payload
+            };
+        case constants.ADD_USER_FAILUER:
+            return {
+                ...state,
+                error: action.payload
+            };
+        case constants.CHECK_AUTHORIZATION_REQUEST:
+            return {
+                ...state
+            };
+        case constants.CHECK_AUTHORIZATION_SUCCESS:
+            return {
+                ...state,
+                isAuthorized: true,
+                username: action.payload
+            };
+        case constants.CHECK_AUTHORIZATION_FAILURE:
+            return {
+                ...state,
+                isAuthorized: false,
+                username: ''
             };
         default:
             return state;
