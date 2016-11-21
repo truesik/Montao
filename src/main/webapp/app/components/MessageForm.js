@@ -25,7 +25,8 @@ export default class MessageForm extends React.Component {
                 <input type="text"
                        className="form-control"
                        ref="messageInput"
-                       onKeyDown={this.handleMessageSubmit.bind(this)}/>
+                       onKeyDown={this.handleMessageSubmit.bind(this)}
+                       disabled={this.props.disabled}/>
             </div>
         )
     }
