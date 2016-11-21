@@ -59,7 +59,7 @@ export default class SignUpForm extends React.Component {
                                 <span aria-hidden="true">&times;</span>
                                 <span className="sr-only">Close</span>
                             </button>
-                            <h4 className="modal-title" id="myModalLabel">Log In</h4>
+                            <h4 className="modal-title" id="myModalLabel">Registration</h4>
                         </div>
                         <div className="modal-body">
                             <form method="post">
