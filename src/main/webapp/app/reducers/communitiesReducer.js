@@ -2,7 +2,8 @@ import * as actionTypes from "../constants/communityConstants";
 
 const initialState = {
     communities: [],
-    error: ''
+    error: '',
+    communityPath: ''
 };
 
 const communitiesReducer = (state = initialState, action) => {
@@ -45,6 +46,20 @@ const communitiesReducer = (state = initialState, action) => {
                 communities: state.communities.map(community => communityReducer(community, action))
             };
         case actionTypes.LEAVE_FAILURE:
+            return {
+                ...state,
+                error: action.payload
+            };
+        case actionTypes.ADD_COMMUNITY_REQUEST:
+            return {
+                ...state
+            };
+        case actionTypes.ADD_COMMUNITY_SUCCESS:
+            return {
+                ...state,
+                communityPath: action.payload
+            };
+        case actionTypes.ADD_COMMUNITY_FAILURE:
             return {
                 ...state,
                 error: action.payload
