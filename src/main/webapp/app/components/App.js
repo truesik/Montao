@@ -1,18 +1,15 @@
 import React from 'react';
-import NavBar from './NavBar';
+import NavBarContainer from "../containers/NavBarContainer";
 
 export default class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isAuthorized: false,
-            username: ''
-        }
+    componentDidMount() {
+        this.props.checkAuthorization();
     }
+
     render() {
         return (
             <div>
-                <NavBar isAuthorized={this.state.isAuthorized} username={this.state.username}/>
+                <NavBarContainer />
                 {this.props.children}
             </div>
         )
