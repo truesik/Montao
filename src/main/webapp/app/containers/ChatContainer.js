@@ -8,7 +8,8 @@ import {connectToWebsocket, subscribeToTopic, unsubscribe, disconnect} from "../
 const mapStateToProps = state => {
     return {
         currentChannelTitle: state.channelsReducer.currentChannelTitle,
-        isConnected: state.websocketReducer.isConnected
+        isConnected: state.websocketReducer.isConnected,
+        isAuthorized: state.usersReducer.isAuthorized
     }
 };
 

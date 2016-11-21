@@ -3,6 +3,7 @@ import {bindActionCreators} from "redux";
 import NavBar from "../components/NavBar";
 import * as userActions from "../actions/UserActions";
 import * as viewActions from "../actions/ViewActions";
+import * as communityActions from "../actions/CommunityActions";
 
 const mapStateToProps = (state) => {
     return {
@@ -12,7 +13,11 @@ const mapStateToProps = (state) => {
         signUpDialog: {
             isShown: state.viewReducer.isShownSignUpDialog
         },
-        isAuthorized: state.usersReducer.isAuthorized
+        addCommunityDialog: {
+            isShown: state.viewReducer.isShownAddCommunityDialog
+        },
+        isAuthorized: state.usersReducer.isAuthorized,
+        username: state.usersReducer.username
     }
 };
 
@@ -25,7 +30,13 @@ const mapDispatchToProps = (dispatch) => {
         },
         signUpDialogActions: {
             show: bindActionCreators(viewActions.showSignUpDialog, dispatch),
-            hide: bindActionCreators(viewActions.hideSignUpDialog, dispatch)
+            hide: bindActionCreators(viewActions.hideSignUpDialog, dispatch),
+            signUp: bindActionCreators(userActions.addUser, dispatch)
+        },
+        addCommunityDialogActions: {
+            show: bindActionCreators(viewActions.showAddCommunityDialog, dispatch),
+            hide: bindActionCreators(viewActions.hideAddCommunityDialog, dispatch),
+            addCommunity: bindActionCreators(communityActions.add, dispatch)
         },
         logOut: bindActionCreators(userActions.logOut, dispatch)
     }
