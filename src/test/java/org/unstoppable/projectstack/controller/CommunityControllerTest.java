@@ -99,8 +99,8 @@ public class CommunityControllerTest {
                 .principal(new UserPrincipal(user.getUsername()))
                 .param("title", communityCreationForm.getTitle())
                 .param("description", communityCreationForm.getDescription())
-                .param("founder", communityCreationForm.getFounder().getUsername())
-                .param("visible", communityCreationForm.getVisible().toString());
+                .param("founder", communityCreationForm.getFounder())
+                .param("visible", String.valueOf(communityCreationForm.getVisible()));
         mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(redirectedUrl("/" + community.getTitle()));
@@ -117,8 +117,8 @@ public class CommunityControllerTest {
                 .principal(new UserPrincipal(user.getUsername()))
                 .param("title", "")
                 .param("description", communityCreationForm.getDescription())
-                .param("founder", communityCreationForm.getFounder().getUsername())
-                .param("visible", communityCreationForm.getVisible().toString());
+                .param("founder", communityCreationForm.getFounder())
+                .param("visible", String.valueOf(communityCreationForm.getVisible()));
         mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(view().name("newcommunity"));
@@ -269,7 +269,7 @@ public class CommunityControllerTest {
         CommunityCreationForm communityCreationForm = new CommunityCreationForm();
         communityCreationForm.setTitle(community.getTitle());
         communityCreationForm.setDescription(community.getDescription());
-        communityCreationForm.setFounder(user);
+        communityCreationForm.setFounder(user.getUsername());
         communityCreationForm.setVisible(true);
         return communityCreationForm;
     }

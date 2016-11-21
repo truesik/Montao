@@ -17,13 +17,13 @@ export const getChannels = (communityTitle) => {
                 type: 'post',
                 headers: headers
             })
-            .then(response => {
+            .then((response, status, xhr) => {
                 dispatch({
                     type: constants.GET_CHANNELS_SUCCESS,
                     payload: response
                 })
             })
-            .fail(error => {
+            .fail((xhr, status, error) => {
                 dispatch({
                     type: constants.GET_CHANNELS_FAILURE,
                     payload: error
@@ -43,13 +43,13 @@ export const getLastOpenedChannel = (communityTitle) => {
                 type: 'post',
                 headers: headers
             })
-            .then(channel => {
+            .then((channel, status, xhr) => {
                 dispatch({
                     type: constants.GET_LAST_OPENED_CHANNEL_SUCCESS,
                     payload: channel.title
                 })
             })
-            .fail(error => {
+            .fail((xhr, status, error) => {
                 dispatch({
                     type: constants.GET_LAST_OPENED_CHANNEL_FAILURE,
                     payload: error
@@ -80,12 +80,12 @@ export const addChannel = (channel) => {
                 date: JSON.stringify(channel),
                 headers: headers
             })
-            .then(response => {
+            .then((response, status, xhr) => {
                 dispatch({
                     type: constants.ADD_CHANNEL_SUCCESS
                 })
             })
-            .fail(error => {
+            .fail((xhr, status, error) => {
                 dispatch({
                     type: constants.ADD_CHANNEL_FAILURE,
                     payload: error

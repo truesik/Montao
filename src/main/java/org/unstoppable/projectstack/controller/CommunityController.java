@@ -69,13 +69,13 @@ public class CommunityController {
             model.addAttribute("user", user);
             return "newcommunity";
         } else {
-            Community community = communityForm.createCommunity();
+            User user = userService.getByUsername(communityForm.getFounder());
+            Community community = communityForm.createCommunity(user);
             communityService.save(community);
             // After community creation we should add default channel
             Channel channel = createDefaultChannel(community);
             channelService.add(channel);
             // And subscribe creator to that community
-            User user = userService.getByUsername(principal.getName());
             subscriptionService.subscribe(createSubscription(community, user));
             return "redirect:/" + community.getTitle();
         }

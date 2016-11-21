@@ -20,10 +20,10 @@ public class CommunityCreationForm {
     private String description;
 
     @NotNull
-    private User founder;
+    private String founder;
 
     @NotNull
-    private Boolean isVisible;
+    private boolean isVisible;
 
     public String getTitle() {
         return title;
@@ -41,19 +41,19 @@ public class CommunityCreationForm {
         this.description = description;
     }
 
-    public User getFounder() {
+    public String getFounder() {
         return founder;
     }
 
-    public void setFounder(User founder) {
+    public void setFounder(String founder) {
         this.founder = founder;
     }
 
-    public Boolean getVisible() {
+    public boolean getVisible() {
         return isVisible;
     }
 
-    public void setVisible(Boolean visible) {
+    public void setVisible(boolean visible) {
         isVisible = visible;
     }
 
@@ -62,7 +62,7 @@ public class CommunityCreationForm {
      *
      * @return Community.
      */
-    public Community createCommunity() {
+    public Community createCommunity(User founder) {
         Community community = new Community();
         community.setTitle(title);
         community.setDescription(description);

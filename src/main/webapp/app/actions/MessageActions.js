@@ -17,13 +17,13 @@ export const getMessages = (communityTitle, channelTitle, startRowPosition) => {
                 type: 'post',
                 headers: headers
             })
-            .then(messages => {
+            .then((messages, status, xhr) => {
                 dispatch({
                     type: constants.GET_MESSAGES_SUCCESS,
                     payload: messages
                 })
             })
-            .fail(error => {
+            .fail((xhr, status, error) => {
                 dispatch({
                     type: constants.GET_MESSAGES_FAILURE,
                     payload: error
@@ -43,13 +43,13 @@ export const getOldestMessages = (communityTitle, channelTitle, startRowPosition
                 type: 'post',
                 headers: headers
             })
-            .then(messages => {
+            .then((messages, status, xhr) => {
                 dispatch({
                     type: constants.GET_OLDEST_MESSAGES_SUCCESS,
                     payload: messages
                 })
             })
-            .fail(error => {
+            .fail((xhr, status, error) => {
                 dispatch({
                     type: constants.GET_OLDEST_MESSAGES_FAILURE,
                     payload: error
@@ -83,7 +83,7 @@ export const sendMessage = (communityTitle, channelTitle, message) => {
                     type: constants.SEND_MESSAGE_SUCCESS
                 })
             )
-            .fail(error => {
+            .fail((xhr, ststus, error) => {
                 dispatch({
                     type: constants.SEND_MESSAGE_FAILURE,
                     payload: error

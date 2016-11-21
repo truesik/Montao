@@ -3,8 +3,13 @@ import Community from "./Community"
 
 export default class CommunitiesBox extends React.Component {
     componentDidMount() {
-        var getCommunities = this.props.getCommunities;
-        getCommunities(0);
+        this.props.getCommunities(0);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.isAuthorized !== nextProps.isAuthorized) {
+            this.props.getCommunities(0);
+        }
     }
 
     render() {

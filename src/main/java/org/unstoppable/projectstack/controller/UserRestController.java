@@ -19,6 +19,7 @@ import org.unstoppable.projectstack.validator.UserValidator;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -37,20 +38,18 @@ public class UserRestController {
         this.communityService = communityService;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<Void> addUser(@Valid @RequestBody UserRegistrationForm userForm,
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity addUser(@Valid @RequestBody UserRegistrationForm userForm,
                                         BindingResult result,
                                         UriComponentsBuilder uriComponentsBuilder) {
         new UserValidator(userService).validate(userForm, result);
         if (result.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
             User user = userForm.createUser();
             userService.registerNewUser(user);
-            HttpHeaders headers = new HttpHeaders();
             URI location = uriComponentsBuilder.path("/{username}").buildAndExpand(user.getUsername()).toUri();
-            headers.setLocation(location);
-            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+            return ResponseEntity.created(location).build();
         }
     }
 
@@ -69,5 +68,13 @@ public class UserRestController {
         Community community = communityService.getByTitle(communityTitle);
         List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
         return new ResponseEntity<>(subscriptions, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/check_authorization")
+    public ResponseEntity getUser(Principal principal) {
+        if (principal != null) {
+            return ResponseEntity.ok(principal.getName());
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 }
