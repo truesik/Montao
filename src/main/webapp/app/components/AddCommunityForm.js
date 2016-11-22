@@ -126,7 +126,7 @@ export default class AddCommunityForm extends React.Component {
                             <button type="submit"
                                     className="btn btn-primary"
                                     onClick={() => ::this.handleSubmit()}>
-                                Log In
+                                Create
                             </button>
                         </div>
                     </div>
