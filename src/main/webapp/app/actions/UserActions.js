@@ -1,10 +1,12 @@
 import * as actionTypes from "../constants/userConstants";
 import * as viewActions from "./ViewActions";
+import {SubmissionError} from "redux-form";
+import fetch from "isomorphic-fetch";
 
-var csrfToken = csrf;
-var csrfHeader = 'X-CSRF-TOKEN';
-var headers = {};
-headers[csrfHeader] = csrfToken;
+// var csrfToken = csrf;
+// var csrfHeader = 'X-CSRF-TOKEN';
+// var headers = {};
+// headers[csrfHeader] = csrfToken;
 
 export const getUsers = (communityTitle) => {
     return (dispatch) => {
@@ -15,7 +17,7 @@ export const getUsers = (communityTitle) => {
             .ajax({
                 url: '/api/user/get_subscribed_users?communityTitle=' + communityTitle,
                 type: 'post',
-                headers: headers
+                // headers: headers
             })
             .then((response, status, xhr) => {
                 dispatch({
@@ -38,25 +40,37 @@ export const logIn = (userCredentials) => {
             type: actionTypes.LOG_IN_REQUEST
         });
         let data = `username=${userCredentials.username}&password=${userCredentials.password}`;
-        $
-            .ajax({
-                url: '/login',
-                type: 'post',
-                data: data,
-                headers: headers
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+        let request = new Request('/login', {
+            method: 'POST',
+            body: data,
+            headers: headers,
+            credentials: 'same-origin'
+        });
+        return window.fetch(request)
+            .then(response => {
+                if (response.status != 200) {
+                    let error = new Error(response.statusText);
+                    error.response = response;
+                    throw error;
+                } else {
+                    dispatch({
+                        type: actionTypes.LOG_IN_SUCCESS
+                    });
+                    dispatch(checkAuthorization());
+                    dispatch(viewActions.hideLogInDialog())
+                }
             })
-            .then((response, status, xhr) => {
-                dispatch({
-                    type: actionTypes.LOG_IN_SUCCESS
-                });
-                dispatch(viewActions.hideLogInDialog())
-            })
-            .fail((xhr, status, error) => {
+            .catch((error) => {
                 dispatch({
                     type: actionTypes.LOG_IN_FAILURE,
                     payload: error
+                });
+                throw new SubmissionError({
+                    _error: 'Login failed!'
                 })
-            })
+            });
     }
 };
 
@@ -69,7 +83,6 @@ export const logOut = () => {
             .ajax({
                 url: '/logout',
                 type: 'post',
-                headers: headers
             })
             .then((response, status, xhr) => {
                 dispatch({
@@ -121,7 +134,7 @@ export const addUser = (user) => {
                 type: 'post',
                 contentType: 'application/json',
                 data: JSON.stringify(user),
-                headers: headers
+                // headers: headers
             })
             .then((response, status, xhr) => {
                 let location = xhr.getResponseHeader('location');
