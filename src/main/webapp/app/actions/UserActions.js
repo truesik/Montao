@@ -40,8 +40,10 @@ export const logIn = (userCredentials) => {
             type: actionTypes.LOG_IN_REQUEST
         });
         let data = `username=${userCredentials.username}&password=${userCredentials.password}`;
+        // build headers
         let headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+        // build request
         let request = new Request('/login', {
             method: 'POST',
             body: data,
@@ -58,7 +60,9 @@ export const logIn = (userCredentials) => {
                     dispatch({
                         type: actionTypes.LOG_IN_SUCCESS
                     });
+                    // get username
                     dispatch(checkAuthorization());
+                    // close log in dialog
                     dispatch(viewActions.hideLogInDialog())
                 }
             })
