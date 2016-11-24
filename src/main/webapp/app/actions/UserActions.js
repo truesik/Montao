@@ -1,12 +1,6 @@
 import * as actionTypes from "../constants/userConstants";
 import * as viewActions from "./ViewActions";
 import {SubmissionError} from "redux-form";
-import fetch from "isomorphic-fetch";
-
-// var csrfToken = csrf;
-// var csrfHeader = 'X-CSRF-TOKEN';
-// var headers = {};
-// headers[csrfHeader] = csrfToken;
 
 export const getUsers = (communityTitle) => {
     return (dispatch) => {
@@ -50,7 +44,7 @@ export const logIn = (userCredentials) => {
             headers: headers,
             credentials: 'same-origin'
         });
-        return window.fetch(request)
+        return fetch(request)
             .then(response => {
                 if (response.status != 200) {
                     let error = new Error(response.statusText);
