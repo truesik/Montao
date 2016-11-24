@@ -6,12 +6,6 @@
 <link href="../css/community.css" rel="stylesheet" th:href="@{/css/community.css}">
 <div id="root">Loading...</div>
 <div th:replace="fragments/footer :: bootstrap-scripts"></div>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var csrf = /*[[${_csrf.token}]]*/ "";
-    var isAuthorizated = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
-    /*]]>*/
-</script>
 <script src="../build/bundle.js"></script>
 </body>
 </html>
