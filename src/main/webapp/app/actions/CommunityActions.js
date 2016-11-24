@@ -1,10 +1,10 @@
 import * as actionTypes from "../constants/communityConstants";
 import * as viewActions from "./ViewActions";
 
-var csrfToken = csrf;
-var csrfHeader = 'X-CSRF-TOKEN';
-var headers = {};
-headers[csrfHeader] = csrfToken;
+// var csrfToken = csrf;
+// var csrfHeader = 'X-CSRF-TOKEN';
+// var headers = {};
+// headers[csrfHeader] = csrfToken;
 
 export const getCommunities = (startRowPosition) => {
     return dispatch => {
@@ -16,7 +16,7 @@ export const getCommunities = (startRowPosition) => {
                 url: '/api/community/get_all',
                 type: 'post',
                 data: {startRowPosition: startRowPosition},
-                headers: headers
+                // headers: headers
             })
             .then((communities, status, xhr) => {
                 dispatch({
@@ -44,7 +44,7 @@ export const join = (communityTitle) => {
                 type: "post",
                 cache: false,
                 data: {communityTitle: communityTitle},
-                headers: headers
+                // headers: headers
             })
             .then((response, status, xhr) => {
                 dispatch({
@@ -72,7 +72,7 @@ export const leave = (communityTitle) => {
                 type: "post",
                 cache: false,
                 data: {communityTitle: communityTitle},
-                headers: headers
+                // headers: headers
             })
             .then((response, status, xhr) => {
                 dispatch({
@@ -100,7 +100,7 @@ export const add = (community) => {
                 type: 'post',
                 contentType: 'application/json',
                 data: JSON.stringify(community),
-                headers: headers
+                // headers: headers
             })
             .then((response, status, xhr) => {
                 let location = xhr.getResponseHeader('location');

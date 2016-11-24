@@ -1,10 +1,10 @@
 // import $ from 'jquery'
 import * as constants from '../constants/messageConstants'
 
-var csrfToken = csrf;
-var csrfHeader = 'X-CSRF-TOKEN';
-var headers = {};
-headers[csrfHeader] = csrfToken;
+// var csrfToken = csrf;
+// var csrfHeader = 'X-CSRF-TOKEN';
+// var headers = {};
+// headers[csrfHeader] = csrfToken;
 
 export const getMessages = (communityTitle, channelTitle, startRowPosition) => {
     return (dispatch) => {
@@ -15,7 +15,7 @@ export const getMessages = (communityTitle, channelTitle, startRowPosition) => {
             .ajax({
                 url: '/api/message/get_messages?communityTitle=' + communityTitle + '&channelTitle=' + channelTitle + '&startRowPosition=' + startRowPosition,
                 type: 'post',
-                headers: headers
+                // headers: headers
             })
             .then((messages, status, xhr) => {
                 dispatch({
@@ -41,7 +41,7 @@ export const getOldestMessages = (communityTitle, channelTitle, startRowPosition
             .ajax({
                 url: '/api/message/get_messages?communityTitle=' + communityTitle + '&channelTitle=' + channelTitle + '&startRowPosition=' + startRowPosition,
                 type: 'post',
-                headers: headers
+                // headers: headers
             })
             .then((messages, status, xhr) => {
                 dispatch({
@@ -76,7 +76,7 @@ export const sendMessage = (communityTitle, channelTitle, message) => {
             .ajax({
                 url: '/api/message/add?newMessage=' + message + '&communityTitle=' + communityTitle + '&channelTitle=' + channelTitle,
                 type: "post",
-                headers: headers
+                // headers: headers
             })
             .then(
                 dispatch({

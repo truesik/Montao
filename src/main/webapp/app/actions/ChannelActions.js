@@ -1,10 +1,10 @@
 // import $ from 'jquery'
 import * as constants from "../constants/channelConstants";
 
-var csrfToken = csrf;
-var csrfHeader = 'X-CSRF-TOKEN';
-var headers = {};
-headers[csrfHeader] = csrfToken;
+// var csrfToken = csrf;
+// var csrfHeader = 'X-CSRF-TOKEN';
+// var headers = {};
+// headers[csrfHeader] = csrfToken;
 
 export const getChannels = (communityTitle) => {
     return (dispatch) => {
@@ -15,7 +15,7 @@ export const getChannels = (communityTitle) => {
             .ajax({
                 url: '/api/channel/get_channels?communityTitle=' + communityTitle,
                 type: 'post',
-                headers: headers
+                // headers: headers
             })
             .then((response, status, xhr) => {
                 dispatch({
@@ -41,7 +41,7 @@ export const getLastOpenedChannel = (communityTitle) => {
             .ajax({
                 url: '/api/channel/get_last_opened_channel?communityTitle=' + communityTitle,
                 type: 'post',
-                headers: headers
+                // headers: headers
             })
             .then((channel, status, xhr) => {
                 dispatch({
@@ -78,7 +78,7 @@ export const addChannel = (channel) => {
                 type: "post",
                 contentType: "application/json",
                 date: JSON.stringify(channel),
-                headers: headers
+                // headers: headers
             })
             .then((response, status, xhr) => {
                 dispatch({

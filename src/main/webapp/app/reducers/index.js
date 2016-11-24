@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import {reducer as formReducer} from "redux-form";
 import usersReducer from './usersReducer'
 import channelsReducer from "./channelsReducer";
 import messagesReducer from "./messagesReducer";
@@ -12,5 +13,6 @@ export default combineReducers({
     messagesReducer,
     websocketReducer,
     communitiesReducer,
-    viewReducer
+    viewReducer,
+    form: formReducer
 })

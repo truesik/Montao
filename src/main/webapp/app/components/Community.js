@@ -11,8 +11,7 @@ const Community = ({community, action}) => {
                 <div className="panel-footer">
                     <i className="material-icons">group</i>
                     <Link to={`/community/${community.title}`}>{community.title}</Link>
-                    <a className="btn btn-primary"
-                       style={{float: 'right'}}
+                    <a className="btn btn-primary pull-right"
                        onClick={() => action(community.title)}>
                         {community.subscribed ? "Leave" : "Join"}
                     </a>

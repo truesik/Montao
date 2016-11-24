@@ -34,8 +34,7 @@ const usersReducer = (state = initialState, action) => {
             };
         case constants.LOG_IN_SUCCESS:
             return {
-                ...state,
-                isAuthorized: true
+                ...state
             };
         case constants.LOG_IN_FAILURE:
             return {
