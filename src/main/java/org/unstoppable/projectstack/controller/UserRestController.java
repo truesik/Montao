@@ -40,8 +40,8 @@ public class UserRestController {
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addUser(@Valid @RequestBody UserRegistrationForm userForm,
-                                        BindingResult result,
-                                        UriComponentsBuilder uriComponentsBuilder) {
+                                  BindingResult result,
+                                  UriComponentsBuilder uriComponentsBuilder) {
         new UserValidator(userService).validate(userForm, result);
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
