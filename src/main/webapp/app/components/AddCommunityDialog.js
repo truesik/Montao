@@ -1,13 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import AddCommunityFormContainer from "../containers/AddCommunityFormContainer";
+
 export default class AddCommunityDialog extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isVisible: true
-        }
-    }
     componentDidMount() {
         const node = ReactDOM.findDOMNode(this);
         $(node).on('hidden.bs.modal', () => {
@@ -65,7 +61,7 @@ export default class AddCommunityDialog extends React.Component {
                  aria-labelledby="myModalLabel"
                  aria-hidden="true">
                 <div className="modal-dialog">
-                    <div className="modal-content">
+                    <div className="modal-content" style={{overflow: 'auto', paddingBottom: '15px'}}>
                         <div className="modal-header">
                             <button type="button" className="close" data-dismiss="modal">
                                 <span aria-hidden="true">&times;</span>
@@ -74,60 +70,8 @@ export default class AddCommunityDialog extends React.Component {
                             <h4 className="modal-title" id="myModalLabel">New Community</h4>
                         </div>
                         <div className="modal-body">
-                            <form method="post">
-                                <div className="form-group">
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           name="username"
-                                           placeholder="Title"
-                                           ref="title"/>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="description">Description</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           name="description"
-                                           placeholder="Description"
-                                           ref="description"/>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="founder">Founder</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           name="founder"
-                                           placeholder="Founder"
-                                           ref="founder"
-                                           value={this.props.username}
-                                           readOnly/>
-                                </div>
-                                <div className="radio">
-                                    <label>
-                                        <input type="radio"
-                                               name="visible"
-                                               checked={this.state.isVisible}
-                                               onChange={() => ::this.handlePrivacyChange(true)}/>
-                                        Public
-                                    </label>
-                                </div>
-                                <div className="radio">
-                                    <label>
-                                        <input type="radio"
-                                               name="visible"
-                                               checked={!this.state.isVisible}
-                                               onChange={() => ::this.handlePrivacyChange(false)}/>
-                                        Private
-                                    </label>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit"
-                                    className="btn btn-primary"
-                                    onClick={() => ::this.handleSubmit()}>
-                                Create
-                            </button>
+                            <AddCommunityFormContainer username={this.props.username}
+                                                       addCommunity={this.props.addCommunity}/>
                         </div>
                     </div>
                 </div>
