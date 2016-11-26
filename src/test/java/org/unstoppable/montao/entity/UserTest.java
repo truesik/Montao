@@ -1,4 +1,4 @@
-package org.unstoppable.projectstack.entity;
+package org.unstoppable.montao.entity;
 
 import org.junit.Test;
 

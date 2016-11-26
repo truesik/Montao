@@ -1,4 +1,4 @@
-package org.unstoppable.projectstack.controller;
+package org.unstoppable.montao.controller;
 
 import com.sun.security.auth.UserPrincipal;
 import org.junit.Before;
@@ -13,16 +13,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.unstoppable.projectstack.entity.Channel;
-import org.unstoppable.projectstack.entity.Community;
-import org.unstoppable.projectstack.entity.Subscription;
-import org.unstoppable.projectstack.entity.User;
-import org.unstoppable.projectstack.model.CommunityCreationForm;
-import org.unstoppable.projectstack.model.CommunitySubscription;
-import org.unstoppable.projectstack.service.ChannelService;
-import org.unstoppable.projectstack.service.CommunityService;
-import org.unstoppable.projectstack.service.SubscriptionService;
-import org.unstoppable.projectstack.service.UserService;
+import org.unstoppable.montao.entity.Channel;
+import org.unstoppable.montao.entity.Community;
+import org.unstoppable.montao.entity.Subscription;
+import org.unstoppable.montao.entity.User;
+import org.unstoppable.montao.model.CommunityCreationForm;
+import org.unstoppable.montao.model.CommunitySubscription;
+import org.unstoppable.montao.service.ChannelService;
+import org.unstoppable.montao.service.CommunityService;
+import org.unstoppable.montao.service.SubscriptionService;
+import org.unstoppable.montao.service.UserService;
 
 import java.text.ParseException;
 import java.util.ArrayList;
