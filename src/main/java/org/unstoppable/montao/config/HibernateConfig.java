@@ -11,10 +11,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.unstoppable.montao.entity.Channel;
-import org.unstoppable.montao.entity.Community;
-import org.unstoppable.montao.entity.Message;
-import org.unstoppable.montao.entity.User;
+import org.unstoppable.montao.entity.*;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -24,7 +21,7 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-//@ComponentScan(basePackages = {"org.unstoppable.projectstack.entity"})
+//@ComponentScan(basePackages = {"org.unstoppable.montao.entity"})
 @PropertySource(value = {"classpath:hibernate.properties"})
 public class HibernateConfig {
     @Autowired
@@ -34,9 +31,9 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("org.unstoppable.projectstack.*");
+        sessionFactory.setPackagesToScan("org.unstoppable.montao.*");
         sessionFactory.setHibernateProperties(hibernateProperties());
-        sessionFactory.setAnnotatedClasses(User.class, Community.class, Channel.class, Message.class);
+        sessionFactory.setAnnotatedClasses(User.class, Community.class, Channel.class, Message.class, Subscription.class);
         return sessionFactory;
     }
 
