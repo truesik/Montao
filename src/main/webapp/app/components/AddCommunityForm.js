@@ -1,6 +1,9 @@
 import React from "react";
 import {Field} from "redux-form";
 
+// You shall not pass (only letters, numbers and underscope)
+const normalizeTitle = value => value.replace(/[\W]+/g, '');
+
 const renderField = ({input, name, label, type, readOnly, meta: {touched, error}}) => {
     return (
         <div className={!touched || !error ? "form-group" : "form-group has-error"}>
@@ -32,7 +35,8 @@ export default class AddCommunityForm extends React.Component {
                 <Field name="title"
                        component={renderField}
                        type="text"
-                       label="Title"/>
+                       label="Title"
+                       normalize={normalizeTitle}/>
                 <Field name="description"
                        component={renderField}
                        type="text"
