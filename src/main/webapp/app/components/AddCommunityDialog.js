@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import LogInFormContainer from "../containers/LogInFormContainer";
+import AddCommunityFormContainer from "../containers/AddCommunityFormContainer";
 
-export default class LogInDialog extends React.Component {
+export default class AddCommunityDialog extends React.Component {
     componentDidMount() {
-        let node = ReactDOM.findDOMNode(this);
+        const node = ReactDOM.findDOMNode(this);
         $(node).on('hidden.bs.modal', () => {
             if (this.props.isShown) {
                 this.props.hide();
@@ -24,13 +24,33 @@ export default class LogInDialog extends React.Component {
     }
 
     showModal() {
-        let node = ReactDOM.findDOMNode(this);
+        const node = ReactDOM.findDOMNode(this);
         $(node).modal('show');
     }
 
     hideModal() {
-        let node = ReactDOM.findDOMNode(this);
+        const node = ReactDOM.findDOMNode(this);
         $(node).modal('hide');
+    }
+
+    handlePrivacyChange(isVisible) {
+        this.setState({
+            isVisible: isVisible
+        })
+    }
+
+    handleSubmit() {
+        let title = ReactDOM.findDOMNode(this.refs.title).value;
+        let description = ReactDOM.findDOMNode(this.refs.description).value;
+        let founder = ReactDOM.findDOMNode(this.refs.founder).value;
+        let visible = this.state.isVisible;
+        let community = {
+            title: title,
+            description: description,
+            founder: founder,
+            visible: visible
+        };
+        this.props.addCommunity(community);
     }
 
     render() {
@@ -47,10 +67,11 @@ export default class LogInDialog extends React.Component {
                                 <span aria-hidden="true">&times;</span>
                                 <span className="sr-only">Close</span>
                             </button>
-                            <h4 className="modal-title" id="myModalLabel">Log In</h4>
+                            <h4 className="modal-title" id="myModalLabel">New Community</h4>
                         </div>
                         <div className="modal-body">
-                            <LogInFormContainer logIn={this.props.logIn}/>
+                            <AddCommunityFormContainer username={this.props.username}
+                                                       addCommunity={this.props.addCommunity}/>
                         </div>
                     </div>
                 </div>
