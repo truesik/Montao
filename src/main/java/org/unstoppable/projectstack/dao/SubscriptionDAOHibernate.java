@@ -85,7 +85,7 @@ public class SubscriptionDAOHibernate implements SubscriptionDAO {
             CommunitySubscription communitySubscription = new CommunitySubscription();
             communitySubscription.setId(((BigDecimal) row[0]).toBigInteger());
             communitySubscription.setTitle(row[1].toString());
-            communitySubscription.setDescription(row[2].toString());
+            communitySubscription.setDescription(row[2] == null ? "" : row[2].toString());
             communitySubscription.setSubscribed((Boolean) row[3]);
             communitySubscriptions.add(communitySubscription);
         }
