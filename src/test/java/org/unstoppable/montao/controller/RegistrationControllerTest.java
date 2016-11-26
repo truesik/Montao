@@ -1,4 +1,4 @@
-package org.unstoppable.projectstack.controller;
+package org.unstoppable.montao.controller;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +10,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.unstoppable.projectstack.model.UserRegistrationForm;
-import org.unstoppable.projectstack.service.UserService;
+import org.unstoppable.montao.model.UserRegistrationForm;
+import org.unstoppable.montao.service.UserService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

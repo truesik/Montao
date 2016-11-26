@@ -1,4 +1,4 @@
-package org.unstoppable.projectstack.controller;
+package org.unstoppable.montao.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,9 +14,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.unstoppable.projectstack.entity.*;
-import org.unstoppable.projectstack.model.ChannelCreationForm;
-import org.unstoppable.projectstack.service.*;
+import org.unstoppable.montao.entity.*;
+import org.unstoppable.montao.model.ChannelCreationForm;
+import org.unstoppable.montao.service.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
