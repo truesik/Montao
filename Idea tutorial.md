@@ -11,8 +11,10 @@
   - Новая версия maven https://maven.apache.org/download.cgi и покозать ИДЕЕ , где лежит распакованный мавен - открыть вкладку files->structure найти maven и указать директорию ![N|Solid](http://filmsforstudy.esy.es/Stack/images/Montao%20tutorial/maven%20directory.png) затем нужно добавить на строку Auto-Import в выпадающем окошке в ИДЕЕ ![N|Solid](http://filmsforstudy.esy.es/Stack/images/Montao%20tutorial/maven%20need%20to%20be%20imported.png) и подождать какое-то время.
   - Последняя версия GIT https://git-scm.com/download/win , также ИДЕЯ должна видеть исполняемый файл гита это делается через settings , в поисковике вбивается git и дальше как на скриншоте ![N|Solid](http://filmsforstudy.esy.es/Stack/images/Montao%20tutorial/git%20exe%20position.png)
   - После всех настроек хорошо бы перезагрузить компьютер. Не думаю что это обязательно , но всё же я бы рекомендовал.
+  
 #### Настройка ПО
 В PostgreSQL должна быть создана роль root с паролем root и со всеми возможными привелегиями ![N|Solid](http://filmsforstudy.esy.es/Stack/images/Montao%20tutorial/Add%20new%20role.png)  Также должны быть создана БД  montao с владельцем root ![N|Solid](http://filmsforstudy.esy.es/Stack/images/Montao%20tutorial/add%20new%20database.png) 
+
 #### Развёртывание 
   - Качаем Montao https://github.com/truesik/Montao.git
   - Добавляем созданную базу данных ![N|Solid](http://filmsforstudy.esy.es/Stack/images/Montao%20tutorial/add%20database.png)
