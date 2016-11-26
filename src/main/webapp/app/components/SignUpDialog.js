@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default class SignUpForm extends React.Component {
+export default class SignUpDialog extends React.Component {
     componentDidMount() {
-        var node = ReactDOM.findDOMNode(this);
+        const node = ReactDOM.findDOMNode(this);
         $(node).on('hidden.bs.modal', () => {
             if (this.props.isShown) {
                 this.props.hide();
@@ -22,12 +22,12 @@ export default class SignUpForm extends React.Component {
     }
 
     showModal() {
-        var node = ReactDOM.findDOMNode(this);
+        const node = ReactDOM.findDOMNode(this);
         $(node).modal('show');
     }
 
     hideModal() {
-        var node = ReactDOM.findDOMNode(this);
+        const node = ReactDOM.findDOMNode(this);
         $(node).modal('hide');
     }
 
