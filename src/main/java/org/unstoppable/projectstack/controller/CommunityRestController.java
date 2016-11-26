@@ -75,12 +75,12 @@ public class CommunityRestController {
      * @param communityTitle Community title.
      * @return String "true" or "false".
      */
-    @RequestMapping(value = "/check_title", method = RequestMethod.POST)
-    public String checkTitle(@RequestParam(value = "communityTitle") String communityTitle) {
+    @PostMapping(value = "/check_title")
+    public String checkTitle(String communityTitle) {
         return communityService.checkTitle(communityTitle).toString();
     }
 
-    @RequestMapping(value = "/get_all", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/get_all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CommunitySubscription> getCommunities(int startRowPosition, Principal principal) {
         if (principal != null) {
             User user = userService.getByUsername(principal.getName());
@@ -96,7 +96,7 @@ public class CommunityRestController {
         }
     }
 
-    @RequestMapping(value = "/join", method = RequestMethod.POST)
+    @PostMapping(value = "/join")
     public ResponseEntity subscribe(String communityTitle, Principal principal) {
         if (principal != null) {
             Community community = communityService.getByTitle(communityTitle);
@@ -107,7 +107,7 @@ public class CommunityRestController {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
-    @RequestMapping(value = "/leave", method = RequestMethod.POST)
+    @PostMapping(value = "/leave")
     public ResponseEntity unsubscribe(String communityTitle, Principal principal) {
         if (principal != null) {
             Community community = communityService.getByTitle(communityTitle);
