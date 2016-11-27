@@ -1,4 +1,4 @@
-Инструкция по разворачиванию Montao [![N|Solid](http://filmsforstudy.esy.es/Stack/images/pure-psevdo-logo.png)](http://filmsforstudy.esy.es/Stack/#)
+Инструкция по разворачиванию Montao
 ===================
 
 #### Комплекс ПО
