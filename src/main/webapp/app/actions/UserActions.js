@@ -126,26 +126,39 @@ export const addUser = (user) => {
         dispatch({
             type: actionTypes.ADD_USER_REQUEST
         });
-        $
-            .ajax({
-                url: '/api/user/add',
-                type: 'post',
-                contentType: 'application/json',
-                data: JSON.stringify(user),
-                // headers: headers
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json; charset=utf-8');
+        let request = new Request('/api/user/add', {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: headers,
+            credentials: 'same-origin'
+        });
+        return fetch(request)
+            .then(response => {
+                if (response.status != 201) {
+                    const error = new Error(response.statusText);
+                    error.response = response;
+                    throw error
+                } else {
+                    return response
+                }
             })
-            .then((response, status, xhr) => {
-                let location = xhr.getResponseHeader('location');
+            .then(response => {
+                const location = response.headers.get('location');
                 dispatch({
                     type: actionTypes.ADD_USER_SUCCESS,
                     payload: location
                 });
                 dispatch(viewActions.hideSignUpDialog());
             })
-            .fail((xhr, status, error) => {
+            .catch(error => {
                 dispatch({
                     type: actionTypes.ADD_USER_FAILUER,
                     payload: error
+                });
+                throw new SubmissionError({
+                    _error: 'Server failure!'
                 })
             })
     }
