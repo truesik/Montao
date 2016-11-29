@@ -51,14 +51,17 @@ export const logIn = (userCredentials) => {
                     error.response = response;
                     throw error;
                 } else {
-                    dispatch({
-                        type: actionTypes.LOG_IN_SUCCESS
-                    });
-                    // get username
-                    dispatch(checkAuthorization());
-                    // close log in dialog
-                    dispatch(viewActions.hideLogInDialog())
+                    return response
                 }
+            })
+            .then(() => {
+                dispatch({
+                    type: actionTypes.LOG_IN_SUCCESS
+                });
+                // get username
+                dispatch(checkAuthorization());
+                // close log in dialog
+                dispatch(viewActions.hideLogInDialog())
             })
             .catch((error) => {
                 dispatch({
