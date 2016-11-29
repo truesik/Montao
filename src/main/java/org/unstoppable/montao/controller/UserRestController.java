@@ -52,12 +52,12 @@ public class UserRestController {
         }
     }
 
-    @RequestMapping(value = "/check_username", method = RequestMethod.POST)
+    @PostMapping(value = "/check_username")
     public String checkUsername(String username) {
         return userService.checkUsername(username).toString();
     }
 
-    @RequestMapping(value = "/check_email", method = RequestMethod.POST)
+    @PostMapping(value = "/check_email")
     public String checkEmail(String email) {
         return userService.checkEmail(email).toString();
     }

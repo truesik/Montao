@@ -1,4 +1,4 @@
-import {reduxForm, SubmissionError} from "redux-form";
+import {reduxForm} from "redux-form";
 
 import AddCommunityForm from "../components/AddCommunityForm";
 

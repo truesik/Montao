@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router";
 
-import SignUpForm from "./SignUpForm";
+import SignUpDialog from "./SignUpDialog";
 import LogInDialog from "./LogInDialog";
 import AddCommunityDialog from "./AddCommunityDialog";
 
@@ -44,7 +44,7 @@ export default class NavBar extends React.Component {
         }
         return (
             <div>
-                <SignUpForm {...this.props.signUpDialog} {...this.props.signUpDialogActions}/>
+                <SignUpDialog {...this.props.signUpDialog} {...this.props.signUpDialogActions}/>
                 <LogInDialog {...this.props.logInDialog} {...this.props.logInDialogActions}/>
                 {this.props.isAuthorized && <AddCommunityDialog {...this.props.addCommunityDialog}
                                                                 {...this.props.addCommunityDialogActions}

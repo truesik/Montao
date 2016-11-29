@@ -1,6 +1,6 @@
 import * as actionTypes from "../constants/communityConstants";
 import * as viewActions from "./ViewActions";
-import {SubmissionError} from "redux-form";
+import {SubmissionError, reset} from "redux-form";
 
 // var csrfToken = csrf;
 // var csrfHeader = 'X-CSRF-TOKEN';
@@ -113,7 +113,8 @@ export const add = (community) => {
                         type: actionTypes.ADD_COMMUNITY_SUCCESS,
                         payload: location
                     });
-                    dispatch(viewActions.hideAddCommunityDialog())
+                    dispatch(viewActions.hideAddCommunityDialog());
+                    dispatch(reset('addCommunityForm'));
                 } else {
                     const error = new Error(response.statusText);
                     error.response = response;
