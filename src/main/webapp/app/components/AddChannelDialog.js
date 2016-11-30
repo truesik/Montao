@@ -1,18 +1,36 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import $ from 'jquery';
+
+import AddChannelFormContainer from "../containers/AddChannelFormContainer";
 
 export default class AddChannelDialog extends React.Component {
     componentDidMount() {
-        var node = ReactDOM.findDOMNode(this);
-        $(node).modal('show');
-        $(node).on('hidden.bs.modal', this.props.handleHideModal)
+        const node = ReactDOM.findDOMNode(this);
+        $(node).on('hidden.bs.modal', () => {
+            if (this.props.isShown) {
+                this.props.hide();
+            }
+        })
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
-        var channelTitle = ReactDOM.findDOMNode(this.refs.channelTitle).value;
-        var channelDescription = ReactDOM.findDOMNode(this.refs.channelDescription).value;
+    componentWillReceiveProps(nextProps) {
+        if (this.props.isShown !== nextProps.isShown) {
+            if (nextProps.isShown) {
+                ::this.showModal();
+            } else {
+                ::this.hideModal();
+            }
+        }
+    }
+
+    showModal() {
+        const node = ReactDOM.findDOMNode(this);
+        $(node).modal('show');
+    }
+
+    hideModal() {
+        const node = ReactDOM.findDOMNode(this);
+        $(node).modal('hide');
     }
 
     render() {
@@ -20,7 +38,7 @@ export default class AddChannelDialog extends React.Component {
             <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
                  aria-hidden="true">
                 <div className="modal-dialog">
-                    <div className="modal-content">
+                    <div className="modal-content" style={{overflow: 'auto', paddingBottom: '15px'}}>
                         <div className="modal-header">
                             <button type="button" className="close" data-dismiss="modal">
                                 <span aria-hidden="true">&times;</span>
@@ -29,25 +47,8 @@ export default class AddChannelDialog extends React.Component {
                             <h4 className="modal-title" id="myModalLabel">New channel</h4>
                         </div>
                         <div className="modal-body">
-                            <form method="post" id="new-channel">
-                                <div className="form-group">
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text" className="form-control" name="title"
-                                           placeholder="Title" ref="channelTitle"/>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="description">Description</label>
-                                    <input type="text" className="form-control" name="description"
-                                           placeholder="Description" ref="channelDescription"/>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" className="btn btn-primary" id="create"
-                                    onClick={this.handleSubmit.bind(this)}>
-                                Create
-                            </button>
+                            <AddChannelFormContainer communityTitle={this.props.communityTitle}
+                                                     addChannel={this.props.addChannel}/>
                         </div>
                     </div>
                 </div>
