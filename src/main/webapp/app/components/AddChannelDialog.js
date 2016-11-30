@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 // import $ from 'jquery';
 
-export default class AddChannelForm extends React.Component {
+export default class AddChannelDialog extends React.Component {
     componentDidMount() {
         var node = ReactDOM.findDOMNode(this);
         $(node).modal('show');
