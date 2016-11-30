@@ -33,26 +33,6 @@ export default class AddCommunityDialog extends React.Component {
         $(node).modal('hide');
     }
 
-    handlePrivacyChange(isVisible) {
-        this.setState({
-            isVisible: isVisible
-        })
-    }
-
-    handleSubmit() {
-        let title = ReactDOM.findDOMNode(this.refs.title).value;
-        let description = ReactDOM.findDOMNode(this.refs.description).value;
-        let founder = ReactDOM.findDOMNode(this.refs.founder).value;
-        let visible = this.state.isVisible;
-        let community = {
-            title: title,
-            description: description,
-            founder: founder,
-            visible: visible
-        };
-        this.props.addCommunity(community);
-    }
-
     render() {
         return (
             <div className="modal fade"
