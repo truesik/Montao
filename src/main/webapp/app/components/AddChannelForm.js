@@ -1,57 +1,52 @@
 import React from "react";
-import ReactDOM from "react-dom";
-// import $ from 'jquery';
+import {Field} from "redux-form";
+
+const normalizeTitle = value => value.replace(/[\W]+/g, '');
+
+const renderField = ({input, name, label, type, readOnly, meta: {touched, error}}) => {
+    return (
+        <div className={!touched || !error ? "form-group" : "form-group has-error"}>
+            <label htmlFor={name}>{label}</label>
+            <input {...input}
+                   placeholder={label}
+                   type={type}
+                   className="form-control"
+                   id={name}
+                   readOnly={readOnly}/>
+            {touched && (error && <small className="help-block">{error}</small>)}
+        </div>
+    )
+};
 
 export default class AddChannelForm extends React.Component {
     componentDidMount() {
-        var node = ReactDOM.findDOMNode(this);
-        $(node).modal('show');
-        $(node).on('hidden.bs.modal', this.props.handleHideModal)
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        var channelTitle = ReactDOM.findDOMNode(this.refs.channelTitle).value;
-        var channelDescription = ReactDOM.findDOMNode(this.refs.channelDescription).value;
+        const initialValues = {
+            'communityTitle': this.props.communityTitle
+        };
+        this.props.initialize(initialValues);
     }
 
     render() {
+        const {error, handleSubmit, pristine, reset, submitting, addChannel} = this.props;
         return (
-            <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
-                 aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal">
-                                <span aria-hidden="true">&times;</span>
-                                <span className="sr-only">Close</span>
-                            </button>
-                            <h4 className="modal-title" id="myModalLabel">New channel</h4>
-                        </div>
-                        <div className="modal-body">
-                            <form method="post" id="new-channel">
-                                <div className="form-group">
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text" className="form-control" name="title"
-                                           placeholder="Title" ref="channelTitle"/>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="description">Description</label>
-                                    <input type="text" className="form-control" name="description"
-                                           placeholder="Description" ref="channelDescription"/>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" className="btn btn-primary" id="create"
-                                    onClick={this.handleSubmit.bind(this)}>
-                                Create
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <form method="post" onSubmit={handleSubmit(addChannel)}>
+                <Field name="title"
+                       component={renderField}
+                       type="text"
+                       label="Title"
+                       normalize={normalizeTitle}/>
+                <Field name="description"
+                       component={renderField}
+                       type="text"
+                       label="Description"/>
+                <Field name="communityTitle"
+                       component={renderField}
+                       type="text"
+                       label="Community"
+                       readOnly/>
+                {error && <span className="text-danger">{error}</span>}
+                <button type="submit" className="pull-right btn btn-primary" disabled={submitting}>Create</button>
+            </form>
         )
     }
-}
+};

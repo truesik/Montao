@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import AddCommunityFormContainer from "../containers/AddCommunityFormContainer";
+import AddChannelFormContainer from "../containers/AddChannelFormContainer";
 
-export default class AddCommunityDialog extends React.Component {
+export default class AddChannelDialog extends React.Component {
     componentDidMount() {
         const node = ReactDOM.findDOMNode(this);
         $(node).on('hidden.bs.modal', () => {
@@ -35,10 +35,7 @@ export default class AddCommunityDialog extends React.Component {
 
     render() {
         return (
-            <div className="modal fade"
-                 tabIndex="-1"
-                 role="dialog"
-                 aria-labelledby="myModalLabel"
+            <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
                  aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content" style={{overflow: 'auto', paddingBottom: '15px'}}>
@@ -47,11 +44,11 @@ export default class AddCommunityDialog extends React.Component {
                                 <span aria-hidden="true">&times;</span>
                                 <span className="sr-only">Close</span>
                             </button>
-                            <h4 className="modal-title" id="myModalLabel">New Community</h4>
+                            <h4 className="modal-title" id="myModalLabel">New channel</h4>
                         </div>
                         <div className="modal-body">
-                            <AddCommunityFormContainer username={this.props.username}
-                                                       addCommunity={this.props.addCommunity}/>
+                            <AddChannelFormContainer communityTitle={this.props.communityTitle}
+                                                     addChannel={this.props.addChannel}/>
                         </div>
                     </div>
                 </div>

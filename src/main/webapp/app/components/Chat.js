@@ -1,12 +1,12 @@
 import React from "react";
-import MessageBoxContainer from '../containers/MessageBoxContainer'
-import MessageForm from './MessageForm'
-import SideBar from './SideBar'
+import MessageBoxContainer from '../containers/MessageBoxContainer';
+import MessageForm from './MessageForm';
+import SideBar from './SideBar';
+import AddChannelDialog from "./AddChannelDialog";
 
 export default class Chat extends React.Component {
     componentDidMount() {
-        var connectToWebSocket = this.props.connectToWebSocket;
-        connectToWebSocket();
+        this.props.connectToWebSocket();
     }
 
     componentWillUnmount() {
@@ -33,14 +33,20 @@ export default class Chat extends React.Component {
             currentChannelTitle: currentChannelTitle
         };
         return (
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-2 sidebar">
-                        <SideBar communityTitle={currentCommunityTitle}/>
-                    </div>
-                    <div className="col-md-offset-2 col-md-10">
-                        <MessageBoxContainer channel={currentChannelTitle} path={path}/>
-                        <MessageForm onSubmit={sendMessage} path={path} disabled={!this.props.isAuthorized}/>
+            <div>
+                <AddChannelDialog {...this.props.addChannelDialog}
+                                  {...this.props.addChannelDialogActions}
+                                  communityTitle={currentCommunityTitle}/>
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-md-2 sidebar">
+                            <SideBar communityTitle={currentCommunityTitle}
+                                     showAddChannelDialog={this.props.addChannelDialogActions.show}/>
+                        </div>
+                        <div className="col-md-offset-2 col-md-10">
+                            <MessageBoxContainer channel={currentChannelTitle} path={path}/>
+                            <MessageForm onSubmit={sendMessage} path={path} disabled={!this.props.isAuthorized}/>
+                        </div>
                     </div>
                 </div>
             </div>

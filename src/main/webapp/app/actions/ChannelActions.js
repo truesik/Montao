@@ -1,10 +1,6 @@
-// import $ from 'jquery'
 import * as constants from "../constants/channelConstants";
-
-// var csrfToken = csrf;
-// var csrfHeader = 'X-CSRF-TOKEN';
-// var headers = {};
-// headers[csrfHeader] = csrfToken;
+import {SubmissionError, reset} from "redux-form";
+import * as viewActions from "./ViewActions";
 
 export const getChannels = (communityTitle) => {
     return (dispatch) => {
@@ -67,28 +63,45 @@ export const setCurrentChannel = (channelTitle) => {
     }
 };
 
-export const addChannel = (channel) => {
+export const add = (channel) => {
     return dispatch => {
         dispatch({
             type: constants.ADD_CHANNEL_REQUEST
         });
-        $
-            .ajax({
-                url: "/api/channel/add",
-                type: "post",
-                contentType: "application/json",
-                date: JSON.stringify(channel),
-                // headers: headers
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json; charset=utf-8');
+        const request = new Request('/api/channel/add', {
+            method: 'POST',
+            body: JSON.stringify(channel),
+            headers: headers,
+            credentials: 'same-origin'
+        });
+        return fetch(request)
+            .then(response => {
+                if (response.status != 201) {
+                    const error = new Error(response.statusText);
+                    error.response = response;
+                    throw error
+                } else {
+                    return response
+                }
             })
-            .then((response, status, xhr) => {
+            .then(response => {
+                const location = response.headers.get('location');
                 dispatch({
-                    type: constants.ADD_CHANNEL_SUCCESS
-                })
+                    type: constants.ADD_CHANNEL_SUCCESS,
+                    payload: location
+                });
+                dispatch(viewActions.hideAddChannelDialog());
+                dispatch(reset('addChannelForm'));
             })
-            .fail((xhr, status, error) => {
+            .catch(error => {
                 dispatch({
                     type: constants.ADD_CHANNEL_FAILURE,
                     payload: error
+                });
+                throw new SubmissionError({
+                    _error: 'Creation failed!'
                 })
             })
     }

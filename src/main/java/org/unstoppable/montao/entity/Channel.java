@@ -4,17 +4,21 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.math.BigInteger;
 
 @Entity
 @Table(name = "channels")
 public class Channel {
+    private static final int MIN_TITLE_LENGTH = 4;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private BigInteger id;
 
     @Column(name = "title", nullable = false)
     @NotEmpty
+    @Size(min = MIN_TITLE_LENGTH)
     private String title;
 
     @Column(name = "description")
