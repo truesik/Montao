@@ -45,24 +45,22 @@ public class ChannelRestController {
         this.subscriptionService = subscriptionService;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> addChannel(@Valid @RequestBody ChannelCreationForm channelForm,
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity addChannel(@Valid @RequestBody ChannelCreationForm channelForm,
                                            BindingResult result,
                                            UriComponentsBuilder uriComponentsBuilder) {
         new ChannelValidator(channelService).validate(channelForm, result);
         if (result.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
             Community community = communityService.getByTitle(channelForm.getCommunityTitle());
             Channel channel = channelForm.createChannel(community);
             channelService.add(channel);
             messagingTemplate.convertAndSend("/topic/" + channel.getCommunity().getTitle() + "/newChannelNotification",
                     channel);
-            HttpHeaders headers = new HttpHeaders();
-            URI location = uriComponentsBuilder.path("/{communityTitle}/channels/{channelTitle}")
+            URI location = uriComponentsBuilder.path("/community/{communityTitle}/channels/{channelTitle}")
                     .buildAndExpand(channel.getCommunity().getTitle(), channel.getTitle()).toUri();
-            headers.setLocation(location);
-            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+            return ResponseEntity.created(location).build();
         }
     }
 
@@ -73,14 +71,13 @@ public class ChannelRestController {
      * @param communityTitle Community title.
      * @return String "true" or "false".
      */
-    @RequestMapping(value = "/check_title", method = RequestMethod.POST)
-    public String checkTitle(@RequestParam(name = "channelTitle") String channelTitle,
-                             @RequestParam(name = "communityTitle") String communityTitle) {
+    @PostMapping(value = "/check_title")
+    public String checkTitle(String channelTitle,
+                             String communityTitle) {
         return channelService.checkTitle(channelTitle, communityTitle).toString();
     }
 
-    @RequestMapping(value = "/get_last_opened_channel",
-            method = RequestMethod.POST,
+    @PostMapping(value = "/get_last_opened_channel",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Channel getLastOpenedChannel(@RequestParam(name = "communityTitle") String communityTitle,
                                         Principal principal) {
@@ -97,8 +94,7 @@ public class ChannelRestController {
         }
     }
 
-    @RequestMapping(value = "/get_channels",
-            method = RequestMethod.POST,
+    @PostMapping(value = "/get_channels",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Channel>> getChannels(@RequestParam(name = "communityTitle") String communityTitle) {
         Community community = communityService.getByTitle(communityTitle);
