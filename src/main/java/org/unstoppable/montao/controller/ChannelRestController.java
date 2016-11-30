@@ -47,8 +47,8 @@ public class ChannelRestController {
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addChannel(@Valid @RequestBody ChannelCreationForm channelForm,
-                                           BindingResult result,
-                                           UriComponentsBuilder uriComponentsBuilder) {
+                                     BindingResult result,
+                                     UriComponentsBuilder uriComponentsBuilder) {
         new ChannelValidator(channelService).validate(channelForm, result);
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
