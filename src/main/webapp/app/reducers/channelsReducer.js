@@ -4,7 +4,8 @@ const initialState = {
     channels: [],
     currentChannelTitle: '',
     error: '',
-    channelListFetching: false
+    channelListFetching: false,
+    channelPath: ''
 };
 
 const channelsReducer = (state = initialState, action) => {
@@ -51,7 +52,8 @@ const channelsReducer = (state = initialState, action) => {
             };
         case constants.ADD_CHANNEL_SUCCESS:
             return {
-                ...state
+                ...state,
+                channelPath: action.payload
             };
         case constants.ADD_CHANNEL_FAILURE:
             return {
