@@ -8,8 +8,8 @@ const validate = (values) => {
     } else if (values.title.length < 4) {
         errors.title = 'Please enter at least 4 characters'
     }
-    if (!values.community) {
-        errors.community = 'Require'
+    if (!values.communityTitle) {
+        errors.communityTitle = 'Require'
     }
     return errors;
 };

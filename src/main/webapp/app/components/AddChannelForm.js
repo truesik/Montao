@@ -21,7 +21,7 @@ const renderField = ({input, name, label, type, readOnly, meta: {touched, error}
 export default class AddChannelForm extends React.Component {
     componentDidMount() {
         const initialValues = {
-            'community': this.props.communityTitle
+            'communityTitle': this.props.communityTitle
         };
         this.props.initialize(initialValues);
     }
@@ -39,7 +39,7 @@ export default class AddChannelForm extends React.Component {
                        component={renderField}
                        type="text"
                        label="Description"/>
-                <Field name="community"
+                <Field name="communityTitle"
                        component={renderField}
                        type="text"
                        label="Community"
