@@ -123,6 +123,22 @@ public class CommunityRestController {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
+    @PostMapping(value = "/check_subscription")
+    public ResponseEntity<String> checkSubscription(String communityTitle, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.ok("false");
+        } else {
+            User user = userService.getByUsername(principal.getName());
+            Community community = communityService.getByTitle(communityTitle);
+            Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
+            if (isSubscribed) {
+                return ResponseEntity.ok(isSubscribed.toString());
+            } else {
+                return ResponseEntity.ok(isSubscribed.toString());
+            }
+        }
+    }
+
     private CommunitySubscription createCommunitySubscription(Community community, boolean isSubscribed) {
         CommunitySubscription communitySubscription = new CommunitySubscription();
         communitySubscription.setId(community.getId());
