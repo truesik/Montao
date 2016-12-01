@@ -1,6 +1,6 @@
 import * as actionTypes from "../constants/userConstants";
 import * as viewActions from "./ViewActions";
-import {SubmissionError} from "redux-form";
+import {SubmissionError, reset} from "redux-form";
 
 export const getUsers = (communityTitle) => {
     return (dispatch) => {
@@ -61,7 +61,9 @@ export const logIn = (userCredentials) => {
                 // get username
                 dispatch(checkAuthorization());
                 // close log in dialog
-                dispatch(viewActions.hideLogInDialog())
+                dispatch(viewActions.hideLogInDialog());
+                // clean up input fields
+                dispatch(reset('logInForm'))
             })
             .catch((error) => {
                 dispatch({
