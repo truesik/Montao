@@ -6,6 +6,9 @@ import AddChannelDialog from "./AddChannelDialog";
 
 export default class Chat extends React.Component {
     componentDidMount() {
+        // Check user subscription on this community
+        this.props.checkSubscription(this.props.params.community);
+        // Connect to web socket
         this.props.connectToWebSocket();
     }
 
@@ -21,6 +24,9 @@ export default class Chat extends React.Component {
         if (this.props.currentChannelTitle != nextProps.currentChannelTitle && this.props.isConnected) {
             this.props.unsubscribe();
             this.props.subscribeToTopic(this.props.params.community, nextProps.currentChannelTitle);
+        }
+        if (this.props.isAuthorized !== nextProps.isAuthorized) {
+            this.props.checkSubscription(this.props.params.community)
         }
     }
 
@@ -41,7 +47,8 @@ export default class Chat extends React.Component {
                     <div className="row">
                         <div className="col-md-2 sidebar">
                             <SideBar communityTitle={currentCommunityTitle}
-                                     showAddChannelDialog={this.props.addChannelDialogActions.show}/>
+                                     showAddChannelDialog={this.props.addChannelDialogActions.show}
+                                     isSubscribed={this.props.isSubscribed}/>
                         </div>
                         <div className="col-md-offset-2 col-md-10">
                             <MessageBoxContainer channel={currentChannelTitle} path={path}/>

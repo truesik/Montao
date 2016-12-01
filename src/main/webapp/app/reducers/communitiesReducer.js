@@ -3,7 +3,8 @@ import * as actionTypes from "../constants/communityConstants";
 const initialState = {
     communities: [],
     error: '',
-    communityPath: ''
+    communityPath: '',
+    isSubscribed: false
 };
 
 const communitiesReducer = (state = initialState, action) => {
@@ -63,6 +64,20 @@ const communitiesReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: action.payload
+            };
+        case actionTypes.CHECK_SUBSCRIPTION_REQUEST:
+            return {
+                ...state
+            };
+        case actionTypes.CHECK_SUBSCRIPTION_SUCCESS:
+            return {
+                ...state,
+                isSubscribed: action.payload == 'true'
+            };
+        case actionTypes.CHECK_SUBSCRIPTION_FAILURE:
+            return {
+                ...state,
+                isSubscribed: false
             };
         default:
             return state;

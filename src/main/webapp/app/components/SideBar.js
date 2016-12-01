@@ -8,8 +8,8 @@ export default class SideBar extends React.Component {
             <div>
                 <div>
                     <span>Channels </span>
-                    <a className="glyphicon glyphicon-plus pull-right"
-                       onClick={() => this.props.showAddChannelDialog()}></a>
+                    {this.props.isSubscribed && <a className="glyphicon glyphicon-plus pull-right"
+                                                   onClick={() => this.props.showAddChannelDialog()}></a>}
                     <ChannelListContainer communityTitle={this.props.communityTitle}/>
                 </div>
                 <div>
