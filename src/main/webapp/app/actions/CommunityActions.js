@@ -107,19 +107,22 @@ export const add = (community) => {
         });
         return fetch(request)
             .then(response => {
-                if (response.status == 201) {
-                    const location = response.headers.get('location');
-                    dispatch({
-                        type: actionTypes.ADD_COMMUNITY_SUCCESS,
-                        payload: location
-                    });
-                    dispatch(viewActions.hideAddCommunityDialog());
-                    dispatch(reset('addCommunityForm'));
-                } else {
+                if (response.status != 201) {
                     const error = new Error(response.statusText);
                     error.response = response;
                     throw error;
+                } else {
+                    return response
                 }
+            })
+            .then(response => {
+                const location = response.headers.get('location');
+                dispatch({
+                    type: actionTypes.ADD_COMMUNITY_SUCCESS,
+                    payload: location
+                });
+                dispatch(viewActions.hideAddCommunityDialog());
+                dispatch(reset('addCommunityForm'));
             })
             .catch(error => {
                 dispatch({
@@ -130,5 +133,46 @@ export const add = (community) => {
                     _error: 'Creation failed!'
                 })
             });
+    }
+};
+
+export const checkSubscription = (communityTitle) => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.CHECK_SUBSCRIPTION_REQUEST
+        });
+
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+
+        const request = new Request('/api/community/check_subscription', {
+            method: 'POST',
+            body: `communityTitle=${communityTitle}`,
+            headers: headers,
+            credentials: 'same-origin'
+        });
+
+        return fetch(request)
+            .then(response => {
+                if (response.status != 200) {
+                    const error = new Error(response.statusText);
+                    error.response = response;
+                    throw error
+                } else {
+                    return response.text()
+                }
+            })
+            .then(response => {
+                dispatch({
+                    type: actionTypes.CHECK_SUBSCRIPTION_SUCCESS,
+                    payload: response
+                })
+            })
+            .catch(error => {
+                dispatch({
+                    type: actionTypes.CHECK_SUBSCRIPTION_FAILURE,
+                    payload: error
+                })
+            })
     }
 };
