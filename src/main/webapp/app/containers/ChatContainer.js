@@ -6,12 +6,14 @@ import {sendMessage} from "../actions/MessageActions";
 import {connectToWebsocket, subscribeToTopic, unsubscribe, disconnect} from "../actions/WebSocketActions";
 import * as viewAction from "../actions/ViewActions";
 import * as channelActions from "../actions/ChannelActions";
+import * as communityActions from "../actions/CommunityActions";
 
 const mapStateToProps = state => {
     return {
         currentChannelTitle: state.channelsReducer.currentChannelTitle,
         isConnected: state.websocketReducer.isConnected,
         isAuthorized: state.usersReducer.isAuthorized,
+        isSubscribed: state.communitiesReducer.isSubscribed,
         addChannelDialog: {
             isShown: state.viewReducer.isShownAddChannelDialog
         }
@@ -30,7 +32,8 @@ const mapDispatchToProps = dispatch => {
             show: bindActionCreators(viewAction.showAddChannelDialog, dispatch),
             hide: bindActionCreators(viewAction.hideAddChannelDialog, dispatch),
             addChannel: bindActionCreators(channelActions.add, dispatch)
-        }
+        },
+        checkSubscription: bindActionCreators(communityActions.checkSubscription, dispatch)
     }
 };
 
