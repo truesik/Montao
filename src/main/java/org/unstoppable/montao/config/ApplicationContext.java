@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.unstoppable.montao.dao.*;
-import org.unstoppable.montao.formatter.DateFormatter;
-import org.unstoppable.montao.formatter.UserFormatter;
 import org.unstoppable.montao.service.*;
 
 import java.util.Properties;
@@ -61,16 +59,6 @@ public class ApplicationContext {
     @Bean
     public SubscriptionDAO subscriptionDAO() {
         return new SubscriptionDAOHibernate();
-    }
-
-    @Bean
-    public UserFormatter userFormatter() {
-        return new UserFormatter();
-    }
-
-    @Bean
-    public DateFormatter dateFormatter() {
-        return new DateFormatter();
     }
 
     @Bean
