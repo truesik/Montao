@@ -1,7 +1,5 @@
 package org.unstoppable.montao.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.security.auth.UserPrincipal;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +10,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.unstoppable.montao.entity.Channel;
 import org.unstoppable.montao.entity.Community;
 import org.unstoppable.montao.entity.Subscription;
 import org.unstoppable.montao.entity.User;
@@ -21,8 +18,6 @@ import org.unstoppable.montao.service.CommunityService;
 import org.unstoppable.montao.service.SubscriptionService;
 import org.unstoppable.montao.service.UserService;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -47,12 +42,12 @@ public class UserRestControllerTest {
 
     @Test
     public void addUser() throws Exception {
-        UserRegistrationForm userForm = createUserForm();
+        UserRegistrationForm userForm = Helper.createUserForm();
         Mockito.when(userService.checkUsername(userForm.getUsername())).thenReturn(true);
         Mockito.when(userService.checkEmail(userForm.getEmail())).thenReturn(true);
         RequestBuilder request = post("/api/user/add")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(json(userForm));
+                .content(Helper.json(userForm));
         String uri = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
@@ -69,12 +64,12 @@ public class UserRestControllerTest {
 
     @Test
     public void addWrongUser() throws Exception {
-        UserRegistrationForm userForm = createUserForm();
+        UserRegistrationForm userForm = Helper.createUserForm();
         userForm.setEmail("sdfsd");
         userForm.setUsername("ывпаыапва");
         RequestBuilder request = post("/api/user/add")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(json(userForm));
+                .content(Helper.json(userForm));
         ResultMatcher conflict = status().isConflict();
         mockMvc.perform(request)
                 .andDo(print())
@@ -83,7 +78,7 @@ public class UserRestControllerTest {
 
     @Test
     public void checkExistUsername() throws Exception {
-        UserRegistrationForm user = createUserForm();
+        UserRegistrationForm user = Helper.createUserForm();
         Mockito.when(userService.checkUsername(user.getUsername())).thenReturn(false);
         ResultMatcher ok = status().isOk();
         ResultMatcher result = content().string("false");
@@ -110,7 +105,7 @@ public class UserRestControllerTest {
 
     @Test
     public void checkExistEmail() throws Exception {
-        UserRegistrationForm user = createUserForm();
+        UserRegistrationForm user = Helper.createUserForm();
         Mockito.when(userService.checkEmail(user.getEmail())).thenReturn(false);
         RequestBuilder request = post("/api/user/check_email")
                 .param("email", user.getEmail());
@@ -159,10 +154,10 @@ public class UserRestControllerTest {
 
     @Test
     public void getSubscribedUsers() throws Exception {
-        Community community = createCommunity();
-        User user = createUser();
-        Subscription subscription = createSubscription(community, user);
-        List<Subscription> subscriptions = createSubscriptionList(subscription);
+        Community community = Helper.createCommunity();
+        User user = Helper.createUser();
+        Subscription subscription = Helper.createSubscription(community, user);
+        List<Subscription> subscriptions = Helper.createSubscriptionList(subscription);
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
         Mockito.when(subscriptionService.getByCommunity(community)).thenReturn(subscriptions);
         RequestBuilder request = post("/api/user/get_subscribed_users")
@@ -185,7 +180,7 @@ public class UserRestControllerTest {
 
     @Test
     public void getSubscribedUsersWithWrongCommunity() throws Exception {
-        Community community = createCommunity();
+        Community community = Helper.createCommunity();
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(null);
         RequestBuilder request = post("/api/user/get_subscribed_users")
                 .param("communityTitle", community.getTitle());
@@ -193,59 +188,5 @@ public class UserRestControllerTest {
         mockMvc.perform(request)
                 .andDo(print())
                 .andExpect(noContent);
-    }
-
-    private UserRegistrationForm createUserForm() {
-        UserRegistrationForm user = new UserRegistrationForm();
-        user.setUsername("username");
-        user.setPassword("password");
-        user.setConfirmPassword("password");
-        user.setEmail("email@mail.com");
-        return user;
-    }
-
-    private byte[] json(Object o) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper.writeValueAsBytes(o);
-    }
-
-    private User createUser() {
-        User user = new User();
-        user.setUsername("userTest");
-        user.setEmail("test@test.com");
-        user.setPassword("passwordTest");
-        return user;
-    }
-
-    private Channel createChannel(Community community) {
-        Channel channel = new Channel();
-        channel.setTitle("channelTest");
-        channel.setCommunity(community);
-        return channel;
-    }
-
-    private Subscription createSubscription(Community community, User user) {
-        Subscription subscription = new Subscription();
-        subscription.setUser(user);
-        subscription.setCommunity(community);
-        return subscription;
-    }
-
-    private Community createCommunity() {
-        Community community = new Community();
-        community.setTitle("communityTest");
-        community.setVisible(true);
-        List<Channel> channels = new ArrayList<>();
-        Channel channel = createChannel(community);
-        channels.add(channel);
-        community.setChannels(channels);
-        return community;
-    }
-
-    private List<Subscription> createSubscriptionList(Subscription subscription) {
-        List<Subscription> subscriptions = new ArrayList<>();
-        subscriptions.add(subscription);
-        return subscriptions;
     }
 }
