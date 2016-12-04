@@ -2,10 +2,7 @@ package org.unstoppable.montao.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.unstoppable.montao.entity.Channel;
-import org.unstoppable.montao.entity.Community;
-import org.unstoppable.montao.entity.Subscription;
-import org.unstoppable.montao.entity.User;
+import org.unstoppable.montao.entity.*;
 import org.unstoppable.montao.model.ChannelCreationForm;
 import org.unstoppable.montao.model.UserRegistrationForm;
 
@@ -67,6 +64,19 @@ public class Helper {
         channels.add(channel);
         community.setChannels(channels);
         return community;
+    }
+
+    public static Message createMessage(Channel channel) {
+        Message message = new Message();
+        message.setText("Hello");
+        message.setChannel(channel);
+        return message;
+    }
+
+    public static List<Message> createMessageList(Message message) {
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
+        return messages;
     }
 
     public static List<Subscription> createSubscriptionList(Subscription subscription) {
