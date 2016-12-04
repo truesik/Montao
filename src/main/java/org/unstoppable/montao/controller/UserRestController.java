@@ -37,7 +37,7 @@ public class UserRestController {
         this.communityService = communityService;
     }
 
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity addUser(@Valid @RequestBody UserRegistrationForm userForm,
                                   BindingResult result,
                                   UriComponentsBuilder uriComponentsBuilder) {
@@ -63,14 +63,17 @@ public class UserRestController {
     }
 
     @PostMapping(value = "/get_subscribed_users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Subscription>> getSubscribedUsers(@RequestParam(value = "communityTitle") String communityTitle) {
+    public ResponseEntity getSubscribedUsers(@RequestParam(value = "communityTitle") String communityTitle) {
         Community community = communityService.getByTitle(communityTitle);
-        List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
-        return new ResponseEntity<>(subscriptions, HttpStatus.OK);
+        if (community != null) {
+            List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
+            return ResponseEntity.ok(subscriptions);
+        }
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "/check_authorization")
-    public ResponseEntity getUser(Principal principal) {
+    public ResponseEntity getPrincipal(Principal principal) {
         if (principal != null) {
             return ResponseEntity.ok(principal.getName());
         }
