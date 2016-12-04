@@ -1,7 +1,6 @@
 package org.unstoppable.montao.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,27 +24,18 @@ import java.util.List;
 public class ChannelRestController {
     private final CommunityService communityService;
     private final ChannelService channelService;
-    private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
-    private final UserService userService;
-    private final SubscriptionService subscriptionService;
 
     @Autowired
     public ChannelRestController(CommunityService communityService,
                                  ChannelService channelService,
-                                 MessageService messageService,
-                                 UserService userService,
-                                 SimpMessagingTemplate messagingTemplate,
-                                 SubscriptionService subscriptionService) {
+                                 SimpMessagingTemplate messagingTemplate) {
         this.communityService = communityService;
         this.channelService = channelService;
-        this.messageService = messageService;
-        this.userService = userService;
         this.messagingTemplate = messagingTemplate;
-        this.subscriptionService = subscriptionService;
     }
 
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity addChannel(@Valid @RequestBody ChannelCreationForm channelForm,
                                      BindingResult result,
                                      UriComponentsBuilder uriComponentsBuilder) {
@@ -72,36 +62,33 @@ public class ChannelRestController {
      * @return String "true" or "false".
      */
     @PostMapping(value = "/check_title")
-    public String checkTitle(String channelTitle,
-                             String communityTitle) {
+    public String checkTitle(String channelTitle, String communityTitle) {
         return channelService.checkTitle(channelTitle, communityTitle).toString();
     }
 
-    @PostMapping(value = "/get_last_opened_channel",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Channel getLastOpenedChannel(@RequestParam(name = "communityTitle") String communityTitle,
-                                        Principal principal) {
+    @PostMapping(value = "/get_last_opened_channel", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Channel> getLastOpenedChannel(@RequestParam(name = "communityTitle") String communityTitle,
+                                                        Principal principal) {
         if (principal == null) {
             // If principal is null, get default channel (general)
             Community community = communityService.getByTitle(communityTitle);
-            return community.getChannels().get(0);
+            return ResponseEntity.ok(community.getChannels().get(0));
         } else {
             // Else get last opened channel
             // TODO: 30.09.2016 fix this branch
             Community community = communityService.getByTitle(communityTitle);
             Channel channel = community.getChannels().get(0);
-            return channel;
+            return ResponseEntity.ok(channel);
         }
     }
 
-    @PostMapping(value = "/get_channels",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Channel>> getChannels(@RequestParam(name = "communityTitle") String communityTitle) {
+    @PostMapping(value = "/get_channels", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getChannels(@RequestParam(name = "communityTitle") String communityTitle) {
         Community community = communityService.getByTitle(communityTitle);
         List<Channel> channels = community.getChannels();
         if (!channels.isEmpty()) {
-            return new ResponseEntity<>(channels, HttpStatus.OK);
+            return ResponseEntity.ok(channels);
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
