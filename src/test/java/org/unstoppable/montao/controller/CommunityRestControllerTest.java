@@ -3,8 +3,12 @@ package org.unstoppable.montao.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.unstoppable.montao.entity.Community;
 import org.unstoppable.montao.entity.User;
 import org.unstoppable.montao.model.CommunityCreationForm;
@@ -40,13 +44,27 @@ public class CommunityRestControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
-//    @Test
-//    public void addCommunity() throws Exception {
-//        Community community = Helper.createCommunity();
-//        User user = Helper.createUser();
-//        CommunityCreationForm communityForm = Helper.createCommunityForm(community, user);
-//        post("/api/community/add")
-//                .content(Helper.json(communityForm));
-//    }
+    @Test
+    public void addCommunity() throws Exception {
+        Community community = Helper.createCommunity();
+        User user = Helper.createUser();
+        CommunityCreationForm communityForm = Helper.createCommunityForm(community, user);
+        Mockito.when(communityService.checkTitle(communityForm.getTitle())).thenReturn(true);
+        String uri = UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host("localhost")
+                .path("/community/{communityTitle}")
+                .buildAndExpand(community.getTitle())
+                .toUriString();
+        RequestBuilder request = post("/api/community/add")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(Helper.json(communityForm));
+        ResultMatcher created = status().isCreated();
+        ResultMatcher location = header().string("location", uri);
+        mockMvc.perform(request)
+                .andDo(print())
+                .andExpect(created)
+                .andExpect(location);
+    }
 
 }
