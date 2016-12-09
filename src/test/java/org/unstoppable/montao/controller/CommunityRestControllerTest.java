@@ -67,4 +67,19 @@ public class CommunityRestControllerTest {
                 .andExpect(location);
     }
 
+    @Test
+    public void addAlreadyExistedCommunity() throws Exception {
+        Community community = Helper.createCommunity();
+        User user = Helper.createUser();
+        CommunityCreationForm communityForm = Helper.createCommunityForm(community, user);
+        Mockito.when(communityService.checkTitle(communityForm.getTitle())).thenReturn(false);
+        RequestBuilder request = post("/api/community/add")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(Helper.json(communityForm));
+        ResultMatcher conflict = status().isConflict();
+        mockMvc.perform(request)
+                .andDo(print())
+                .andExpect(conflict);
+    }
+
 }
