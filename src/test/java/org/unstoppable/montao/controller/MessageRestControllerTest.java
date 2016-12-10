@@ -109,9 +109,9 @@ public class MessageRestControllerTest {
                 .param("communityTitle", community.getTitle())
                 .param("channelTitle", "fake")
                 .param("startRowPosition", "0");
-        ResultMatcher noContent = status().isNoContent();
+        ResultMatcher badRequest = status().isBadRequest();
         mockMvc.perform(request)
                 .andDo(print())
-                .andExpect(noContent);
+                .andExpect(badRequest);
     }
 }
