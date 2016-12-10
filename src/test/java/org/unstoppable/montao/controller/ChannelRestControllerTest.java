@@ -47,7 +47,8 @@ public class ChannelRestControllerTest {
                 .scheme("http")
                 .host("localhost")
                 .path("/community/{communityTitle}/channels/{channelTitle}")
-                .buildAndExpand(community.getTitle(), channelForm.getTitle()).toUriString();
+                .buildAndExpand(community.getTitle(), channelForm.getTitle())
+                .toUriString();
         RequestBuilder request = post("/api/channel/add")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(Helper.json(channelForm));
