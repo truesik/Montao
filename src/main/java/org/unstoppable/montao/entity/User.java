@@ -24,6 +24,7 @@ public class User {
     private BigInteger id;
 
     @NotNull
+    @Column(name = "uuid", nullable = false, unique = true)
     private String uuid;
 
     @Column(name = "username", nullable = false, unique = true)
