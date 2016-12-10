@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.unstoppable.montao.entity.*;
 import org.unstoppable.montao.model.ChannelCreationForm;
+import org.unstoppable.montao.model.CommunityCreationForm;
+import org.unstoppable.montao.model.CommunitySubscription;
 import org.unstoppable.montao.model.UserRegistrationForm;
 
 import java.io.IOException;
@@ -25,6 +27,15 @@ public class Helper {
         form.setTitle("channelTest");
         form.setCommunityTitle("communityTest");
         return form;
+    }
+
+    public static CommunityCreationForm createCommunityForm(Community community, User user) {
+        CommunityCreationForm communityCreationForm = new CommunityCreationForm();
+        communityCreationForm.setTitle(community.getTitle());
+        communityCreationForm.setDescription(community.getDescription());
+        communityCreationForm.setFounder(user.getUsername());
+        communityCreationForm.setVisible(true);
+        return communityCreationForm;
     }
 
     public static byte[] json(Object o) throws IOException {
@@ -83,5 +94,25 @@ public class Helper {
         List<Subscription> subscriptions = new ArrayList<>();
         subscriptions.add(subscription);
         return subscriptions;
+    }
+
+    public static CommunitySubscription createCommunitySubscription(Community community) {
+        CommunitySubscription communitySubscription = new CommunitySubscription();
+        communitySubscription.setTitle(community.getTitle());
+        communitySubscription.setDescription(community.getDescription());
+        communitySubscription.setSubscribed(true);
+        return communitySubscription;
+    }
+
+    public static List<CommunitySubscription> createCommunitySubscriptionList(CommunitySubscription communitySubscription) {
+        List<CommunitySubscription> communitySubscriptions = new ArrayList<>();
+        communitySubscriptions.add(communitySubscription);
+        return communitySubscriptions;
+    }
+
+    public static List<Community> createCommunityList(Community community) {
+        List<Community> communities = new ArrayList<>();
+        communities.add(community);
+        return communities;
     }
 }
