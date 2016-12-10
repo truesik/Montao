@@ -46,13 +46,13 @@ public class CommunityRestController {
         this.subscriptionService = subscriptionService;
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity addCommunity(@Valid @RequestBody CommunityCreationForm communityForm,
                                        BindingResult result,
                                        UriComponentsBuilder uriComponentsBuilder) {
         new CommunityValidator(communityService).validate(communityForm, result);
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Form validation failed");
         } else {
             // Get User instance by founder username
             User founder = userService.getByUsername(communityForm.getFounder());
@@ -64,7 +64,10 @@ public class CommunityRestController {
             // Subscribe creator to that community
             subscriptionService.subscribe(createSubscription(community, founder));
             // And create location
-            URI location = uriComponentsBuilder.path("/community/{communityTitle}").buildAndExpand(community.getTitle()).toUri();
+            URI location = uriComponentsBuilder
+                    .path("/community/{communityTitle}")
+                    .buildAndExpand(community.getTitle())
+                    .toUri();
             return ResponseEntity.created(location).build();
         }
     }
@@ -104,7 +107,7 @@ public class CommunityRestController {
             subscriptionService.subscribe(createSubscription(community, user));
             return ResponseEntity.ok(createCommunitySubscription(community, true));
         }
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Allows to authorized users only");
     }
 
     @PostMapping(value = "/leave")
@@ -117,10 +120,10 @@ public class CommunityRestController {
                 subscriptionService.delete(subscription);
                 return ResponseEntity.ok(createCommunitySubscription(community, false));
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.badRequest().body("Subscription not found");
             }
         }
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Allows to authorized users only");
     }
 
     @PostMapping(value = "/check_subscription")
