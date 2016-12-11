@@ -1,7 +1,6 @@
 package org.unstoppable.montao.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.unstoppable.montao.entity.Channel;
 import org.unstoppable.montao.entity.Community;
+import org.unstoppable.montao.exception.ChannelFormException;
+import org.unstoppable.montao.exception.CommunityNotFoundException;
 import org.unstoppable.montao.model.ChannelCreationForm;
 import org.unstoppable.montao.service.*;
 import org.unstoppable.montao.validator.ChannelValidator;
@@ -41,17 +42,22 @@ public class ChannelRestController {
                                      UriComponentsBuilder uriComponentsBuilder) {
         new ChannelValidator(channelService).validate(channelForm, result);
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } else {
-            Community community = communityService.getByTitle(channelForm.getCommunityTitle());
-            Channel channel = channelForm.createChannel(community);
-            channelService.add(channel);
-            messagingTemplate.convertAndSend("/topic/" + channel.getCommunity().getTitle() + "/newChannelNotification",
-                    channel);
-            URI location = uriComponentsBuilder.path("/community/{communityTitle}/channels/{channelTitle}")
-                    .buildAndExpand(channel.getCommunity().getTitle(), channel.getTitle()).toUri();
-            return ResponseEntity.created(location).build();
+            throw new ChannelFormException("Form validation failed");
         }
+        Community community = communityService.getByTitle(channelForm.getCommunityTitle());
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
+        }
+        Channel channel = channelForm.createChannel(community);
+        channelService.add(channel);
+        messagingTemplate
+                .convertAndSend("/topic/" + channel.getCommunity().getTitle() + "/newChannelNotification",
+                channel);
+        URI location = uriComponentsBuilder
+                .path("/community/{communityTitle}/channels/{channelTitle}")
+                .buildAndExpand(channel.getCommunity().getTitle(), channel.getTitle())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     /**
@@ -67,28 +73,36 @@ public class ChannelRestController {
     }
 
     @PostMapping(value = "/get_last_opened_channel", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Channel> getLastOpenedChannel(@RequestParam(name = "communityTitle") String communityTitle,
-                                                        Principal principal) {
+    public ResponseEntity getLastOpenedChannel(@RequestParam(name = "communityTitle") String communityTitle,
+                                               Principal principal) {
         if (principal == null) {
             // If principal is null, get default channel (general)
             Community community = communityService.getByTitle(communityTitle);
+            if (community == null) {
+                throw new CommunityNotFoundException("Community not found");
+            }
             return ResponseEntity.ok(community.getChannels().get(0));
-        } else {
-            // Else get last opened channel
-            // TODO: 30.09.2016 fix this branch
-            Community community = communityService.getByTitle(communityTitle);
-            Channel channel = community.getChannels().get(0);
-            return ResponseEntity.ok(channel);
         }
+        // Else get last opened channel
+        // TODO: 30.09.2016 fix this branch
+        Community community = communityService.getByTitle(communityTitle);
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
+        }
+        Channel channel = community.getChannels().get(0);
+        return ResponseEntity.ok(channel);
     }
 
     @PostMapping(value = "/get_channels", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getChannels(@RequestParam(name = "communityTitle") String communityTitle) {
         Community community = communityService.getByTitle(communityTitle);
-        List<Channel> channels = community.getChannels();
-        if (!channels.isEmpty()) {
-            return ResponseEntity.ok(channels);
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
         }
-        return ResponseEntity.noContent().build();
+        List<Channel> channels = community.getChannels();
+        if (channels.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(channels);
     }
 }
