@@ -34,7 +34,10 @@ public class ChannelRestControllerTest {
                 communityService,
                 channelService,
                 simpMessagingTemplate);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(controller)
+                .setControllerAdvice(new ExceptionHandlerController())
+                .build();
     }
 
     @Test

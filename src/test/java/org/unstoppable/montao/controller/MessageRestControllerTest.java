@@ -42,7 +42,10 @@ public class MessageRestControllerTest {
                 userService,
                 messageService,
                 messagingTemplate);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(controller)
+                .setControllerAdvice(new ExceptionHandlerController())
+                .build();
     }
 
     @Test
@@ -109,9 +112,9 @@ public class MessageRestControllerTest {
                 .param("communityTitle", community.getTitle())
                 .param("channelTitle", "fake")
                 .param("startRowPosition", "0");
-        ResultMatcher badRequest = status().isBadRequest();
+        ResultMatcher notFound = status().isNotFound();
         mockMvc.perform(request)
                 .andDo(print())
-                .andExpect(badRequest);
+                .andExpect(notFound);
     }
 }

@@ -4,6 +4,7 @@ import com.sun.security.auth.UserPrincipal;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -51,7 +52,10 @@ public class CommunityRestControllerTest {
                 userService,
                 channelService,
                 subscriptionService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(controller)
+                .setControllerAdvice(new ExceptionHandlerController())
+                .build();
     }
 
     @Test
@@ -60,6 +64,7 @@ public class CommunityRestControllerTest {
         User user = Helper.createUser();
         CommunityCreationForm communityForm = Helper.createCommunityForm(community, user);
         Mockito.when(communityService.checkTitle(communityForm.getTitle())).thenReturn(true);
+        Mockito.when(userService.getByUsername(user.getUsername())).thenReturn(user);
         String uri = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
@@ -291,10 +296,10 @@ public class CommunityRestControllerTest {
         RequestBuilder request = post(path)
                 .param("communityTitle", community.getTitle());
         ResultMatcher notAllowed = status().isMethodNotAllowed();
-        ResultMatcher result = content().string("Allows to authorized users only");
         mockMvc.perform(request)
                 .andDo(print())
                 .andExpect(notAllowed)
-                .andExpect(result);
+                .andExpect(jsonPath("$.code").value(HttpStatus.METHOD_NOT_ALLOWED.value()))
+                .andExpect(jsonPath("$.message").value("Allows to authorized users only"));
     }
 }
