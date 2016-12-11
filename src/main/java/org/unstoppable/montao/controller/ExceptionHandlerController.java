@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.unstoppable.montao.exception.*;
-import org.unstoppable.montao.exception.Error;
+import org.unstoppable.montao.model.Error;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {
