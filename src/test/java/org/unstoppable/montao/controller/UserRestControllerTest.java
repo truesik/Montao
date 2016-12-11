@@ -37,7 +37,10 @@ public class UserRestControllerTest {
         subscriptionService = Mockito.mock(SubscriptionService.class);
         communityService = Mockito.mock(CommunityService.class);
         UserRestController controller = new UserRestController(userService, subscriptionService, communityService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(controller)
+                .setControllerAdvice(new ExceptionHandlerController())
+                .build();
     }
 
     @Test
@@ -146,10 +149,10 @@ public class UserRestControllerTest {
     @Test
     public void getNonAuthorizedPrincipal() throws Exception {
         RequestBuilder request = get("/api/user/check_authorization");
-        ResultMatcher conflict = status().isConflict();
+        ResultMatcher notAllowed = status().isMethodNotAllowed();
         mockMvc.perform(request)
                 .andDo(print())
-                .andExpect(conflict);
+                .andExpect(notAllowed);
     }
 
     @Test
@@ -184,9 +187,9 @@ public class UserRestControllerTest {
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(null);
         RequestBuilder request = post("/api/user/get_subscribed_users")
                 .param("communityTitle", community.getTitle());
-        ResultMatcher noContent = status().isNoContent();
+        ResultMatcher notFound = status().isNotFound();
         mockMvc.perform(request)
                 .andDo(print())
-                .andExpect(noContent);
+                .andExpect(notFound);
     }
 }
