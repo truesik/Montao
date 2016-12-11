@@ -1,7 +1,6 @@
 package org.unstoppable.montao.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -10,6 +9,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.unstoppable.montao.entity.Community;
 import org.unstoppable.montao.entity.Subscription;
 import org.unstoppable.montao.entity.User;
+import org.unstoppable.montao.exception.CommunityNotFoundException;
+import org.unstoppable.montao.exception.RegistrationFormException;
+import org.unstoppable.montao.exception.UserNotAuthorizedException;
 import org.unstoppable.montao.model.UserRegistrationForm;
 import org.unstoppable.montao.service.CommunityService;
 import org.unstoppable.montao.service.SubscriptionService;
@@ -43,13 +45,12 @@ public class UserRestController {
                                   UriComponentsBuilder uriComponentsBuilder) {
         new UserValidator(userService).validate(userForm, result);
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } else {
-            User user = userForm.createUser();
-            userService.registerNewUser(user);
-            URI location = uriComponentsBuilder.path("/{username}").buildAndExpand(user.getUsername()).toUri();
-            return ResponseEntity.created(location).build();
+            throw new RegistrationFormException("Form validation failure");
         }
+        User user = userForm.createUser();
+        userService.registerNewUser(user);
+        URI location = uriComponentsBuilder.path("/{username}").buildAndExpand(user.getUsername()).toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @PostMapping(value = "/check_username")
@@ -65,18 +66,18 @@ public class UserRestController {
     @PostMapping(value = "/get_subscribed_users", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getSubscribedUsers(@RequestParam(value = "communityTitle") String communityTitle) {
         Community community = communityService.getByTitle(communityTitle);
-        if (community != null) {
-            List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
-            return ResponseEntity.ok(subscriptions);
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
         }
-        return ResponseEntity.noContent().build();
+        List<Subscription> subscriptions = subscriptionService.getByCommunity(community);
+        return ResponseEntity.ok(subscriptions);
     }
 
     @GetMapping(value = "/check_authorization")
     public ResponseEntity getPrincipal(Principal principal) {
-        if (principal != null) {
-            return ResponseEntity.ok(principal.getName());
+        if (principal == null) {
+            throw new UserNotAuthorizedException("Not authorized");
         }
-        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        return ResponseEntity.ok(principal.getName());
     }
 }
