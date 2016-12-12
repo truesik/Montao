@@ -5,7 +5,7 @@ import * as communityActions from "../actions/CommunityActions";
 
 const mapStateToProps = (state) => {
     return {
-        communities: state.communitiesReducer.communities,
+        communities: state.communitiesReducer.get('communities').toArray(),
         isAuthorized: state.usersReducer.isAuthorized
     }
 };

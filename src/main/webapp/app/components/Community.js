@@ -6,14 +6,14 @@ const Community = ({community, action}) => {
         <div className="col-lg-3">
             <div className="panel panel-default">
                 <div className="panel-body">
-                    <q>{community.description}</q>
+                    <q>{community.get('description')}</q>
                 </div>
                 <div className="panel-footer">
                     <i className="material-icons">group</i>
-                    <Link to={`/community/${community.title}`}>{community.title}</Link>
+                    <Link to={`/community/${community.get('title')}`}>{community.get('title')}</Link>
                     <a className="btn btn-primary pull-right"
-                       onClick={() => action(community.title)}>
-                        {community.subscribed ? "Leave" : "Join"}
+                       onClick={() => action(community.get('title'))}>
+                        {community.get('subscribed') ? "Leave" : "Join"}
                     </a>
                 </div>
             </div>
