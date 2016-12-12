@@ -3,7 +3,7 @@ import {Link} from "react-router";
 
 const Community = ({community, action}) => {
     return (
-        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             <div className="panel panel-default">
                 <div className="panel-body">
                     <q>{community.get('description')}</q>
