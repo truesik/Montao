@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.unstoppable.montao.handler.SuccessUrlHandler;
@@ -39,12 +40,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         encodingFilter.setForceEncoding(true);
         http.addFilterBefore(encodingFilter, CsrfFilter.class);
         // PERMISSIONS
+        // @formatter:off
         http.authorizeRequests()
                 .anyRequest().permitAll()
-                .and().formLogin().loginPage("/login").successHandler(new SuccessUrlHandler()).failureHandler(new SimpleUrlAuthenticationFailureHandler()).permitAll()
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").permitAll()
-                .and().csrf().disable();
-//                .and().csrf().ignoringAntMatchers("/websocket/**");
+                .and()
+                    .formLogin()
+                        .loginPage("/login")
+                        .successHandler(new SuccessUrlHandler())
+                        .failureHandler(new SimpleUrlAuthenticationFailureHandler())
+                        .permitAll()
+                .and()
+                    .logout()
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .permitAll()
+                .and()
+                    .csrf()
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .ignoringAntMatchers("/websocket/**");
 //                .and().headers().frameOptions().sameOrigin();
+        // @formatter:on
     }
 }

@@ -11,6 +11,9 @@ import org.unstoppable.montao.entity.Channel;
 import org.unstoppable.montao.entity.Community;
 import org.unstoppable.montao.entity.Subscription;
 import org.unstoppable.montao.entity.User;
+import org.unstoppable.montao.exception.CommunityNotFoundException;
+import org.unstoppable.montao.exception.UserNotAuthorizedException;
+import org.unstoppable.montao.exception.UserNotFoundException;
 import org.unstoppable.montao.model.CommunityCreationForm;
 import org.unstoppable.montao.model.CommunitySubscription;
 import org.unstoppable.montao.service.ChannelService;
@@ -46,27 +49,33 @@ public class CommunityRestController {
         this.subscriptionService = subscriptionService;
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity addCommunity(@Valid @RequestBody CommunityCreationForm communityForm,
                                        BindingResult result,
                                        UriComponentsBuilder uriComponentsBuilder) {
         new CommunityValidator(communityService).validate(communityForm, result);
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } else {
-            // Get User instance by founder username
-            User founder = userService.getByUsername(communityForm.getFounder());
-            Community community = communityForm.createCommunity(founder);
-            communityService.save(community);
-            // After community creation we should add default channel
-            Channel defaultChannel = createDefaultChannel(community);
-            channelService.add(defaultChannel);
-            // Subscribe creator to that community
-            subscriptionService.subscribe(createSubscription(community, founder));
-            // And create location
-            URI location = uriComponentsBuilder.path("/community/{communityTitle}").buildAndExpand(community.getTitle()).toUri();
-            return ResponseEntity.created(location).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Form validation failed");
         }
+        // Get User instance by founder username
+        User founder = userService.getByUsername(communityForm.getFounder());
+        if (founder == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        Community community = communityForm.createCommunity(founder);
+        communityService.save(community);
+        // After community creation we should add default channel
+        Channel defaultChannel = createDefaultChannel(community);
+        channelService.add(defaultChannel);
+        // Subscribe creator to that community
+        subscriptionService.subscribe(createSubscription(community, founder));
+        // And create location
+        URI location = uriComponentsBuilder
+                .path("/community/{communityTitle}")
+                .buildAndExpand(community.getTitle())
+                .toUri();
+        return ResponseEntity.created(location).build();
+
     }
 
     /**
@@ -81,61 +90,68 @@ public class CommunityRestController {
     }
 
     @PostMapping(value = "/get_all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<CommunitySubscription> getCommunities(int startRowPosition, Principal principal) {
-        if (principal != null) {
-            User user = userService.getByUsername(principal.getName());
-            return subscriptionService.getCommunitiesWithSubscriptionsByUser(user, startRowPosition, QUANTITY);
-        } else {
+    public ResponseEntity<List<CommunitySubscription>> getCommunities(int startRowPosition, Principal principal) {
+        if (principal == null) {
             List<Community> communities = communityService.getPublicCommunities(startRowPosition, QUANTITY);
             List<CommunitySubscription> communitySubscriptions = new ArrayList<>();
             for (Community community : communities) {
                 CommunitySubscription communitySubscription = createCommunitySubscription(community, false);
                 communitySubscriptions.add(communitySubscription);
             }
-            return communitySubscriptions;
+            return ResponseEntity.ok(communitySubscriptions);
         }
+        User user = userService.getByUsername(principal.getName());
+        return ResponseEntity
+                .ok(subscriptionService.getCommunitiesWithSubscriptionsByUser(user, startRowPosition, QUANTITY));
     }
 
     @PostMapping(value = "/join")
     public ResponseEntity subscribe(String communityTitle, Principal principal) {
-        if (principal != null) {
-            Community community = communityService.getByTitle(communityTitle);
-            User user = userService.getByUsername(principal.getName());
-            subscriptionService.subscribe(createSubscription(community, user));
-            return ResponseEntity.ok(createCommunitySubscription(community, true));
+        if (principal == null) {
+            throw new UserNotAuthorizedException("Allows to authorized users only");
         }
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+        Community community = communityService.getByTitle(communityTitle);
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
+        }
+        User user = userService.getByUsername(principal.getName());
+        subscriptionService.subscribe(createSubscription(community, user));
+        return ResponseEntity.ok(createCommunitySubscription(community, true));
     }
 
     @PostMapping(value = "/leave")
     public ResponseEntity unsubscribe(String communityTitle, Principal principal) {
-        if (principal != null) {
-            Community community = communityService.getByTitle(communityTitle);
-            User user = userService.getByUsername(principal.getName());
-            Subscription subscription = subscriptionService.get(community, user);
-            if (subscription != null) {
-                subscriptionService.delete(subscription);
-                return ResponseEntity.ok(createCommunitySubscription(community, false));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+        if (principal == null) {
+            throw new UserNotAuthorizedException("Allows to authorized users only");
         }
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+        Community community = communityService.getByTitle(communityTitle);
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
+        }
+        User user = userService.getByUsername(principal.getName());
+        Subscription subscription = subscriptionService.get(community, user);
+        if (subscription == null) {
+            return ResponseEntity.badRequest().body("Subscription not found");
+        }
+        subscriptionService.delete(subscription);
+        return ResponseEntity.ok(createCommunitySubscription(community, false));
     }
 
     @PostMapping(value = "/check_subscription")
     public ResponseEntity<String> checkSubscription(String communityTitle, Principal principal) {
         if (principal == null) {
             return ResponseEntity.ok("false");
+        }
+        Community community = communityService.getByTitle(communityTitle);
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
+        }
+        User user = userService.getByUsername(principal.getName());
+        Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
+        if (isSubscribed) {
+            return ResponseEntity.ok(isSubscribed.toString());
         } else {
-            User user = userService.getByUsername(principal.getName());
-            Community community = communityService.getByTitle(communityTitle);
-            Boolean isSubscribed = subscriptionService.checkSubscription(community, user);
-            if (isSubscribed) {
-                return ResponseEntity.ok(isSubscribed.toString());
-            } else {
-                return ResponseEntity.ok(isSubscribed.toString());
-            }
+            return ResponseEntity.ok(isSubscribed.toString());
         }
     }
 

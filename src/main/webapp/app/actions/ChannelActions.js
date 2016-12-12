@@ -1,30 +1,45 @@
 import * as constants from "../constants/channelConstants";
 import {SubmissionError, reset} from "redux-form";
 import * as viewActions from "./ViewActions";
+import {getCookie} from "../utils/cookie";
 
 export const getChannels = (communityTitle) => {
     return (dispatch) => {
         dispatch({
             type: constants.GET_CHANNELS_REQUEST
         });
-        $
-            .ajax({
-                url: '/api/channel/get_channels?communityTitle=' + communityTitle,
-                type: 'post',
-                // headers: headers
+
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
+        const request = new Request('/api/channel/get_channels', {
+            method: 'POST',
+            body: `communityTitle=${communityTitle}`,
+            headers: headers,
+            credentials: 'same-origin'
+        });
+
+        return fetch(request)
+            .then(response => {
+                if (response.status < 200 || response.status >= 300) {
+                    const error = new Error(response.statusText);
+                    error.response = response.json();
+                    throw error;
+                }
+                return response.json();
             })
-            .then((response, status, xhr) => {
+            .then(response => {
                 dispatch({
                     type: constants.GET_CHANNELS_SUCCESS,
                     payload: response
                 })
             })
-            .fail((xhr, status, error) => {
+            .catch(error => {
                 dispatch({
                     type: constants.GET_CHANNELS_FAILURE,
                     payload: error
                 })
-            })
+            });
     }
 };
 
@@ -33,24 +48,38 @@ export const getLastOpenedChannel = (communityTitle) => {
         dispatch({
             type: constants.GET_LAST_OPENED_CHANNEL_REQUEST
         });
-        $
-            .ajax({
-                url: '/api/channel/get_last_opened_channel?communityTitle=' + communityTitle,
-                type: 'post',
-                // headers: headers
+
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
+        const request = new Request('/api/channel/get_last_opened_channel', {
+            method: 'POST',
+            body: `communityTitle=${communityTitle}`,
+            headers: headers,
+            credentials: 'same-origin'
+        });
+
+        return fetch(request)
+            .then(response => {
+                if (response.status != 200) {
+                    const error = new Error(response.statusText);
+                    error.response = response.json();
+                    throw error;
+                }
+                return response.json();
             })
-            .then((channel, status, xhr) => {
+            .then(channel => {
                 dispatch({
                     type: constants.GET_LAST_OPENED_CHANNEL_SUCCESS,
                     payload: channel.title
                 })
             })
-            .fail((xhr, status, error) => {
+            .catch(error => {
                 dispatch({
                     type: constants.GET_LAST_OPENED_CHANNEL_FAILURE,
                     payload: error
                 })
-            })
+            });
     }
 };
 
@@ -70,6 +99,7 @@ export const add = (channel) => {
         });
         const headers = new Headers();
         headers.append('Content-Type', 'application/json; charset=utf-8');
+        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
         const request = new Request('/api/channel/add', {
             method: 'POST',
             body: JSON.stringify(channel),
