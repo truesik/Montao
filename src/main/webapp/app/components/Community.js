@@ -1,5 +1,6 @@
 import React from "react";
 import {Link} from "react-router";
+import {Map} from 'immutable';
 
 const Community = ({community, action}) => {
     return (
@@ -19,6 +20,11 @@ const Community = ({community, action}) => {
             </div>
         </div>
     )
+};
+
+Community.propTypes = {
+    community: React.PropTypes.instanceOf(Map).isRequired,
+    action: React.PropTypes.func.isRequired
 };
 
 export default Community;
