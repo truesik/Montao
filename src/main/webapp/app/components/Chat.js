@@ -1,12 +1,15 @@
 import React from "react";
-import MessageBoxContainer from '../containers/MessageBoxContainer'
-import MessageForm from './MessageForm'
-import SideBar from './SideBar'
+import MessageBoxContainer from '../containers/MessageBoxContainer';
+import MessageForm from './MessageForm';
+import SideBar from './SideBar';
+import AddChannelDialog from "./AddChannelDialog";
 
 export default class Chat extends React.Component {
     componentDidMount() {
-        var connectToWebSocket = this.props.connectToWebSocket;
-        connectToWebSocket();
+        // Check user subscription on this community
+        this.props.checkSubscription(this.props.params.community);
+        // Connect to web socket
+        this.props.connectToWebSocket();
     }
 
     componentWillUnmount() {
@@ -22,6 +25,9 @@ export default class Chat extends React.Component {
             this.props.unsubscribe();
             this.props.subscribeToTopic(this.props.params.community, nextProps.currentChannelTitle);
         }
+        if (this.props.isAuthorized !== nextProps.isAuthorized) {
+            this.props.checkSubscription(this.props.params.community)
+        }
     }
 
     render() {
@@ -33,14 +39,21 @@ export default class Chat extends React.Component {
             currentChannelTitle: currentChannelTitle
         };
         return (
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-2 sidebar">
-                        <SideBar communityTitle={currentCommunityTitle}/>
-                    </div>
-                    <div className="col-md-offset-2 col-md-10">
-                        <MessageBoxContainer channel={currentChannelTitle} path={path}/>
-                        <MessageForm onSubmit={sendMessage} path={path} disabled={!this.props.isAuthorized}/>
+            <div>
+                <AddChannelDialog {...this.props.addChannelDialog}
+                                  {...this.props.addChannelDialogActions}
+                                  communityTitle={currentCommunityTitle}/>
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-md-2 sidebar">
+                            <SideBar communityTitle={currentCommunityTitle}
+                                     showAddChannelDialog={this.props.addChannelDialogActions.show}
+                                     isSubscribed={this.props.isSubscribed}/>
+                        </div>
+                        <div className="col-md-offset-2 col-md-10">
+                            <MessageBoxContainer channel={currentChannelTitle} path={path}/>
+                            <MessageForm onSubmit={sendMessage} path={path} disabled={!this.props.isAuthorized}/>
+                        </div>
                     </div>
                 </div>
             </div>

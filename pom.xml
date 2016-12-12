@@ -12,9 +12,9 @@
     <properties>
         <spring.version>4.3.0.RELEASE</spring.version>
         <jdk.version>1.8</jdk.version>
-        <spring.security.version>4.0.4.RELEASE</spring.security.version>
+        <spring.security.version>4.2.0.RELEASE</spring.security.version>
         <hibernate-version>5.2.1.Final</hibernate-version>
-        <spring-security-test>4.0.3.RELEASE</spring-security-test>
+        <spring-security-test>4.2.0.RELEASE</spring-security-test>
     </properties>
 
     <dependencies>

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import LogInFormContainer from "../containers/LogInFormContainer";
 
-export default class LogInForm extends React.Component {
+export default class LogInDialog extends React.Component {
     componentDidMount() {
         let node = ReactDOM.findDOMNode(this);
         $(node).on('hidden.bs.modal', () => {

@@ -13,4 +13,7 @@ const validate = (values) => {
     return errors;
 };
 
-export default reduxForm({form: 'logInForm', validate})(LogInForm)
+export default reduxForm({
+    form: 'logInForm',
+    validate
+})(LogInForm)

@@ -10,7 +10,7 @@ export default class Message extends React.Component {
                 <div className="panel-body">
                     <strong>{message.user.username}</strong>
                     <small>{message.receivedTime}</small>
-                    <p>{message.message}</p>
+                    <p>{message.text}</p>
                 </div>
             </div>
         )

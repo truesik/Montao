@@ -1,30 +1,45 @@
 import * as actionTypes from "../constants/userConstants";
 import * as viewActions from "./ViewActions";
-import {SubmissionError} from "redux-form";
+import {SubmissionError, reset} from "redux-form";
+import {getCookie} from "../utils/cookie";
 
 export const getUsers = (communityTitle) => {
     return (dispatch) => {
         dispatch({
             type: actionTypes.GET_USERS_REQUEST
         });
-        $
-            .ajax({
-                url: '/api/user/get_subscribed_users?communityTitle=' + communityTitle,
-                type: 'post',
-                // headers: headers
+
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
+        const request = new Request('/api/user/get_subscribed_users', {
+            method: 'POST',
+            body: `communityTitle=${communityTitle}`,
+            headers: headers,
+            credentials: 'same-origin'
+        });
+
+        return fetch(request)
+            .then(response => {
+                if (response.status != 200) {
+                    const error = new Error(response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+                return response.json()
             })
-            .then((response, status, xhr) => {
+            .then(response => {
                 dispatch({
                     type: actionTypes.GET_USERS_SUCCESS,
                     payload: response
                 })
             })
-            .fail((xhr, status, error) => {
+            .catch(error => {
                 dispatch({
                     type: actionTypes.GET_USERS_FAILURE,
                     payload: error
                 })
-            })
+            });
     };
 };
 
@@ -37,6 +52,7 @@ export const logIn = (userCredentials) => {
         // build headers
         let headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
         // build request
         let request = new Request('/login', {
             method: 'POST',
@@ -51,14 +67,19 @@ export const logIn = (userCredentials) => {
                     error.response = response;
                     throw error;
                 } else {
-                    dispatch({
-                        type: actionTypes.LOG_IN_SUCCESS
-                    });
-                    // get username
-                    dispatch(checkAuthorization());
-                    // close log in dialog
-                    dispatch(viewActions.hideLogInDialog())
+                    return response
                 }
+            })
+            .then(() => {
+                dispatch({
+                    type: actionTypes.LOG_IN_SUCCESS
+                });
+                // get username
+                dispatch(checkAuthorization());
+                // close log in dialog
+                dispatch(viewActions.hideLogInDialog());
+                // clean up input fields
+                dispatch(reset('logInForm'))
             })
             .catch((error) => {
                 dispatch({
@@ -77,22 +98,36 @@ export const logOut = () => {
         dispatch({
             type: actionTypes.LOG_OUT_REQUEST
         });
-        $
-            .ajax({
-                url: '/logout',
-                type: 'post',
+
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
+        const request = new Request('/logout', {
+            method: 'POST',
+            headers: headers,
+            credentials: 'same-origin'
+        });
+
+        return fetch(request)
+            .then(response => {
+                if (response.status != 200) {
+                    const error = new Error(response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+                return response
             })
-            .then((response, status, xhr) => {
+            .then(() => {
                 dispatch({
                     type: actionTypes.LOG_OUT_SUCCESS
                 })
             })
-            .fail((xhr, status, error) => {
+            .catch(error => {
                 dispatch({
                     type: actionTypes.LOG_OUT_FAILURE,
                     payload: error
                 })
-            })
+            });
     }
 };
 
@@ -101,23 +136,33 @@ export const checkAuthorization = () => {
         dispatch({
             type: actionTypes.CHECK_AUTHORIZATION_REQUEST
         });
-        $
-            .ajax({
-                url: '/api/user/check_authorization',
-                type: 'get'
+
+        const request = new Request('/api/user/check_authorization', {
+            method: 'GET',
+            credentials: 'same-origin'
+        });
+
+        return fetch(request)
+            .then(response => {
+                if (response.status != 200) {
+                    const error = new Error(response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+                return response.text()
             })
-            .then((response, status, xhr) => {
+            .then(response => {
                 dispatch({
                     type: actionTypes.CHECK_AUTHORIZATION_SUCCESS,
                     payload: response
                 })
             })
-            .fail((xhr, status, error) => {
+            .catch(error => {
                 dispatch({
                     type: actionTypes.CHECK_AUTHORIZATION_FAILURE,
                     payload: error
                 })
-            })
+            });
     }
 };
 
@@ -126,26 +171,40 @@ export const addUser = (user) => {
         dispatch({
             type: actionTypes.ADD_USER_REQUEST
         });
-        $
-            .ajax({
-                url: '/api/user/add',
-                type: 'post',
-                contentType: 'application/json',
-                data: JSON.stringify(user),
-                // headers: headers
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json; charset=utf-8');
+        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
+        let request = new Request('/api/user/add', {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: headers,
+            credentials: 'same-origin'
+        });
+        return fetch(request)
+            .then(response => {
+                if (response.status != 201) {
+                    const error = new Error(response.statusText);
+                    error.response = response;
+                    throw error
+                } else {
+                    return response
+                }
             })
-            .then((response, status, xhr) => {
-                let location = xhr.getResponseHeader('location');
+            .then(response => {
+                const location = response.headers.get('location');
                 dispatch({
                     type: actionTypes.ADD_USER_SUCCESS,
                     payload: location
                 });
                 dispatch(viewActions.hideSignUpDialog());
             })
-            .fail((xhr, status, error) => {
+            .catch(error => {
                 dispatch({
                     type: actionTypes.ADD_USER_FAILUER,
                     payload: error
+                });
+                throw new SubmissionError({
+                    _error: 'Server failure!'
                 })
             })
     }

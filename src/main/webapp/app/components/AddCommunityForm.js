@@ -1,137 +1,72 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import {Field} from "redux-form";
+
+// You shall not pass (only letters, numbers and underscope)
+const normalizeTitle = value => value.replace(/[\W]+/g, '');
+
+const renderField = ({input, name, label, type, readOnly, meta: {touched, error}}) => {
+    return (
+        <div className={!touched || !error ? "form-group" : "form-group has-error"}>
+            <label htmlFor={name}>{label}</label>
+            <input {...input}
+                   placeholder={label}
+                   type={type}
+                   className="form-control"
+                   id={name}
+                   readOnly={readOnly}/>
+            {touched && (error && <small className="help-block">{error}</small>)}
+        </div>
+    )
+};
 
 export default class AddCommunityForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isVisible: true
-        }
-    }
     componentDidMount() {
-        var node = ReactDOM.findDOMNode(this);
-        $(node).on('hidden.bs.modal', () => {
-            if (this.props.isShown) {
-                this.props.hide();
-            }
-        })
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.isShown !== nextProps.isShown) {
-            if (nextProps.isShown) {
-                ::this.showModal();
-            } else {
-                ::this.hideModal();
-            }
-        }
-    }
-
-    showModal() {
-        var node = ReactDOM.findDOMNode(this);
-        $(node).modal('show');
-    }
-
-    hideModal() {
-        var node = ReactDOM.findDOMNode(this);
-        $(node).modal('hide');
-    }
-
-    handlePrivacyChange(isVisible) {
-        this.setState({
-            isVisible: isVisible
-        })
-    }
-
-    handleSubmit() {
-        let title = ReactDOM.findDOMNode(this.refs.title).value;
-        let description = ReactDOM.findDOMNode(this.refs.description).value;
-        let founder = ReactDOM.findDOMNode(this.refs.founder).value;
-        let visible = this.state.isVisible;
-        let community = {
-            title: title,
-            description: description,
-            founder: founder,
-            visible: visible
+        const initialValues = {
+            'founder': this.props.username,
+            'visible': "true"
         };
-        this.props.addCommunity(community);
+        this.props.initialize(initialValues);
     }
 
     render() {
+        const {error, handleSubmit, pristine, reset, submitting, addCommunity} = this.props;
         return (
-            <div className="modal fade"
-                 tabIndex="-1"
-                 role="dialog"
-                 aria-labelledby="myModalLabel"
-                 aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal">
-                                <span aria-hidden="true">&times;</span>
-                                <span className="sr-only">Close</span>
-                            </button>
-                            <h4 className="modal-title" id="myModalLabel">New Community</h4>
-                        </div>
-                        <div className="modal-body">
-                            <form method="post">
-                                <div className="form-group">
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           name="username"
-                                           placeholder="Title"
-                                           ref="title"/>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="description">Description</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           name="description"
-                                           placeholder="Description"
-                                           ref="description"/>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="founder">Founder</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           name="founder"
-                                           placeholder="Founder"
-                                           ref="founder"
-                                           value={this.props.username}
-                                           readOnly/>
-                                </div>
-                                <div className="radio">
-                                    <label>
-                                        <input type="radio"
-                                               name="visible"
-                                               checked={this.state.isVisible}
-                                               onChange={() => ::this.handlePrivacyChange(true)}/>
-                                        Public
-                                    </label>
-                                </div>
-                                <div className="radio">
-                                    <label>
-                                        <input type="radio"
-                                               name="visible"
-                                               checked={!this.state.isVisible}
-                                               onChange={() => ::this.handlePrivacyChange(false)}/>
-                                        Private
-                                    </label>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit"
-                                    className="btn btn-primary"
-                                    onClick={() => ::this.handleSubmit()}>
-                                Create
-                            </button>
-                        </div>
-                    </div>
+            <form method="post" onSubmit={handleSubmit(addCommunity)}>
+                <Field name="title"
+                       component={renderField}
+                       type="text"
+                       label="Title"
+                       normalize={normalizeTitle}/>
+                <Field name="description"
+                       component={renderField}
+                       type="text"
+                       label="Description"/>
+                <Field name="founder"
+                       component={renderField}
+                       type="text"
+                       label="Founder"
+                       readOnly/>
+                <div className="radio">
+                    <label>
+                        <Field name="visible"
+                               component="input"
+                               type="radio"
+                               value="true"/>
+                        Public
+                    </label>
                 </div>
-            </div>
+                <div className="radio">
+                    <label>
+                        <Field name="visible"
+                               component="input"
+                               type="radio"
+                               value="false"/>
+                        Private
+                    </label>
+                </div>
+                {error && <span className="text-danger">{error}</span>}
+                <button type="submit" className="pull-right btn btn-primary" disabled={submitting}>Create</button>
+            </form>
         )
     }
-}
+};

@@ -1,9 +1,9 @@
 import React from "react";
 import {Link} from "react-router";
 
-import SignUpForm from "./SignUpForm";
+import SignUpDialog from "./SignUpDialog";
 import LogInDialog from "./LogInDialog";
-import AddCommunityForm from "./AddCommunityForm";
+import AddCommunityDialog from "./AddCommunityDialog";
 
 export default class NavBar extends React.Component {
     render() {
@@ -44,11 +44,11 @@ export default class NavBar extends React.Component {
         }
         return (
             <div>
-                <SignUpForm {...this.props.signUpDialog} {...this.props.signUpDialogActions}/>
+                <SignUpDialog {...this.props.signUpDialog} {...this.props.signUpDialogActions}/>
                 <LogInDialog {...this.props.logInDialog} {...this.props.logInDialogActions}/>
-                {this.props.isAuthorized && <AddCommunityForm {...this.props.addCommunityDialog}
-                                                              {...this.props.addCommunityDialogActions}
-                                                              username={this.props.username}/>}
+                {this.props.isAuthorized && <AddCommunityDialog {...this.props.addCommunityDialog}
+                                                                {...this.props.addCommunityDialogActions}
+                                                                username={this.props.username}/>}
                 <nav className="navbar navbar-inverse navbar-fixed-top">
                     <div className="container-fluid">
                         <div className="navbar-header">
