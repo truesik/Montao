@@ -13,7 +13,7 @@ const mapStateToProps = state => {
         currentChannelTitle: state.channelsReducer.currentChannelTitle,
         isConnected: state.websocketReducer.isConnected,
         isAuthorized: state.usersReducer.isAuthorized,
-        isSubscribed: state.communitiesReducer.isSubscribed,
+        isSubscribed: state.communitiesReducer.get('isSubscribed'),
         addChannelDialog: {
             isShown: state.viewReducer.isShownAddChannelDialog
         }

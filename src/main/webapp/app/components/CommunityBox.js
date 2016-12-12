@@ -13,12 +13,12 @@ export default class CommunitiesBox extends React.Component {
     }
 
     render() {
-        var communities = this.props.communities;
-        var join = this.props.join;
-        var leave = this.props.leave;
-        var communitiesTemplate = communities.map((community) => {
+        const communities = this.props.communities;
+        const join = this.props.join;
+        const leave = this.props.leave;
+        const communitiesTemplate = communities.map((community) => {
             return (
-                <Community key={community.id} community={community} action={community.subscribed ? leave : join}/>
+                <Community key={community.get('id')} community={community} action={community.get('subscribed') ? leave : join}/>
             )
         });
 
