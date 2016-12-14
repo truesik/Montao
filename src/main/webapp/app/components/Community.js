@@ -12,10 +12,11 @@ const Community = ({community, action}) => {
                 <div className="panel-footer">
                     <i className="material-icons">group</i>
                     <Link to={`/community/${community.get('title')}`}>{community.get('title')}</Link>
-                    <a className="btn btn-primary pull-right"
-                       onClick={() => action(community.get('title'))}>
+                    <button className="btn btn-primary pull-right"
+                            onClick={() => action(community.get('title'))}
+                            disabled={community.get('inProgress')}>
                         {community.get('subscribed') ? "Leave" : "Join"}
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
