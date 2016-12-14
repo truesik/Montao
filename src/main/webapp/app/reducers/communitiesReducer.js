@@ -18,13 +18,13 @@ const communitiesReducer = (state = initialState, action) => {
         case actionTypes.GET_COMMUNITIES_FAILURE:
             return state.set('error', action.payload);
         case actionTypes.JOIN_REQUEST:
-            return state;
+            return inProgress(state, action);
         case actionTypes.JOIN_SUCCESS:
             return changeSubscriptionStatus(state, action);
         case actionTypes.JOIN_FAILURE:
             return state.set('error', action.payload);
         case actionTypes.LEAVE_REQUEST:
-            return state;
+            return inProgress(state, action);
         case actionTypes.LEAVE_SUCCESS:
             return changeSubscriptionStatus(state, action);
         case actionTypes.LEAVE_FAILURE:
@@ -46,9 +46,16 @@ const communitiesReducer = (state = initialState, action) => {
     }
 };
 
+const inProgress = (state, action) => {
+    const index = state.get('communities').findIndex(community => community.get('title') === action.payload);
+    return state.setIn(['communities', index, 'inProgress'], true);
+};
+
 const changeSubscriptionStatus = (state, action) => {
     const index = state.get('communities').findIndex(community => community.get('id') === action.payload.id);
-    return state.setIn(['communities', index, 'subscribed'], action.payload.subscribed);
+    return state
+        .setIn(['communities', index, 'subscribed'], action.payload.subscribed)
+        .setIn(['communities', index, 'inProgress'], false);
 };
 
 export default communitiesReducer;

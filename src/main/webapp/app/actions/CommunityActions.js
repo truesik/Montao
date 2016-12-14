@@ -47,7 +47,8 @@ export const getCommunities = (startRowPosition) => {
 export const join = (communityTitle) => {
     return dispatch => {
         dispatch({
-            type: actionTypes.JOIN_REQUEST
+            type: actionTypes.JOIN_REQUEST,
+            payload: communityTitle
         });
 
         const headers = new Headers();
@@ -88,7 +89,8 @@ export const join = (communityTitle) => {
 export const leave = (communityTitle) => {
     return dispatch => {
         dispatch({
-            type: actionTypes.LEAVE_REQUEST
+            type: actionTypes.LEAVE_REQUEST,
+            payload: communityTitle
         });
 
         const headers = new Headers();
