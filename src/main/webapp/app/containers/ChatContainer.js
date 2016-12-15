@@ -11,7 +11,7 @@ import * as communityActions from "../actions/CommunityActions";
 const mapStateToProps = state => {
     return {
         currentChannelTitle: state.channelsReducer.get('currentChannelTitle'),
-        isConnected: state.websocketReducer.isConnected,
+        isConnected: state.websocketReducer.get('isConnected'),
         isAuthorized: state.usersReducer.get('isAuthorized'),
         isSubscribed: state.communitiesReducer.get('isSubscribed'),
         addChannelDialog: {
