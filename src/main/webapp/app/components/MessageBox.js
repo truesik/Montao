@@ -59,7 +59,7 @@ export default class MessageBox extends React.Component {
         var messages = this.props.messages;
         var messagesTemplate = messages.map(message => {
             return (
-                <Message key={message.id} message={message}/>
+                <Message key={message.get('id')} message={message}/>
             )
         });
         return (

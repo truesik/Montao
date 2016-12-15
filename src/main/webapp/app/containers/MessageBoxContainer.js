@@ -5,10 +5,10 @@ import * as messageActions from '../actions/MessageActions'
 
 const mapStateToProps = (state) => {
     return {
-        messages: state.messagesReducer.messages,
-        error: state.messagesReducer.error,
-        scrollBottom: state.messagesReducer.scrollBottom,
-        startRowPosition: state.messagesReducer.startRowPosition
+        messages: state.messagesReducer.get('messages').toArray(),
+        error: state.messagesReducer.get('error'),
+        scrollBottom: state.messagesReducer.get('scrollBottom'),
+        startRowPosition: state.messagesReducer.get('startRowPosition')
     }
 };
 
