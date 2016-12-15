@@ -8,13 +8,13 @@ import * as communityActions from "../actions/CommunityActions";
 const mapStateToProps = (state) => {
     return {
         logInDialog: {
-            isShown: state.viewReducer.isShownLogInDialog
+            isShown: state.viewReducer.get('isShownLogInDialog')
         },
         signUpDialog: {
-            isShown: state.viewReducer.isShownSignUpDialog
+            isShown: state.viewReducer.get('isShownSignUpDialog')
         },
         addCommunityDialog: {
-            isShown: state.viewReducer.isShownAddCommunityDialog
+            isShown: state.viewReducer.get('isShownAddCommunityDialog')
         },
         isAuthorized: state.usersReducer.get('isAuthorized'),
         username: state.usersReducer.get('username')
