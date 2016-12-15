@@ -11,7 +11,7 @@ export default class UserList extends React.Component {
         const subscribers = this.props.subscribers;
         const userListTemplate = subscribers.map(subscriber => {
             return (
-                <User key={subscriber.user.id} user={subscriber.user}/>
+                <User key={subscriber.getIn(['user', 'id'])} user={subscriber.get('user')}/>
             )
         });
         return (

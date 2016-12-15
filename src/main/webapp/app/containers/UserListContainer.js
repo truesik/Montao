@@ -5,9 +5,8 @@ import UserList from "../components/UserList";
 
 const mapStateToProps = state => {
     return {
-        subscribers: state.usersReducer.subscribers,
-        error: state.usersReducer.error,
-        channelListFetching: state.usersReducer.channelListFetching
+        subscribers: state.usersReducer.get('subscribers').toArray(),
+        error: state.usersReducer.get('error')
     }
 };
 

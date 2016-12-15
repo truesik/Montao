@@ -1,93 +1,50 @@
+import {fromJS} from 'immutable';
+
 import * as constants from "../constants/userConstants";
 
-const initialState = {
+const initialState = fromJS({
     subscribers: [],
     error: '',
-    userListFetching: false,
     isAuthorized: false,
     username: '',
     userPath: ''
-};
+});
 
 const usersReducer = (state = initialState, action) => {
     switch (action.type) {
         case constants.GET_USERS_REQUEST:
-            return {
-                ...state,
-                userListFetching: true
-            };
+            return state;
         case constants.GET_USERS_SUCCESS:
-            return {
-                ...state,
-                subscribers: action.payload,
-                userListFetching: false
-            };
+            return state.set('subscribers', fromJS(action.payload));
         case constants.GET_USERS_FAILURE:
-            return {
-                ...state,
-                error: action.payload,
-                userListFetching: false
-            };
+            return state.set('error', action.payload);
         case constants.LOG_IN_REQUEST:
-            return {
-                ...state
-            };
+            return state;
         case constants.LOG_IN_SUCCESS:
-            return {
-                ...state
-            };
+            return state;
         case constants.LOG_IN_FAILURE:
-            return {
-                ...state,
-                error: action.payload
-            };
+            return state.set('error', action.payload);
         case constants.LOG_OUT_REQUEST:
-            return {
-                ...state
-            };
+            return state;
         case constants.LOG_OUT_SUCCESS:
-            return {
-                ...state,
-                isAuthorized: false
-            };
+            return state.set('isAuthorized', false);
         case constants.LOG_OUT_FAILURE:
-            return {
-                ...state,
-                error: action.payload
-            };
+            return state.set('error', action.payload);
         case constants.ADD_USER_REQUEST:
-            return {
-                ...state
-            };
+            return state;
         case constants.ADD_USER_SUCCESS:
-            return {
-                ...state,
-                userPath: action.payload
-            };
+            return state.set('userPath', action.payload);
         case constants.ADD_USER_FAILUER:
-            return {
-                ...state,
-                error: action.payload
-            };
+            return state.set('error', action.payload);
         case constants.CHECK_AUTHORIZATION_REQUEST:
-            return {
-                ...state
-            };
+            return state;
         case constants.CHECK_AUTHORIZATION_SUCCESS:
-            return {
-                ...state,
-                isAuthorized: true,
-                username: action.payload
-            };
+            return state.set('isAuthorized', true).set('username', action.payload);
         case constants.CHECK_AUTHORIZATION_FAILURE:
-            return {
-                ...state,
-                isAuthorized: false,
-                username: ''
-            };
+            return state.set('isAuthorized', false).set('username', '');
         default:
             return state;
     }
 };
 
-export default usersReducer
+export default usersReducer;

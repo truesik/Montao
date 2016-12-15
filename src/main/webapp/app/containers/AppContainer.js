@@ -5,7 +5,7 @@ import App from "../components/App";
 
 const mapStateToProps = (state) => {
     return {
-        isAuthorized: state.usersReducer.isAuthorized
+        isAuthorized: state.usersReducer.get('isAuthorized')
     }
 };
 
