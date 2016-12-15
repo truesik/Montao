@@ -26,7 +26,7 @@ const messagesReducer = (state = initialState, action) => {
             return state;
         case constants.GET_OLDEST_MESSAGES_SUCCESS:
             return state
-                .update('messages', (messages) => messages.unshift(fromJS(action.payload)))
+                .update('messages', messages => messages.unshift(fromJS(action.payload)))
                 .update('startRowPosition', count =>  count + action.payload.length)
                 .set('scrollBottom', false);
         case constants.GET_OLDEST_MESSAGES_FAILURE:
