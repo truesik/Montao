@@ -1,65 +1,36 @@
-import * as constants from "../constants/channelConstants";
+import {fromJS} from 'immutable';
 
-const initialState = {
+import * as constants from '../constants/channelConstants';
+
+const initialState = fromJS({
     channels: [],
     currentChannelTitle: '',
     error: '',
-    channelListFetching: false,
     channelPath: ''
-};
+});
 
 const channelsReducer = (state = initialState, action) => {
     switch (action.type) {
         case constants.GET_CHANNELS_REQUEST:
-            return {
-                ...state,
-                channelListFetching: true
-            };
+            return state;
         case constants.GET_CHANNELS_SUCCESS:
-            return {
-                ...state,
-                channels: action.payload,
-                channelListFetching: false
-            };
+            return state.set('channels', fromJS(action.payload));
         case constants.GET_CHANNELS_FAILURE:
-            return {
-                ...state,
-                error: action.payload,
-                channelListFetching: false
-            };
+            return state.set('error', action.payload);
         case constants.GET_LAST_OPENED_CHANNEL_REQUEST:
-            return {
-                ...state
-            };
+            return state;
         case constants.GET_LAST_OPENED_CHANNEL_SUCCESS:
-            return {
-                ...state,
-                currentChannelTitle: action.payload
-            };
+            return state.set('currentChannelTitle', action.payload);
         case constants.GET_LAST_OPENED_CHANNEL_FAILURE:
-            return {
-                ...state,
-                error: action.payload
-            };
+            return state.set('error', action.payload);
         case constants.SET_CURRENT_CHANNEL:
-            return {
-                ...state,
-                currentChannelTitle: action.payload
-            };
+            return state.set('currentChannelTitle', action.payload);
         case constants.ADD_CHANNEL_REQUEST:
-            return {
-                ...state
-            };
+            return state;
         case constants.ADD_CHANNEL_SUCCESS:
-            return {
-                ...state,
-                channelPath: action.payload
-            };
+            return state.set('channelPath', action.payload);
         case constants.ADD_CHANNEL_FAILURE:
-            return {
-                ...state,
-                error: action.payload
-            };
+            return state.set('error', action.payload);
         default:
             return state;
     }

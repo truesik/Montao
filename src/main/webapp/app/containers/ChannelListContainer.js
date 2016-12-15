@@ -5,7 +5,7 @@ import ChannelList from "../components/ChannelList"
 
 const mapStateToProps = state => {
     return {
-        channels: state.channelsReducer.channels
+        channels: state.channelsReducer.get('channels').toArray()
     }
 };
 
