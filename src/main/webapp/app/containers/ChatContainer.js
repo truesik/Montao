@@ -15,7 +15,7 @@ const mapStateToProps = state => {
         isAuthorized: state.usersReducer.get('isAuthorized'),
         isSubscribed: state.communitiesReducer.get('isSubscribed'),
         addChannelDialog: {
-            isShown: state.viewReducer.isShownAddChannelDialog
+            isShown: state.viewReducer.get('isShownAddChannelDialog')
         }
     }
 };
