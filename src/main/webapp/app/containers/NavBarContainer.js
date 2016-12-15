@@ -16,8 +16,8 @@ const mapStateToProps = (state) => {
         addCommunityDialog: {
             isShown: state.viewReducer.isShownAddCommunityDialog
         },
-        isAuthorized: state.usersReducer.isAuthorized,
-        username: state.usersReducer.username
+        isAuthorized: state.usersReducer.get('isAuthorized'),
+        username: state.usersReducer.get('username')
     }
 };
 
