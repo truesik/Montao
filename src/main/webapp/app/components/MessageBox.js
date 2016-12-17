@@ -64,9 +64,10 @@ export default class MessageBox extends React.Component {
         });
         return (
             <div className="chat">
+                {messages.length > 0 &&
                 <ReactTransitionGroup>
                     {messagesTemplate}
-                </ReactTransitionGroup>
+                </ReactTransitionGroup>}
             </div>
         )
     }
