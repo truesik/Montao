@@ -1,6 +1,7 @@
 import {reduxForm, SubmissionError} from "redux-form";
 
 import SignUpForm from "../components/SignUpForm";
+import {getCookie} from "../utils/cookie";
 
 const validate = (values) => {
     const errors = {};
@@ -42,6 +43,7 @@ const asyncValidate = (values, dispatch, props, currentField) => {
 const checkUsername = (values, oldErrors, currentField) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+    headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
     const request = new Request('/api/user/check_username', {
         method: 'POST',
         body: `username=${values.username}`,
@@ -75,6 +77,7 @@ const checkUsername = (values, oldErrors, currentField) => {
 const checkEmail = (values, oldErrors, currentField) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+    headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
     const request = new Request('/api/user/check_email', {
         method: 'POST',
         body: `email=${values.email}`,
