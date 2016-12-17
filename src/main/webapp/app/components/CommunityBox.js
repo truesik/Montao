@@ -2,7 +2,7 @@ import React from "react";
 import Community from "./Community"
 
 CommunityBox.propTypes = {
-    communities:  React.PropTypes.array.isRequired,
+    communities:  React.PropTypes.instanceOf(Map).isRequired,
     join: React.PropTypes.func.isRequired,
     leave: React.PropTypes.func.isRequired
 }
