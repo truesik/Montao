@@ -21,9 +21,9 @@ export default class Chat extends React.Component {
         if (this.props.isConnected !== nextProps.isConnected && nextProps.isConnected) {
             this.props.getLastOpenedChannel(this.props.params.community);
         }
-        if (this.props.currentChannelTitle != nextProps.currentChannelTitle && this.props.isConnected) {
+        if (this.props.currentChannel.get('id') != nextProps.currentChannel.get('id') && this.props.isConnected) {
             this.props.unsubscribe();
-            this.props.subscribeToTopic(this.props.params.community, nextProps.currentChannelTitle);
+            this.props.subscribeToTopic(this.props.params.community, nextProps.currentChannel.get('title'));
         }
         if (this.props.isAuthorized !== nextProps.isAuthorized) {
             this.props.checkSubscription(this.props.params.community)
@@ -32,7 +32,7 @@ export default class Chat extends React.Component {
 
     render() {
         const currentCommunityTitle = this.props.params.community;
-        const currentChannelTitle = this.props.currentChannelTitle;
+        const currentChannelTitle = this.props.currentChannel.get('title');
         const sendMessage = this.props.sendMessage;
         const path = {
             currentCommunityTitle: currentCommunityTitle,
@@ -51,7 +51,7 @@ export default class Chat extends React.Component {
                                      isSubscribed={this.props.isSubscribed}/>
                         </div>
                         <div className="col-md-offset-2 col-md-10">
-                            <MessageBoxContainer channel={currentChannelTitle} path={path}/>
+                            <MessageBoxContainer channel={this.props.currentChannel} path={path}/>
                             <MessageForm onSubmit={sendMessage} path={path} disabled={!this.props.isAuthorized}/>
                         </div>
                     </div>
