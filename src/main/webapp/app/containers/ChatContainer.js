@@ -1,6 +1,7 @@
 import Chat from "../components/Chat";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
+
 import {getLastOpenedChannel} from "../actions/ChannelActions";
 import {sendMessage} from "../actions/MessageActions";
 import {connectToWebsocket, subscribeToTopic, unsubscribe, disconnect} from "../actions/WebSocketActions";
@@ -10,7 +11,7 @@ import * as communityActions from "../actions/CommunityActions";
 
 const mapStateToProps = state => {
     return {
-        currentChannelTitle: state.channelsReducer.get('currentChannelTitle'),
+        currentChannel: state.channelsReducer.get('currentChannel'),
         isConnected: state.websocketReducer.get('isConnected'),
         isAuthorized: state.usersReducer.get('isAuthorized'),
         isSubscribed: state.communitiesReducer.get('isSubscribed'),

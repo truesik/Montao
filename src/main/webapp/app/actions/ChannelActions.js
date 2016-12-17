@@ -71,7 +71,7 @@ export const getLastOpenedChannel = (communityTitle) => {
             .then(channel => {
                 dispatch({
                     type: constants.GET_LAST_OPENED_CHANNEL_SUCCESS,
-                    payload: channel.title
+                    payload: channel
                 })
             })
             .catch(error => {
@@ -83,11 +83,11 @@ export const getLastOpenedChannel = (communityTitle) => {
     }
 };
 
-export const setCurrentChannel = (channelTitle) => {
+export const setCurrentChannel = (channel) => {
     return dispatch => {
         dispatch({
             type: constants.SET_CURRENT_CHANNEL,
-            payload: channelTitle
+            payload: channel
         })
     }
 };
