@@ -2,7 +2,7 @@ import * as React from "react";
 
 export const Channel = ({channel, onClick}) => (
     <li>
-        <a onClick={() => onClick(channel.get('title'))}>{channel.get('title')}</a>
+        <a onClick={() => onClick(channel)}>{channel.get('title')}</a>
     </li>
 );
 
