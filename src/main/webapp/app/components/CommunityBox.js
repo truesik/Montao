@@ -1,11 +1,11 @@
 import React from "react";
 import Community from "./Community"
 
-CommunityBox.propTypes = {
-    communities:  React.PropTypes.instanceOf(Map).isRequired,
-    join: React.PropTypes.func.isRequired,
-    leave: React.PropTypes.func.isRequired
-}
+// CommunityBox.propTypes = {
+//     communities:  React.PropTypes.instanceOf(List).isRequired,
+//     join: React.PropTypes.func.isRequired,
+//     leave: React.PropTypes.func.isRequired
+// }
 
 export default class CommunitiesBox extends React.Component {
     componentDidMount() {
