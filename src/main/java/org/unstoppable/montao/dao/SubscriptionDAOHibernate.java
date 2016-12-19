@@ -73,7 +73,8 @@ public class SubscriptionDAOHibernate implements SubscriptionDAO {
                 "FROM communities AS c " +
                 "   LEFT JOIN ( SELECT * " +
                 "               FROM subscriptions " +
-                "               WHERE user_id = :userId) AS s ON c.id = s.community_id";
+                "               WHERE user_id = :userId) AS s ON c.id = s.community_id " +
+                "WHERE c.is_visible = true";
         NativeQuery nativeQuery = sessionFactory.getCurrentSession().createNativeQuery(sql);
         nativeQuery.setParameter("userId", user.getId());
         nativeQuery.setFirstResult(startRowPosition);
