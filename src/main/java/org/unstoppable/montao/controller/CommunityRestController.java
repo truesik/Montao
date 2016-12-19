@@ -1,7 +1,6 @@
 package org.unstoppable.montao.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,9 +10,7 @@ import org.unstoppable.montao.entity.Channel;
 import org.unstoppable.montao.entity.Community;
 import org.unstoppable.montao.entity.Subscription;
 import org.unstoppable.montao.entity.User;
-import org.unstoppable.montao.exception.CommunityNotFoundException;
-import org.unstoppable.montao.exception.UserNotAuthorizedException;
-import org.unstoppable.montao.exception.UserNotFoundException;
+import org.unstoppable.montao.exception.*;
 import org.unstoppable.montao.model.CommunityCreationForm;
 import org.unstoppable.montao.model.CommunitySubscription;
 import org.unstoppable.montao.service.ChannelService;
@@ -55,7 +52,7 @@ public class CommunityRestController {
                                        UriComponentsBuilder uriComponentsBuilder) {
         new CommunityValidator(communityService).validate(communityForm, result);
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Form validation failed");
+            throw new CommunityFormException("Form validation failed");
         }
         // Get User instance by founder username
         User founder = userService.getByUsername(communityForm.getFounder());
