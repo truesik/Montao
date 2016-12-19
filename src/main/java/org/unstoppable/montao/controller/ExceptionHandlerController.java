@@ -41,7 +41,13 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(ChannelFormException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public Error userFormFailure(ChannelFormException e) {
+    public Error channelFormFailure(ChannelFormException e) {
+        return new Error(HttpStatus.CONFLICT.value(), e.getMessage());
+    }
+
+    @ExceptionHandler(CommunityFormException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Error communityFormFailure(CommunityFormException e) {
         return new Error(HttpStatus.CONFLICT.value(), e.getMessage());
     }
 }

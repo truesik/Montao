@@ -12,12 +12,12 @@ export default class MessageBox extends React.Component {
     }
 
     componentDidMount() {
-        var node = ReactDOM.findDOMNode(this);
+        const node = ReactDOM.findDOMNode(this);
         node.addEventListener('scroll', this.handleScrollEvent.bind(this, node));
     }
 
     componentWillUnmount() {
-        var node = ReactDOM.findDOMNode(this);
+        const node = ReactDOM.findDOMNode(this);
         node.removeEventListener('scroll', this.handleScrollEvent.bind(this, node));
     }
 
@@ -28,7 +28,7 @@ export default class MessageBox extends React.Component {
             this.state.scrollHeight = node.scrollHeight;
 
             let currentCommunityTitle = this.props.path.currentCommunityTitle;
-            let channelTitle = this.props.channel;
+            let channelTitle = this.props.channel.get('title');
             let startRowPosition = this.props.startRowPosition;
             // Get oldest messages
             this.props.getOldestMessages(currentCommunityTitle, channelTitle, startRowPosition)
@@ -37,15 +37,15 @@ export default class MessageBox extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         // When channel changed
-        if (this.props.channel !== nextProps.channel) {
-            var currentCommunityTitle = this.props.path.currentCommunityTitle;
+        if (this.props.channel.get('id') !== nextProps.channel.get('id')) {
+            const currentCommunityTitle = this.props.path.currentCommunityTitle;
             // Get messages
-            this.props.getMessages(currentCommunityTitle, nextProps.channel, 0)
+            this.props.getMessages(currentCommunityTitle, nextProps.channel.get('title'), 0)
         }
     }
 
     componentDidUpdate() {
-        var node = ReactDOM.findDOMNode(this);
+        const node = ReactDOM.findDOMNode(this);
         if (this.props.scrollBottom) {
             // Scroll to bottom
             node.scrollTop = node.scrollHeight;
@@ -56,8 +56,8 @@ export default class MessageBox extends React.Component {
     }
 
     render() {
-        var messages = this.props.messages;
-        var messagesTemplate = messages.map(message => {
+        const messages = this.props.messages;
+        const messagesTemplate = messages.map(message => {
             return (
                 <Message key={message.get('id')} message={message}/>
             )
