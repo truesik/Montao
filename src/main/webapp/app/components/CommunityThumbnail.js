@@ -2,7 +2,7 @@ import React from "react";
 import {Link} from "react-router";
 import {Map} from 'immutable';
 
-const Community = ({community, action}) => {
+const CommunityThumbnail = ({community, action}) => {
     return (
         <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             <div className="panel panel-default">
@@ -23,9 +23,9 @@ const Community = ({community, action}) => {
     )
 };
 
-Community.propTypes = {
+CommunityThumbnail.propTypes = {
     community: React.PropTypes.instanceOf(Map).isRequired,
     action: React.PropTypes.func.isRequired
 };
 
-export default Community;
+export default CommunityThumbnail;

@@ -1,7 +1,7 @@
 import React from "react";
-import Community from "./Community"
+import CommunityThumbnail from "./CommunityThumbnail"
 
-export default class CommunitiesBox extends React.Component {
+export default class CommunityThumbnailBox extends React.Component {
     componentDidMount() {
         this.props.getCommunities(0);
     }
@@ -18,9 +18,9 @@ export default class CommunitiesBox extends React.Component {
         const leave = this.props.leave;
         const communitiesTemplate = communities.map((community) => {
             return (
-                <Community key={community.get('id')}
-                           community={community}
-                           action={community.get('subscribed') ? leave : join}/>
+                <CommunityThumbnail key={community.get('id')}
+                                    community={community}
+                                    action={community.get('subscribed') ? leave : join}/>
             )
         });
 

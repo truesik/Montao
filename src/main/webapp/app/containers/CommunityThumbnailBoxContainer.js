@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import CommunitiesBox from "../components/CommunityBox";
+import CommunityThumbnailBox from "../components/CommunityThumbnailBox";
 import * as communityActions from "../actions/CommunityActions";
 
 const mapStateToProps = (state) => {
@@ -18,4 +18,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommunitiesBox)
+export default connect(mapStateToProps, mapDispatchToProps)(CommunityThumbnailBox)
