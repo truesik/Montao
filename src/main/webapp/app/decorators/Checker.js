@@ -1,6 +1,6 @@
 import React from 'react';
 
-const checker = (Component) => {
+const checkExistence = (Component) => {
     return class extends React.Component {
         componentDidMount() {
             this.props.checkCommunityExistence(this.props.params.community);
@@ -32,4 +32,4 @@ const checker = (Component) => {
     }
 };
 
-export default checker;
+export default checkExistence;
