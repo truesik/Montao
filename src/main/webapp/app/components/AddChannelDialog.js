@@ -1,38 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import AddChannelFormContainer from "../containers/AddChannelFormContainer";
+import setModal from '../decorators/Modal';
 
+@setModal
 export default class AddChannelDialog extends React.Component {
-    componentDidMount() {
-        const node = ReactDOM.findDOMNode(this);
-        $(node).on('hidden.bs.modal', () => {
-            if (this.props.isShown) {
-                this.props.hide();
-            }
-        })
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.isShown !== nextProps.isShown) {
-            if (nextProps.isShown) {
-                ::this.showModal();
-            } else {
-                ::this.hideModal();
-            }
-        }
-    }
-
-    showModal() {
-        const node = ReactDOM.findDOMNode(this);
-        $(node).modal('show');
-    }
-
-    hideModal() {
-        const node = ReactDOM.findDOMNode(this);
-        $(node).modal('hide');
-    }
-
     render() {
         return (
             <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"

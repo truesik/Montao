@@ -1,38 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import LogInFormContainer from "../containers/LogInFormContainer";
+import setModal from '../decorators/Modal';
 
+@setModal
 export default class LogInDialog extends React.Component {
-    componentDidMount() {
-        let node = ReactDOM.findDOMNode(this);
-        $(node).on('hidden.bs.modal', () => {
-            if (this.props.isShown) {
-                this.props.hide();
-            }
-        })
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.isShown !== nextProps.isShown) {
-            if (nextProps.isShown) {
-                ::this.showModal();
-            } else {
-                ::this.hideModal();
-            }
-        }
-    }
-
-    showModal() {
-        let node = ReactDOM.findDOMNode(this);
-        $(node).modal('show');
-    }
-
-    hideModal() {
-        let node = ReactDOM.findDOMNode(this);
-        $(node).modal('hide');
-    }
-
     render() {
         return (
             <div className="modal fade"

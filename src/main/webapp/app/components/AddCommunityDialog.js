@@ -1,38 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import AddCommunityFormContainer from "../containers/AddCommunityFormContainer";
+import setModal from '../decorators/Modal';
 
+@setModal
 export default class AddCommunityDialog extends React.Component {
-    componentDidMount() {
-        const node = ReactDOM.findDOMNode(this);
-        $(node).on('hidden.bs.modal', () => {
-            if (this.props.isShown) {
-                this.props.hide();
-            }
-        })
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.isShown !== nextProps.isShown) {
-            if (nextProps.isShown) {
-                ::this.showModal();
-            } else {
-                ::this.hideModal();
-            }
-        }
-    }
-
-    showModal() {
-        const node = ReactDOM.findDOMNode(this);
-        $(node).modal('show');
-    }
-
-    hideModal() {
-        const node = ReactDOM.findDOMNode(this);
-        $(node).modal('hide');
-    }
-
     render() {
         return (
             <div className="modal fade"
