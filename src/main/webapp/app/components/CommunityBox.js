@@ -1,11 +1,6 @@
 import React from "react";
 import Community from "./Community"
-
-// CommunityBox.propTypes = {
-//     communities:  React.PropTypes.instanceOf(List).isRequired,
-//     join: React.PropTypes.func.isRequired,
-//     leave: React.PropTypes.func.isRequired
-// }
+import {List} from 'immutable';
 
 export default class CommunitiesBox extends React.Component {
     componentDidMount() {
@@ -39,3 +34,11 @@ export default class CommunitiesBox extends React.Component {
         )
     }
 }
+
+CommunitiesBox.propTypes = {
+    getCommunities: React.PropTypes.func.isRequired,
+    join: React.PropTypes.func.isRequired,
+    leave: React.PropTypes.func.isRequired,
+    isAuthorized: React.PropTypes.bool.isRequired,
+    communities:  React.PropTypes.array
+};
