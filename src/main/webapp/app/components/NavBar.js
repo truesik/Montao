@@ -4,6 +4,7 @@ import {Link} from "react-router";
 import SignUpDialog from "./SignUpDialog";
 import LogInDialog from "./LogInDialog";
 import AddCommunityDialog from "./AddCommunityDialog";
+import Search from "./Search";
 
 export default class NavBar extends React.Component {
     render() {
@@ -46,10 +47,13 @@ export default class NavBar extends React.Component {
             <div>
                 <SignUpDialog {...this.props.signUpDialog} {...this.props.signUpDialogActions}/>
                 <LogInDialog {...this.props.logInDialog} {...this.props.logInDialogActions}/>
+
+
                 {this.props.isAuthorized && <AddCommunityDialog {...this.props.addCommunityDialog}
                                                                 {...this.props.addCommunityDialogActions}
                                                                 username={this.props.username}/>}
                 <nav className="navbar navbar-inverse navbar-fixed-top">
+                    <Search/>
                     <div className="container-fluid">
                         <div className="navbar-header">
                             <button type="button"
