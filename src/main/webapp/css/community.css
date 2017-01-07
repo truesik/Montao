@@ -26,3 +26,17 @@
     bottom: 10px;
     width: 82%;
 }
+
+div.navbar-header + div{
+    text-align: center;
+    height: 0px;
+    position: absolute;
+    width: 100%;
+    top: 9px;
+    right: 10px;
+}
+
+div.navbar-header+div input{
+    border-radius: 20px;
+    padding-left: 5px;
+}

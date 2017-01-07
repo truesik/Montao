@@ -53,7 +53,6 @@ export default class NavBar extends React.Component {
                                                                 {...this.props.addCommunityDialogActions}
                                                                 username={this.props.username}/>}
                 <nav className="navbar navbar-inverse navbar-fixed-top">
-                    <Search/>
                     <div className="container-fluid">
                         <div className="navbar-header">
                             <button type="button"
@@ -67,6 +66,9 @@ export default class NavBar extends React.Component {
                                 <span className="icon-bar"></span>
                             </button>
                             <Link to="/"><span className="navbar-brand">Montao</span></Link>
+                        </div>
+                        <div>
+                            <Search/>
                         </div>
                         {navBarTemplate}
                     </div>

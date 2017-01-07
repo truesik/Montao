@@ -7,9 +7,9 @@ import React from "react";
 export default class Search extends React.Component {
     render() {
         return (
-            <form>
-                <input type="text" placeholder="Поиск"/>
-            </form>
+            /*<form style="text-allign:center; top:12px;">*/
+                <input type="text" placeholder="Поиск" />
+            /*</form>*/
         )
     }
 }
