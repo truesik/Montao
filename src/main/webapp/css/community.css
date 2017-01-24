@@ -34,4 +34,8 @@ div.text-center input{
     margin-top: 4px;
 }
 
-div.input-group{width:100%;}
+div.input-group-btn{width:1% !important;}
+
+@media (min-width: 768px) {
+    div.navbar-collapse > div.col-sm-offset-3 {position:absolute;}
+}

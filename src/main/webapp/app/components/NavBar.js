@@ -12,7 +12,7 @@ export default class NavBar extends React.Component {
         if (this.props.isAuthorized) {
             navBarTemplate = (
                 <div className="collapse navbar-collapse" id="navbar">
-                    <div className="col-sm-6 col-md-6">
+                    <div className="col-sm-6 col-md-6 -col-lg-6 col-sm-offset-3 col-md-offset-3 col-lg-offset3">
                         <Search/>
                     </div>
                     <ul className="nav navbar-nav navbar-right">
@@ -39,7 +39,7 @@ export default class NavBar extends React.Component {
         } else {
             navBarTemplate = (
                 <div className="collapse navbar-collapse" id="navbar">
-                    <div className="col-sm-6 col-md-6">
+                    <div className="col-sm-6 col-md-6 -col-lg-6 col-sm-offset-3 col-md-offset-3 col-lg-offset3">
                         <Search/>
                     </div>
                     <ul className="nav navbar-nav navbar-right ">
