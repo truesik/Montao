@@ -18,7 +18,7 @@ public class MessageService {
     }
 
     public void delete(Message message) {
-        messageDAO.add(message);
+        messageDAO.delete(message);
     }
 
     public void update(Message message) {
