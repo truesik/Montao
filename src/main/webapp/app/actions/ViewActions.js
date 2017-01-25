@@ -63,3 +63,35 @@ export const hideAddChannelDialog = () => {
         })
     }
 };
+
+export const showChannelListDialog = () => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.SHOW_CHANNEL_LIST_DIALOG
+        })
+    }
+};
+
+export const hideChannelListDialog = () => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.HIDE_CHANNEL_LIST_DIALOG
+        })
+    }
+};
+
+export const showUserListDialog = () => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.SHOW_USER_LIST_DIALOG
+        })
+    }
+};
+
+export const hideUserListDialog = () => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.HIDE_USER_LIST_DIALOG
+        })
+    }
+};
