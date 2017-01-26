@@ -1,4 +1,4 @@
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
 import * as actionTypes from "../constants/viewConstants";
 
@@ -6,7 +6,9 @@ const initialState = fromJS({
     isShownLogInDialog: false,
     isShownSignUpDialog: false,
     isShownAddCommunityDialog: false,
-    isShownAddChannelDialog: false
+    isShownAddChannelDialog: false,
+    isShownChannelListDialog: false,
+    isShownUserListDialog: false
 });
 
 const viewReducer = (state = initialState, action) => {
@@ -27,6 +29,14 @@ const viewReducer = (state = initialState, action) => {
             return state.set('isShownAddChannelDialog', true);
         case actionTypes.HIDE_ADD_CHANNEL_DIALOG:
             return state.set('isShownAddChannelDialog', false);
+        case actionTypes.SHOW_CHANNEL_LIST_DIALOG:
+            return state.set('isShownChannelListDialog', true);
+        case actionTypes.HIDE_CHANNEL_LIST_DIALOG:
+            return state.set('isShownChannelListDialog', false);
+        case actionTypes.SHOW_USER_LIST_DIALOG:
+            return state.set('isShownUserListDialog', true);
+        case actionTypes.HIDE_USER_LIST_DIALOG:
+            return state.set('isShownUserListDialog', false);
         default:
             return state;
     }
