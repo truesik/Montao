@@ -22,6 +22,10 @@ const setModal = (Component) => {
             }
         }
 
+        componentWillUnmount() {
+            ::this.hideModal();
+        }
+
         showModal() {
             const node = ReactDOM.findDOMNode(this);
             $(node).modal('show');
