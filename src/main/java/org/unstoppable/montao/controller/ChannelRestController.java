@@ -105,4 +105,17 @@ public class ChannelRestController {
         }
         return ResponseEntity.ok(channels);
     }
+
+    @PostMapping(value = "/get_channel", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity getChannelByTitle(@RequestParam String communityTitle, @RequestParam String channelTitle) {
+        Community community = communityService.getByTitle(communityTitle);
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
+        }
+        Channel channel = community.getChannels().stream()
+                .filter(c -> c.getTitle().equals(channelTitle))
+                .findFirst()
+                .orElse(null);
+        return ResponseEntity.ok(channel);
+    }
 }
