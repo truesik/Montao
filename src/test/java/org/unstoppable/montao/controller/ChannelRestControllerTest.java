@@ -1,6 +1,5 @@
 package org.unstoppable.montao.controller;
 
-import com.sun.security.auth.UserPrincipal;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -106,43 +105,6 @@ public class ChannelRestControllerTest {
                 .andDo(print())
                 .andExpect(ok)
                 .andExpect(result);
-    }
-
-    @Test
-    public void getLastOpenedChannelWithPrincipal() throws Exception {
-        Community community = Helper.createCommunity();
-        Channel channel = Helper.createChannel(community);
-        community.getChannels().add(channel);
-        String username = "usernameTest";
-        Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
-        RequestBuilder request = post("/api/channel/get_last_opened_channel")
-                .param("communityTitle", community.getTitle())
-                .principal(new UserPrincipal(username));
-        ResultMatcher ok = status().isOk();
-        ResultMatcher contentType = content().contentType(MediaType.APPLICATION_JSON_UTF8);
-        String channelTitle = channel.getTitle();
-        mockMvc.perform(request)
-                .andDo(print())
-                .andExpect(ok)
-                .andExpect(contentType)
-                .andExpect(jsonPath("$.title").value(channelTitle));
-    }
-
-    @Test
-    public void getDefaultChannel() throws Exception {
-        Community community = Helper.createCommunity();
-        Channel channel = Helper.createChannel(community);
-        Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
-        RequestBuilder request = post("/api/channel/get_last_opened_channel")
-                .param("communityTitle", community.getTitle());
-        ResultMatcher ok = status().isOk();
-        ResultMatcher contentType = content().contentType(MediaType.APPLICATION_JSON_UTF8);
-        String channelTitle = channel.getTitle();
-        mockMvc.perform(request)
-                .andDo(print())
-                .andExpect(ok)
-                .andExpect(contentType)
-                .andExpect(jsonPath("$.title").value(channelTitle));
     }
 
     @Test
