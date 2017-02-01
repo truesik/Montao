@@ -1,5 +1,7 @@
 import React from 'react';
 
+import NotFound from '../components/NotFound';
+
 const checkExistence = (Component) => {
     return class extends React.Component {
         componentDidMount() {
@@ -7,17 +9,17 @@ const checkExistence = (Component) => {
         }
 
         render() {
-            let communityTemplate;
+            let template;
             if (this.props.valid && !this.props.notFound) {
-                communityTemplate = (
+                template = (
                     <Component {...this.props}/>
                 )
             } else if (!this.props.valid && this.props.notFound) {
-                communityTemplate = (
+                template = (
                     <NotFound/>
                 )
             } else if (!this.props.valid) {
-                communityTemplate = (
+                template = (
                     <div className="loading">
                         <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
                     </div>
@@ -25,7 +27,7 @@ const checkExistence = (Component) => {
             }
             return (
                 <div>
-                    {communityTemplate}
+                    {template}
                 </div>
             )
         }
