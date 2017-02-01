@@ -43,55 +43,6 @@ export const getChannels = (communityTitle) => {
     }
 };
 
-export const getLastOpenedChannel = (communityTitle) => {
-    return dispatch => {
-        dispatch({
-            type: constants.GET_LAST_OPENED_CHANNEL_REQUEST
-        });
-
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
-        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-        const request = new Request('/api/channel/get_last_opened_channel', {
-            method: 'POST',
-            body: `communityTitle=${communityTitle}`,
-            headers: headers,
-            credentials: 'same-origin'
-        });
-
-        return fetch(request)
-            .then(response => {
-                if (response.status != 200) {
-                    const error = new Error(response.statusText);
-                    error.response = response.json();
-                    throw error;
-                }
-                return response.json();
-            })
-            .then(channel => {
-                dispatch({
-                    type: constants.GET_LAST_OPENED_CHANNEL_SUCCESS,
-                    payload: channel
-                })
-            })
-            .catch(error => {
-                dispatch({
-                    type: constants.GET_LAST_OPENED_CHANNEL_FAILURE,
-                    payload: error
-                })
-            });
-    }
-};
-
-export const setCurrentChannel = (channel) => {
-    return dispatch => {
-        dispatch({
-            type: constants.SET_CURRENT_CHANNEL,
-            payload: channel
-        })
-    }
-};
-
 export const add = (channel) => {
     return dispatch => {
         dispatch({
@@ -134,49 +85,5 @@ export const add = (channel) => {
                     _error: 'Creation failed!'
                 })
             })
-    }
-};
-
-export const getChannelByTitle = (communityTitle, channelTitle) => {
-    return dispatch => {
-        dispatch({
-            type: constants.GET_CHANNEL_BY_TITLE_REQUEST
-        });
-
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
-        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-        const requestBody = [
-            `communityTitle=${communityTitle}`,
-            `channelTitle=${channelTitle}`
-        ].join('&');
-        const request = new Request('/api/channel/get_channel', {
-            method: 'POST',
-            body: requestBody,
-            headers: headers,
-            credentials: 'same-origin'
-        });
-
-        return fetch(request)
-            .then(response => {
-                if (response.status != 200) {
-                    const error = new Error(response.statusText);
-                    error.response = response.json();
-                    throw error;
-                }
-                return response.json();
-            })
-            .then(channel => {
-                dispatch({
-                    type: constants.GET_CHANNEL_BY_TITLE_SUCCESS,
-                    payload: channel
-                })
-            })
-            .catch(error => {
-                dispatch({
-                    type: constants.GET_CHANNEL_BY_TITLE_FAILURE,
-                    payload: error
-                })
-            });
     }
 };
