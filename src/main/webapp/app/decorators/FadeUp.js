@@ -12,7 +12,7 @@ const fadeUp = (Component) => {
         }
 
         componentWillAppear(callback) {
-            var node = ReactDOM.findDOMNode(this);
+            const node = ReactDOM.findDOMNode(this);
             TweenMax.fromTo(node, 0.6, {opacity: 0.01}, {opacity: 1, ease: Power1.easeIn, onComplete: callback});
         }
 
@@ -20,7 +20,7 @@ const fadeUp = (Component) => {
             this.setState({
                 className: "panel panel-danger"
             });
-            var node = ReactDOM.findDOMNode(this);
+            const node = ReactDOM.findDOMNode(this);
             TweenMax.fromTo(node, 0.6, {opacity: 0.01}, {opacity: 1, ease: Power1.easeIn, onComplete: callback});
         }
 
@@ -33,7 +33,7 @@ const fadeUp = (Component) => {
         }
 
         componentWillLeave(callback) {
-            var node = ReactDOM.findDOMNode(this);
+            const node = ReactDOM.findDOMNode(this);
             TweenMax.fromTo(node, 0.6, {opacity: 1}, {opacity: 0.01, onComplete: callback});
         }
 
