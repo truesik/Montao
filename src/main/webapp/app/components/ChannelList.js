@@ -1,5 +1,5 @@
-import * as React from "react";
-import Channel from './Channel'
+import * as React from 'react';
+import { Link } from 'react-router';
 
 export default class ChannelList extends React.Component {
     componentDidMount() {
@@ -9,12 +9,13 @@ export default class ChannelList extends React.Component {
 
     render() {
         const channels = this.props.channels;
-        const setCurrentChannel = this.props.setCurrentChannel;
-        const channelListTemplate = channels.map(channel => {
-            return (
-                <Channel key={channel.get('id')} channel={channel} onClick={setCurrentChannel}/>
-            )
-        });
+        const channelListTemplate = channels.map(channel => (
+            <li key={channel.get('id')}>
+                <Link to={`/community/${this.props.communityTitle}/channel/${channel.get('title')}`}>
+                    {channel.get('title')}
+                </Link>
+            </li>
+        ));
         return (
             <div>
                 <ul className="nav nav-sidebar" id="channelList">

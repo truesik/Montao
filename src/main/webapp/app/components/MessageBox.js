@@ -14,6 +14,8 @@ export default class MessageBox extends React.Component {
     componentDidMount() {
         const node = ReactDOM.findDOMNode(this);
         node.addEventListener('scroll', this.handleScrollEvent.bind(this, node));
+
+        this.props.getMessages(this.props.community, this.props.channel, 0);
     }
 
     componentWillUnmount() {
@@ -27,20 +29,17 @@ export default class MessageBox extends React.Component {
             // Store current scroll height
             this.state.scrollHeight = node.scrollHeight;
 
-            let currentCommunityTitle = this.props.path.currentCommunityTitle;
-            let channelTitle = this.props.channel.get('title');
             let startRowPosition = this.props.startRowPosition;
             // Get oldest messages
-            this.props.getOldestMessages(currentCommunityTitle, channelTitle, startRowPosition)
+            this.props.getOldestMessages(this.props.community, this.props.channel, startRowPosition)
         }
     }
 
     componentWillReceiveProps(nextProps) {
         // When channel changed
-        if (this.props.channel.get('id') !== nextProps.channel.get('id')) {
-            const currentCommunityTitle = this.props.path.currentCommunityTitle;
+        if (this.props.channel !== nextProps.channel) {
             // Get messages
-            this.props.getMessages(currentCommunityTitle, nextProps.channel.get('title'), 0)
+            this.props.getMessages(this.props.community, nextProps.channel, 0)
         }
     }
 
@@ -57,11 +56,9 @@ export default class MessageBox extends React.Component {
 
     render() {
         const messages = this.props.messages;
-        const messagesTemplate = messages.map(message => {
-            return (
-                <Message key={message.get('id')} message={message}/>
-            )
-        });
+        const messagesTemplate = messages.map(message => (
+            <Message key={message.get('id')} message={message}/>
+        ));
         return (
             <div className="chat">
                 {messages.length > 0 &&

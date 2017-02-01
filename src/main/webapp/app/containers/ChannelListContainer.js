@@ -12,7 +12,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getChannels: bindActionCreators(channelActions.getChannels, dispatch),
-        setCurrentChannel: bindActionCreators(channelActions.setCurrentChannel, dispatch)
     }
 };
 

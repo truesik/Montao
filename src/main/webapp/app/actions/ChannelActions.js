@@ -1,7 +1,7 @@
 import * as constants from "../constants/channelConstants";
-import {SubmissionError, reset} from "redux-form";
+import { SubmissionError, reset } from "redux-form";
 import * as viewActions from "./ViewActions";
-import {getCookie} from "../utils/cookie";
+import { getCookie } from "../utils/cookie";
 
 export const getChannels = (communityTitle) => {
     return (dispatch) => {
@@ -40,55 +40,6 @@ export const getChannels = (communityTitle) => {
                     payload: error
                 })
             });
-    }
-};
-
-export const getLastOpenedChannel = (communityTitle) => {
-    return dispatch => {
-        dispatch({
-            type: constants.GET_LAST_OPENED_CHANNEL_REQUEST
-        });
-
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
-        headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-        const request = new Request('/api/channel/get_last_opened_channel', {
-            method: 'POST',
-            body: `communityTitle=${communityTitle}`,
-            headers: headers,
-            credentials: 'same-origin'
-        });
-
-        return fetch(request)
-            .then(response => {
-                if (response.status != 200) {
-                    const error = new Error(response.statusText);
-                    error.response = response.json();
-                    throw error;
-                }
-                return response.json();
-            })
-            .then(channel => {
-                dispatch({
-                    type: constants.GET_LAST_OPENED_CHANNEL_SUCCESS,
-                    payload: channel
-                })
-            })
-            .catch(error => {
-                dispatch({
-                    type: constants.GET_LAST_OPENED_CHANNEL_FAILURE,
-                    payload: error
-                })
-            });
-    }
-};
-
-export const setCurrentChannel = (channel) => {
-    return dispatch => {
-        dispatch({
-            type: constants.SET_CURRENT_CHANNEL,
-            payload: channel
-        })
     }
 };
 

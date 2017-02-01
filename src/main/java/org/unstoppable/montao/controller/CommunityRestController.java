@@ -152,6 +152,15 @@ public class CommunityRestController {
         }
     }
 
+    @PostMapping(value = "/get")
+    public ResponseEntity getByTitle(String communityTitle) {
+        Community community = communityService.getByTitle(communityTitle);
+        if (community == null) {
+            throw  new CommunityNotFoundException("Community not found");
+        }
+        return ResponseEntity.ok(community);
+    }
+
     private CommunitySubscription createCommunitySubscription(Community community, boolean isSubscribed) {
         CommunitySubscription communitySubscription = new CommunitySubscription();
         communitySubscription.setId(community.getId());

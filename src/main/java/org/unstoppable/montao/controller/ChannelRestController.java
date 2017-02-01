@@ -72,27 +72,6 @@ public class ChannelRestController {
         return channelService.checkTitle(channelTitle, communityTitle).toString();
     }
 
-    @PostMapping(value = "/get_last_opened_channel", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity getLastOpenedChannel(@RequestParam(name = "communityTitle") String communityTitle,
-                                               Principal principal) {
-        if (principal == null) {
-            // If principal is null, get default channel (general)
-            Community community = communityService.getByTitle(communityTitle);
-            if (community == null) {
-                throw new CommunityNotFoundException("Community not found");
-            }
-            return ResponseEntity.ok(community.getChannels().get(0));
-        }
-        // Else get last opened channel
-        // TODO: 30.09.2016 fix this branch
-        Community community = communityService.getByTitle(communityTitle);
-        if (community == null) {
-            throw new CommunityNotFoundException("Community not found");
-        }
-        Channel channel = community.getChannels().get(0);
-        return ResponseEntity.ok(channel);
-    }
-
     @PostMapping(value = "/get_channels", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getChannels(@RequestParam(name = "communityTitle") String communityTitle) {
         Community community = communityService.getByTitle(communityTitle);
@@ -104,5 +83,18 @@ public class ChannelRestController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(channels);
+    }
+
+    @PostMapping(value = "/get_channel", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity getChannelByTitle(@RequestParam String communityTitle, @RequestParam String channelTitle) {
+        Community community = communityService.getByTitle(communityTitle);
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
+        }
+        Channel channel = community.getChannels().stream()
+                .filter(c -> c.getTitle().equals(channelTitle))
+                .findFirst()
+                .orElse(null);
+        return ResponseEntity.ok(channel);
     }
 }
