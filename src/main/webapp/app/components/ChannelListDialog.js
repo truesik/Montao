@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 import setModal from '../decorators/Modal';
 
@@ -6,10 +7,15 @@ import setModal from '../decorators/Modal';
 export default class ChannelListDialog extends React.Component {
     render() {
         const channelsTemplate = this.props.channels.map(channel => (
-            <a className="list-group-item" key={channel.id}>{channel.title}</a>
+            <Link to={`/community/${this.props.communityTitle}/channel/${channel.title}`}
+                  className="list-group-item"
+                  key={channel.id}>
+                {channel.title}
+            </Link>
         ));
         return (
-            <div className="modal fade bs-example-modal-sm" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
+            <div className="modal fade bs-example-modal-sm" id="myModal" tabIndex="-1" role="dialog"
+                 aria-labelledby="myModalLabel"
                  aria-hidden="true">
                 <div className="modal-dialog modal-sm">
                     <div className="modal-content" style={{overflow: 'auto', paddingBottom: '15px'}}>
