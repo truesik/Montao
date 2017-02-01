@@ -4,6 +4,7 @@ import {Link} from "react-router";
 import SignUpDialog from "./SignUpDialog";
 import LogInDialog from "./LogInDialog";
 import AddCommunityDialog from "./AddCommunityDialog";
+import Search from "./Search";
 
 export default class NavBar extends React.Component {
     render() {
@@ -11,6 +12,9 @@ export default class NavBar extends React.Component {
         if (this.props.isAuthorized) {
             navBarTemplate = (
                 <div className="collapse navbar-collapse" id="navbar">
+                    <div className="col-sm-6 col-md-6 -col-lg-6 col-sm-offset-3 col-md-offset-3 col-lg-offset3">
+                        <Search/>
+                    </div>
                     <ul className="nav navbar-nav navbar-right">
                         <li className="dropdown">
                             <a className="dropdown-toggle"
@@ -35,7 +39,10 @@ export default class NavBar extends React.Component {
         } else {
             navBarTemplate = (
                 <div className="collapse navbar-collapse" id="navbar">
-                    <ul className="nav navbar-nav navbar-right">
+                    <div className="col-sm-6 col-md-6 -col-lg-6 col-sm-offset-3 col-md-offset-3 col-lg-offset3">
+                        <Search/>
+                    </div>
+                    <ul className="nav navbar-nav navbar-right ">
                         <li><a onClick={() => this.props.signUpDialogActions.show()}>Sign up</a></li>
                         <li><a onClick={() => this.props.logInDialogActions.show()}>Log in</a></li>
                     </ul>
@@ -46,6 +53,8 @@ export default class NavBar extends React.Component {
             <div>
                 <SignUpDialog {...this.props.signUpDialog} {...this.props.signUpDialogActions}/>
                 <LogInDialog {...this.props.logInDialog} {...this.props.logInDialogActions}/>
+
+
                 {this.props.isAuthorized && <AddCommunityDialog {...this.props.addCommunityDialog}
                                                                 {...this.props.addCommunityDialogActions}
                                                                 username={this.props.username}/>}

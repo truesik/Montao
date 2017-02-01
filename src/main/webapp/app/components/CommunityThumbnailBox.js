@@ -33,3 +33,11 @@ export default class CommunityThumbnailBox extends React.Component {
         )
     }
 }
+
+CommunityThumbnailBox.propTypes = {
+    getCommunities: React.PropTypes.func.isRequired,
+    join: React.PropTypes.func.isRequired,
+    leave: React.PropTypes.func.isRequired,
+    isAuthorized: React.PropTypes.bool.isRequired,
+    communities:  React.PropTypes.array
+};

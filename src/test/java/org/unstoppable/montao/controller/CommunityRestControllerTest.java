@@ -92,11 +92,11 @@ public class CommunityRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(Helper.json(communityForm));
         ResultMatcher conflict = status().isConflict();
-        ResultMatcher result = content().string("Form validation failed");
         mockMvc.perform(request)
                 .andDo(print())
                 .andExpect(conflict)
-                .andExpect(result);
+                .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.value()))
+                .andExpect(jsonPath("$.message").value("Form validation failed"));
     }
 
     @Test
