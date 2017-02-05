@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/search")
+@RequestMapping(value = "/api/search")
 public class SearchRestController {
     private final CommunityService communityService;
 
