@@ -68,7 +68,7 @@ public class MessageRestController {
         // Adds message to database
         messageService.add(message);
         // Broadcast message to channel
-        messagingTemplate.convertAndSend("/topic/" + communityTitle + "/" + channelTitle, message);
+        messagingTemplate.convertAndSend("/api/topic/" + communityTitle + "/" + channelTitle, message);
         URI location = uriComponentsBuilder
                 .path("/community/{communityTitle}/channel/{channelTitle}/")
                 .query("messages={uuid}")

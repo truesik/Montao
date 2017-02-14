@@ -45,19 +45,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                     .formLogin()
-                        .loginPage("/login")
+                        .loginPage("/api/login")
                         .successHandler(new SuccessUrlHandler())
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                         .permitAll()
                 .and()
                     .logout()
-                        .logoutUrl("/logout")
+                        .logoutUrl("/api/logout")
                         .logoutSuccessUrl("/")
                         .permitAll()
                 .and()
                     .csrf()
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringAntMatchers("/websocket/**");
+                        .ignoringAntMatchers("/api/websocket/**");
 //                .and().headers().frameOptions().sameOrigin();
         // @formatter:on
     }
