@@ -1,8 +1,4 @@
-/**
- * Created by User on 29.12.2016.
- */
-import React from "react";
- // import ReactDOM from "react-dom";
+import React from 'react';
 
 export default class Search extends React.Component {
     render() {
