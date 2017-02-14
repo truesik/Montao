@@ -1,6 +1,5 @@
 import * as actionTypes from '../constants/communityConstants';
-import {fromJS, Map} from 'immutable';
-import 'babel-polyfill';
+import { fromJS, Map } from 'immutable';
 
 const initialState = fromJS({
     communities: [],

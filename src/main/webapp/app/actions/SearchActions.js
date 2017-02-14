@@ -1,5 +1,5 @@
-import * as actionTypes from "../constants/searchConstants";
-import {getCookie} from "../utils/cookie";
+import * as actionTypes from '../constants/searchConstants';
+import { getCookie } from '../utils/cookie';
 
 export const search = (query) => {
     return (dispatch) => {
@@ -17,7 +17,7 @@ export const search = (query) => {
         });
         return fetch(request)
             .then(response => {
-                if(response.status != 200){
+                if (response.status != 200) {
                     const error = new Error(response.statusText);
                     error.response = response;
                     throw error;

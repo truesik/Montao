@@ -12,7 +12,7 @@ export const subscribeToTopic = (currentCommunityTitle, currentChannelTitle) => 
     return (dispatch) => {
         dispatch({
             type: actionTypes.SUBSCRIBE_TO_TOPIC_REQUEST,
-            topic: '/topic/' + currentCommunityTitle + '/' + currentChannelTitle
+            topic: '/api/topic/' + currentCommunityTitle + '/' + currentChannelTitle
         })
     }
 };
