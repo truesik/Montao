@@ -1,5 +1,5 @@
-import * as actionTypes from "../constants/searchConstants";
-import { getCookie } from "../utils/cookie";
+import * as actionTypes from '../constants/searchConstants';
+import { getCookie } from '../utils/cookie';
 
 export const search = (query) => {
     return (dispatch) => {
