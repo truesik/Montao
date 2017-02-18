@@ -6,6 +6,7 @@ import messagesReducer from './messagesReducer';
 import websocketReducer from './websocketReducer';
 import communitiesReducer from './communitiesReducer';
 import viewReducer from './viewReducer';
+import searchReducer from './searchReducer';
 
 export default combineReducers({
     usersReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
     websocketReducer,
     communitiesReducer,
     viewReducer,
+    searchReducer,
     form: formReducer
 })
