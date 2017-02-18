@@ -1,6 +1,6 @@
-import React from "react";
-import {Link} from "react-router";
-import {Map} from 'immutable';
+import React from 'react';
+import { Link } from 'react-router';
+import { Map } from 'immutable';
 
 const CommunityThumbnail = ({community, action}) => {
     return (

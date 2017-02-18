@@ -1,7 +1,7 @@
-import * as actionTypes from "../constants/userConstants";
-import * as viewActions from "./ViewActions";
-import {SubmissionError, reset} from "redux-form";
-import {getCookie} from "../utils/cookie";
+import * as actionTypes from '../constants/userConstants';
+import * as viewActions from './ViewActions';
+import { SubmissionError, reset } from 'redux-form';
+import { getCookie } from '../utils/cookie';
 
 export const getUsers = (communityTitle) => {
     return (dispatch) => {
@@ -54,7 +54,7 @@ export const logIn = (userCredentials) => {
         headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
         headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
         // build request
-        let request = new Request('/login', {
+        let request = new Request('/api/login', {
             method: 'POST',
             body: data,
             headers: headers,
@@ -102,7 +102,7 @@ export const logOut = () => {
         const headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
         headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-        const request = new Request('/logout', {
+        const request = new Request('/api/logout', {
             method: 'POST',
             headers: headers,
             credentials: 'same-origin'
