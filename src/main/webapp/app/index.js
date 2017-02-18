@@ -11,6 +11,7 @@ import CommunityThumbnailBoxContainer from "./containers/CommunityThumbnailBoxCo
 import CommunityContainer from "./containers/CommunityContainer";
 import NotFound from "./components/NotFound";
 import ChannelContainer from "./containers/ChannelContainer";
+import UserProfileCont from './containers/UserProfileCont';
 
 let store = configureStore();
 
@@ -18,10 +19,11 @@ ReactDOM.render(
     <Provider store={store}>
         <Router history={browserHistory}>
             <Route path="/" component={AppContainer}>
-                <IndexRoute component={CommunityThumbnailBoxContainer}/>
-                <Route path="community/:community" component={CommunityContainer}/>
+                <IndexRoute component={CommunityThumbnailBoxContainer} />
+                <Route path="community/:community" component={CommunityContainer} />
                 <Route path="community/:community/channel" component={ChatContainer}>
-                    <Route path=":channel" component={ChannelContainer}/>
+                <Route path="user/:user" component={UserProfileCont} />
+                <Route path=":channel" component={ChannelContainer} />
                 </Route>
                 <Route path="*" component={NotFound}/>
             </Route>
