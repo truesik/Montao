@@ -15,6 +15,8 @@ const searchReducer = (state = initialState, action) => {
             return state.set('result', fromJS(action.payload));
         case constants.SEARCH_FAILURE:
             return state.set('error', action.payload);
+        default:
+            return state;
     }
 };
 
