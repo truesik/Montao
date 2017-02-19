@@ -1,34 +1,52 @@
-const path = require('path');
+const {resolve} = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: [
-        './app/index.js',
-        'babel-polyfill'
+        'react-hot-loader/patch',
+        'webpack-dev-server/client?http://localhost:4200',
+        'webpack/hot/only-dev-server',
+        './app/index.js'
     ],
-    devtool: 'source-map',
-    cache: true,
-    debug: true,
-    resolve: {
-        extensions: [
-            '',
-            '.js',
-            '.jsx'
-        ]
-    },
     output: {
-        path: './build',
-        filename: 'bundle.js'
+        path: resolve(__dirname, 'build'),
+        filename: 'bundle.js',
+        publicPath: '/'
+    },
+    devtool: 'inline-source-map',
+    devServer: {
+        hot: true,
+        contentBase: resolve(__dirname, 'build'),
+        port: 4200,
+        publicPath: '/',
+        historyApiFallback: true,
+        proxy: {
+            "/api": "http://localhost:3000"
+        }
     },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loaders: [
-                    'babel-loader'
+                test: /\.js$/,
+                use: [
+                    'babel-loader',
                 ],
-                plugins: ['transform-runtime']
+                exclude: /node_modules/,
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader'
+                ]
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin(),
+        new HtmlWebpackPlugin({
+            template: "index.html"
+        })
+    ]
 };
