@@ -19,12 +19,12 @@ ReactDOM.render(
     <Provider store={store}>
         <Router history={browserHistory}>
             <Route path="/" component={AppContainer}>
-                <IndexRoute component={CommunityThumbnailBoxContainer} />
-                <Route path="community/:community" component={CommunityContainer} />
+                <IndexRoute component={CommunityThumbnailBoxContainer}/>
+                <Route path="community/:community" component={CommunityContainer}/>
                 <Route path="community/:community/channel" component={ChatContainer}>
-                <Route path="user/:user" component={UserProfileCont} />
-                <Route path=":channel" component={ChannelContainer} />
+                    <Route path=":channel" component={ChannelContainer}/>
                 </Route>
+                <Route path="user/:user" component={UserProfileCont}/>
                 <Route path="*" component={NotFound}/>
             </Route>
         </Router>
