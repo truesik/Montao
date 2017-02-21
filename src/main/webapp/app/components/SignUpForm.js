@@ -4,7 +4,7 @@ import { Field, propTypes } from 'redux-form';
 // You shall not pass (only letters, numbers and underscope)
 const normalizeUsername = value => value.replace(/[\W]+/g, '');
 
-const renderField = ({ input, name, label, type, readOnly, meta: { touched, error } }) => {
+const renderField = ({ input, name, label, type, meta: { touched, error } }) => {
   return (
     <div className={!touched || !error ? 'form-group' : 'form-group has-error'}>
       <label htmlFor={name}>{label}</label>
@@ -12,8 +12,7 @@ const renderField = ({ input, name, label, type, readOnly, meta: { touched, erro
              placeholder={label}
              type={type}
              className="form-control"
-             id={name}
-             readOnly={readOnly}/>
+             id={name}/>
       {touched && (error && <small className="help-block">{error}</small>)}
     </div>
   );
@@ -46,12 +45,19 @@ const SignUpForm = ({ error, handleSubmit, submitting, signUp }) => {
 };
 
 renderField.propTypes = {
-  ...propTypes
+  input: React.PropTypes.object.isRequired,
+  name: React.PropTypes.string.isRequired,
+  label: React.PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
+  meta: React.PropTypes.shape({
+    touched: React.PropTypes.bool.isRequired,
+    error: React.PropTypes.string
+  }).isRequired
 };
 
 SignUpForm.propTypes = {
   ...propTypes,
-  singUp: React.PropTypes.func.isRequired
+  signUp: React.PropTypes.func.isRequired
 };
 
 export default SignUpForm;

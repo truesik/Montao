@@ -52,7 +52,15 @@ export default class AddChannelForm extends React.Component {
 }
 
 renderField.propTypes = {
-  ...propTypes
+  input: React.PropTypes.object.isRequired,
+  name: React.PropTypes.string.isRequired,
+  label: React.PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
+  readOnly: React.PropTypes.bool,
+  meta: React.PropTypes.shape({
+    touched: React.PropTypes.bool.isRequired,
+    error: React.PropTypes.string
+  }).isRequired
 };
 
 AddChannelForm.propTypes = {
