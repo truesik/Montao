@@ -80,3 +80,21 @@ export default class NavBar extends React.Component {
     );
   }
 }
+
+NavBar.propTypes = {
+  isAuthorized: React.PropTypes.bool.isRequired,
+  username: React.PropTypes.string,
+  addCommunityDialogActions: React.PropTypes.shape({
+    show: React.PropTypes.func.isRequired
+  }).isRequired,
+  logOut: React.PropTypes.func.isRequired,
+  signUpDialogActions: React.PropTypes.shape({
+    show: React.PropTypes.func.isRequired
+  }).isRequired,
+  logInDialogActions: React.PropTypes.shape({
+    show: React.PropTypes.func.isRequired
+  }),
+  signUpDialog: React.PropTypes.object.isRequired,
+  logInDialog: React.PropTypes.object.isRequired,
+  addCommunityDialog: React.PropTypes.object.isRequired
+};

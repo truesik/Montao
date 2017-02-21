@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router';
+import { Map } from 'immutable';
 
 export default class ChannelList extends React.Component {
   componentDidMount() {
@@ -25,3 +26,9 @@ export default class ChannelList extends React.Component {
     );
   }
 }
+
+ChannelList.propTypes = {
+  getChannels: React.PropTypes.func.isRequired,
+  communityTitle: React.PropTypes.string.isRequired,
+  channels: React.PropTypes.arrayOf(Map)
+};

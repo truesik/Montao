@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactTransitionGroup from 'react-addons-transition-group';
+import { Map } from 'immutable';
 
 import Message from './Message';
 
@@ -13,27 +13,9 @@ export default class MessageBox extends React.Component {
   }
 
   componentDidMount() {
-    const node = ReactDOM.findDOMNode(this);
-    node.addEventListener('scroll', this.handleScrollEvent.bind(this, node));
+    this.node.addEventListener('scroll', this.handleScrollEvent(this.node));
 
     this.props.getMessages(this.props.community, this.props.channel, 0);
-  }
-
-  componentWillUnmount() {
-    const node = ReactDOM.findDOMNode(this);
-    node.removeEventListener('scroll', this.handleScrollEvent.bind(this, node));
-  }
-
-  handleScrollEvent(node) {
-    // When scroll top equal 0
-    if (node.scrollTop == 0) {
-      // Store current scroll height
-      this.state.scrollHeight = node.scrollHeight;
-
-      let startRowPosition = this.props.startRowPosition;
-      // Get oldest messages
-      this.props.getOldestMessages(this.props.community, this.props.channel, startRowPosition);
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,15 +27,30 @@ export default class MessageBox extends React.Component {
   }
 
   componentDidUpdate() {
-    const node = ReactDOM.findDOMNode(this);
     if (this.props.scrollBottom) {
       // Scroll to bottom
-      node.scrollTop = node.scrollHeight;
+      this.node.scrollTop = this.node.scrollHeight;
     } else {
       // Stay on position
-      node.scrollTop = node.scrollHeight - this.state.scrollHeight;
+      this.node.scrollTop = this.node.scrollHeight - this.state.scrollHeight;
     }
   }
+
+  componentWillUnmount() {
+    this.node.removeEventListener('scroll', this.handleScrollEvent(this.node));
+  }
+
+  handleScrollEvent = (node) => {
+    // When scroll top equal 0
+    if (node.scrollTop == 0) {
+      // Store current scroll height
+      this.setState({ scrollHeight: node.scrollHeight });
+
+      let startRowPosition = this.props.startRowPosition;
+      // Get oldest messages
+      this.props.getOldestMessages(this.props.community, this.props.channel, startRowPosition);
+    }
+  };
 
   render() {
     const messages = this.props.messages;
@@ -61,7 +58,7 @@ export default class MessageBox extends React.Component {
       <Message key={message.get('id')} message={message}/>
     ));
     return (
-      <div className="chat">
+      <div className="chat" ref={node => this.node = node}>
         {messages.length > 0 &&
         <ReactTransitionGroup>
           {messagesTemplate}
@@ -70,3 +67,13 @@ export default class MessageBox extends React.Component {
     );
   }
 }
+
+MessageBox.propTypes = {
+  getMessages: React.PropTypes.func.isRequired,
+  community: React.PropTypes.string,
+  channel: React.PropTypes.string,
+  startRowPosition: React.PropTypes.number.isRequired,
+  getOldestMessages: React.PropTypes.func.isRequired,
+  scrollBottom: React.PropTypes.bool.isRequired,
+  messages: React.PropTypes.arrayOf(Map)
+};

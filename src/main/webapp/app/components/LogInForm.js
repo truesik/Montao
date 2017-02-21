@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field } from 'redux-form';
+import { Field, propTypes } from 'redux-form';
 
 const renderField = ({ input, name, label, type, meta: { touched, error } }) => {
   return (
@@ -30,6 +30,22 @@ const LogInForm = ({ error, handleSubmit, submitting, logIn }) => {
       </button>
     </form>
   );
+};
+
+renderField.propTypes = {
+  input: React.PropTypes.object.isRequired,
+  name: React.PropTypes.string.isRequired,
+  label: React.PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
+  meta: React.PropTypes.shape({
+    touched: React.PropTypes.bool.isRequired,
+    error: React.PropTypes.string
+  }).isRequired
+};
+
+LogInForm.propTypes = {
+  ...propTypes,
+  logIn: React.PropTypes.func.isRequired
 };
 
 export default LogInForm;

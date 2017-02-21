@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field } from 'redux-form';
+import { Field, propTypes } from 'redux-form';
 
 // You shall not pass (only letters, numbers and underscope)
 const normalizeTitle = value => value.replace(/[\W]+/g, '');
@@ -70,3 +70,21 @@ export default class AddCommunityForm extends React.Component {
     );
   }
 }
+
+renderField.propTypes = {
+  input: React.PropTypes.object.isRequired,
+  name: React.PropTypes.string.isRequired,
+  label: React.PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
+  readOnly: React.PropTypes.bool,
+  meta: React.PropTypes.shape({
+    touched: React.PropTypes.bool.isRequired,
+    error: React.PropTypes.string
+  }).isRequired
+};
+
+AddCommunityForm.propTypes = {
+  ...propTypes,
+  username: React.PropTypes.string,
+  addCommunity: React.PropTypes.func.isRequired
+};

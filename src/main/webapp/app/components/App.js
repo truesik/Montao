@@ -16,3 +16,8 @@ export default class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  checkAuthorization: React.PropTypes.func.isRequired,
+  children: React.PropTypes.element.isRequired
+};
