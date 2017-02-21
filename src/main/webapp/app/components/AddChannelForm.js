@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field } from 'redux-form';
+import { Field, propTypes } from 'redux-form';
 
 const normalizeTitle = value => value.replace(/[\W]+/g, '');
 
@@ -50,3 +50,13 @@ export default class AddChannelForm extends React.Component {
     );
   }
 }
+
+renderField.propTypes = {
+  ...propTypes
+};
+
+AddChannelForm.propTypes = {
+  ...propTypes,
+  communityTitle: React.PropTypes.string,
+  addChannel: React.PropTypes.func.isRequired
+};

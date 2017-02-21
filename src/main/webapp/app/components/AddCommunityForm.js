@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field } from 'redux-form';
+import { Field, propTypes } from 'redux-form';
 
 // You shall not pass (only letters, numbers and underscope)
 const normalizeTitle = value => value.replace(/[\W]+/g, '');
@@ -70,3 +70,13 @@ export default class AddCommunityForm extends React.Component {
     );
   }
 }
+
+renderField.propTypes = {
+  ...propTypes
+};
+
+AddCommunityForm.propTypes = {
+  ...propTypes,
+  username: React.PropTypes.string,
+  addCommunity: React.PropTypes.func.isRequired
+};

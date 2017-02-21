@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import MessageBoxContainer from '../containers/MessageBoxContainer';
 import MessageForm from './MessageForm';
@@ -29,3 +29,15 @@ export default class Channel extends React.Component {
     );
   }
 }
+
+Channel.propTypes = {
+  isConnected: React.PropTypes.bool.isRequired,
+  subscribeToTopic: React.PropTypes.func.isRequired,
+  params: React.PropTypes.shape({
+    community: React.PropTypes.string.isRequired,
+    channel: React.PropTypes.string.isRequired
+  }).isRequired,
+  unsubscribe: React.PropTypes.func.isRequired,
+  sendMessage: React.PropTypes.func.isRequired,
+  isAuthorized: React.PropTypes.bool.isRequired
+};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field } from 'redux-form';
+import { Field, propTypes } from 'redux-form';
 
 // You shall not pass (only letters, numbers and underscope)
 const normalizeUsername = value => value.replace(/[\W]+/g, '');
@@ -43,6 +43,15 @@ const SignUpForm = ({ error, handleSubmit, submitting, signUp }) => {
       <button type="submit" className="pull-right btn btn-primary" disabled={submitting}>Register</button>
     </form>
   );
+};
+
+renderField.propTypes = {
+  ...propTypes
+};
+
+SignUpForm.propTypes = {
+  ...propTypes,
+  singUp: React.PropTypes.func.isRequired
 };
 
 export default SignUpForm;

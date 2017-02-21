@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router';
+import { Map } from 'immutable';
 
 import checkExistence from '../decorators/Checker';
 
@@ -91,3 +92,16 @@ export default class Community extends React.Component {
     );
   }
 }
+
+Community.propTypes = {
+  getUsers: React.PropTypes.func.isRequired,
+  params: React.PropTypes.shape({
+    community: React.PropTypes.string.isRequired
+  }).isRequired,
+  community: React.PropTypes.instanceOf(Map),
+  subscribers: React.PropTypes.arrayOf(Map),
+  channelListDialog: React.PropTypes.object.isRequired,
+  channelListDialogActions: React.PropTypes.object.isRequired,
+  userListDialog: React.PropTypes.object.isRequired,
+  userListDialogActions: React.PropTypes.object.isRequired
+};

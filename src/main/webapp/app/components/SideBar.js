@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import ChannelListContainer from '../containers/ChannelListContainer';
 import UserListContainer from '../containers/UserListContainer';
@@ -21,3 +21,9 @@ export default class SideBar extends React.Component {
     );
   }
 }
+
+SideBar.propTypes = {
+  showAddChannelDialog: React.PropTypes.func.isRequired,
+  communityTitle: React.PropTypes.string.isRequired,
+  isSubscribed: React.PropTypes.bool.isRequired
+};

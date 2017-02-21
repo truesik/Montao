@@ -43,3 +43,17 @@ export default class Chat extends React.Component {
     );
   }
 }
+
+Chat.propTypes = {
+  checkSubscription: React.PropTypes.func.isRequired,
+  params: React.PropTypes.shape({
+    community: React.PropTypes.string.isRequired
+  }).isRequired,
+  connectToWebSocket: React.PropTypes.func.isRequired,
+  disconnect: React.PropTypes.func.isRequired,
+  isAuthorized: React.PropTypes.bool.isRequired,
+  addChannelDialog: React.PropTypes.object.isRequired,
+  addChannelDialogActions: React.PropTypes.object.isRequired,
+  isSubscribed: React.PropTypes.bool.isRequired,
+  children: React.PropTypes.element.isRequired
+};

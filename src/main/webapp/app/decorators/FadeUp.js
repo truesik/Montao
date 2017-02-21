@@ -1,9 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import TweenMax from 'gsap/src/uncompressed/TweenMax';
 
-const fadeUp = (Component) => {
-  return class FadeUp extends React.Component {
+const fadeUp = (Component) =>
+  class FadeUp extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -12,16 +11,14 @@ const fadeUp = (Component) => {
     }
 
     componentWillAppear(callback) {
-      const node = ReactDOM.findDOMNode(this);
-      TweenMax.fromTo(node, 0.6, { opacity: 0.01 }, { opacity: 1, ease: Power1.easeIn, onComplete: callback });
+      TweenMax.fromTo(this.node, 0.6, { opacity: 0.01 }, { opacity: 1, ease: Power1.easeIn, onComplete: callback });
     }
 
     componentWillEnter(callback) {
       this.setState({
         className: 'panel panel-danger'
       });
-      const node = ReactDOM.findDOMNode(this);
-      TweenMax.fromTo(node, 0.6, { opacity: 0.01 }, { opacity: 1, ease: Power1.easeIn, onComplete: callback });
+      TweenMax.fromTo(this.node, 0.6, { opacity: 0.01 }, { opacity: 1, ease: Power1.easeIn, onComplete: callback });
     }
 
     componentDidEnter() {
@@ -33,16 +30,14 @@ const fadeUp = (Component) => {
     }
 
     componentWillLeave(callback) {
-      const node = ReactDOM.findDOMNode(this);
-      TweenMax.fromTo(node, 0.6, { opacity: 1 }, { opacity: 0.01, onComplete: callback });
+      TweenMax.fromTo(this.node, 0.6, { opacity: 1 }, { opacity: 0.01, onComplete: callback });
     }
 
     render() {
       return (
-        <Component ref="child" {...this.props} className={this.state.className}/>
+        <Component ref={node => this.node = node} {...this.props} className={this.state.className}/>
       );
     }
   };
-};
 
 export default fadeUp;

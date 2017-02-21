@@ -1,4 +1,5 @@
 import React from 'react';
+import { Map } from 'immutable';
 
 import CommunityThumbnail from './CommunityThumbnail';
 
@@ -40,5 +41,5 @@ CommunityThumbnailBox.propTypes = {
   join: React.PropTypes.func.isRequired,
   leave: React.PropTypes.func.isRequired,
   isAuthorized: React.PropTypes.bool.isRequired,
-  communities: React.PropTypes.array
+  communities: React.PropTypes.arrayOf(Map)
 };

@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+import { Map } from 'immutable';
 
 import fadeUp from '../decorators/FadeUp';
 
@@ -17,3 +18,8 @@ export default class Message extends React.Component {
     );
   }
 }
+
+Message.propTypes = {
+  message: React.PropTypes.instanceOf(Map).isRequired,
+  className: React.PropTypes.string.isRequired
+};
