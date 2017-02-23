@@ -13,13 +13,13 @@ export default class SearchResultList extends React.Component{
         }
         else {
             const searchResultListTemplate = results.map(result => (
-                <li key={result.get('id')}>
+                <li key={result.get('id')} className="list-group-item">
                     {result.get('title')}
                 </li>
             ));
             return (
                 <div>
-                    <ul className="nav nav-sidebar" id="searchResultList">
+                    <ul className="nav nav-sidebar list-group" id="searchResultList">
                         {searchResultListTemplate}
                     </ul>
                 </div>
