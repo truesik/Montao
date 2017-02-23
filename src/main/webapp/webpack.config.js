@@ -38,21 +38,35 @@ module.exports = {
       {
         test: /\.js$/,
         loader: [
-          'babel-loader',
+          'babel-loader'
         ],
         exclude: /node_modules/,
       },
       {
+        test: /\.scss$/,
+        use: [
+          'style-loader', 'css-loader', 'sass-loader'
+        ]
+      },
+      {
         test: /\.css$/,
         use: [
-          'style-loader'
+          'style-loader', 'css-loader'
         ]
+      },
+      {
+        test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
+        use: 'url-loader'
       }
     ]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html'
     })
