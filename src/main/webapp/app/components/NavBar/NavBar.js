@@ -6,6 +6,8 @@ import LogInDialog from '../LogInDialog';
 import AddCommunityDialog from '../AddCommunityDialog';
 import Search from '../Search';
 
+import './NavBar.scss';
+
 export default class NavBar extends React.Component {
   render() {
     let navBarTemplate;

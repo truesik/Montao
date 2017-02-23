@@ -3,7 +3,7 @@ import React from 'react';
 import AddChannelDialog from '../AddChannelDialog';
 import SideBar from '../SideBar';
 
-import styles from './Chat.scss';
+import './Chat.scss';
 
 export default class Chat extends React.Component {
   componentDidMount() {
