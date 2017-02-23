@@ -1,6 +1,7 @@
 import React from 'react';
 
 import NotFound from '../components/NotFound';
+import Spinner from '../components/Spinner';
 
 const checkExistence = (Component) =>
   class Checker extends React.Component {
@@ -31,9 +32,7 @@ const checkExistence = (Component) =>
 
     renderSpinner() {
       return (
-        <div className="loading">
-          <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-        </div>
+        <Spinner/>
       );
     }
 
