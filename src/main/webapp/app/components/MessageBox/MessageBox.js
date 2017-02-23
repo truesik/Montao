@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactTransitionGroup from 'react-addons-transition-group';
 import { Map } from 'immutable';
 
 import Message from '../Message';
 
-import styles from './MessageBox.scss';
+import './MessageBox.scss';
 
 export default class MessageBox extends React.Component {
   constructor(props) {
@@ -15,8 +14,6 @@ export default class MessageBox extends React.Component {
   }
 
   componentDidMount() {
-    this.node.addEventListener('scroll', this.handleScrollEvent(this.node));
-
     this.props.getMessages(this.props.community, this.props.channel, 0);
   }
 
@@ -38,19 +35,14 @@ export default class MessageBox extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.node.removeEventListener('scroll', this.handleScrollEvent(this.node));
-  }
-
-  handleScrollEvent = (node) => {
+  handleScrollEvent = () => {
     // When scroll top equal 0
-    if (node.scrollTop == 0) {
+    if (this.node.scrollTop == 0) {
       // Store current scroll height
-      this.setState({ scrollHeight: node.scrollHeight });
+      this.setState({ scrollHeight: this.node.scrollHeight });
 
-      let startRowPosition = this.props.startRowPosition;
       // Get oldest messages
-      this.props.getOldestMessages(this.props.community, this.props.channel, startRowPosition);
+      this.props.getOldestMessages(this.props.community, this.props.channel, this.props.startRowPosition);
     }
   };
 
@@ -60,11 +52,8 @@ export default class MessageBox extends React.Component {
       <Message key={message.get('id')} message={message}/>
     ));
     return (
-      <div className="chat" ref={node => this.node = node}>
-        {messages.length > 0 &&
-        <ReactTransitionGroup>
-          {messagesTemplate}
-        </ReactTransitionGroup>}
+      <div className="chat" ref={node => this.node = node} onScroll={this.handleScrollEvent}>
+        {messagesTemplate}
       </div>
     );
   }
