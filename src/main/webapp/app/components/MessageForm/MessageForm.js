@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './MessageForm.scss';
+import './MessageForm.scss';
 
 export default class MessageForm extends React.Component {
   handleMessageSubmit = (event) => {
