@@ -11,6 +11,10 @@ import CommunityContainer from './containers/CommunityContainer';
 import NotFound from './components/NotFound';
 import ChannelContainer from './containers/ChannelContainer';
 
+import 'font-awesome/css/font-awesome.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap';
+
 let store = configureStore();
 
 ReactDOM.render(
