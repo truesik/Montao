@@ -10,6 +10,7 @@ import CommunityThumbnailBoxContainer from './containers/CommunityThumbnailBoxCo
 import CommunityContainer from './containers/CommunityContainer';
 import NotFound from './components/NotFound';
 import ChannelContainer from './containers/ChannelContainer';
+import SearchResultListContainer from './containers/SearchResultListContainer';
 
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,6 +27,7 @@ ReactDOM.render(
         <Route path="community/:community/channel" component={ChatContainer}>
           <Route path=":channel" component={ChannelContainer}/>
         </Route>
+        <Route path="search" component={SearchResultListContainer}/>
         <Route path="*" component={NotFound}/>
       </Route>
     </Router>
