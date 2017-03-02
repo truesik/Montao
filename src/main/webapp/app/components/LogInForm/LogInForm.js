@@ -34,7 +34,7 @@ const LogInForm = ({ error, handleSubmit, submitting, logIn }) => {
 
 renderField.propTypes = {
   input: React.PropTypes.object.isRequired,
-  name: React.PropTypes.string.isRequired,
+  name: React.PropTypes.string,
   label: React.PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
   meta: React.PropTypes.shape({
