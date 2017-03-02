@@ -3,10 +3,13 @@ import { browserHistory } from 'react-router';
 
 export default class SearchBar extends React.Component {
   handleSearchSubmit = (event) => {
-    browserHistory.push({
-      pathname: '/search',
-      query: { q: this.searchInput.value }
-    });
+    if (this.searchInput.value.trim().length > 0) {
+      browserHistory.push({
+        pathname: '/search',
+        query: { q: this.searchInput.value }
+      });
+      this.searchInput.value = '';
+    }
     event.preventDefault();
   };
 
