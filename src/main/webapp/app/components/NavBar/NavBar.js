@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import SignUpDialog from '../SignUpDialog';
 import LogInDialog from '../LogInDialog';
 import AddCommunityDialog from '../AddCommunityDialog';
-import Search from '../Search';
+import SearchBar from '../SearchBar';
 
 import './NavBar.scss';
 
@@ -15,7 +15,7 @@ export default class NavBar extends React.Component {
       navBarTemplate = (
         <div className="collapse navbar-collapse" id="navbar">
           <div className="col-sm-6 col-md-6 -col-lg-6 col-sm-offset-3 col-md-offset-3 col-lg-offset3">
-            <Search/>
+            <SearchBar/>
           </div>
           <ul className="nav navbar-nav navbar-right">
             <li className="dropdown">
@@ -42,7 +42,7 @@ export default class NavBar extends React.Component {
       navBarTemplate = (
         <div className="collapse navbar-collapse" id="navbar">
           <div className="col-sm-6 col-md-6 -col-lg-6 col-sm-offset-3 col-md-offset-3 col-lg-offset3">
-            <Search/>
+            <SearchBar/>
           </div>
           <ul className="nav navbar-nav navbar-right ">
             <li><a onClick={() => this.props.signUpDialogActions.show()}>Sign up</a></li>
