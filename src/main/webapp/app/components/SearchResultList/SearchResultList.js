@@ -10,6 +10,13 @@ export default class SearchResultList extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // Если текст запроса изменился, то вызываем новый поиск
+    if (this.props.location.query.q !== nextProps.location.query.q) {
+      this.props.search(nextProps.location.query.q);
+    }
+  }
+
   render() {
     const results = this.props.results;
     if (results.length == 0) {
