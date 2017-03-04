@@ -14,7 +14,7 @@ export default class SearchResultList extends React.Component {
     const results = this.props.results;
     if (results.length == 0) {
       return (
-        <div style={ { marginTop: "100px" } }>
+        <div style={ { marginTop: '100px' } }>
           <string>Ничего не найдено.</string>
         </div>
       );
@@ -22,11 +22,11 @@ export default class SearchResultList extends React.Component {
     else {
       const searchResultListTemplate = results.map(result => (
         <li key={result.get('id')} className="list-group-item">
-          {result.get('title')}
+          <Link to={`/community/${result.get('title')}`}>{result.get('title')}</Link>
         </li>
       ));
       return (
-        <div style={{ marginTop: "100px" }}>
+        <div style={{ marginTop: '100px' }}>
           <ul className="list-group" id="searchResultList">
             {searchResultListTemplate}
           </ul>
