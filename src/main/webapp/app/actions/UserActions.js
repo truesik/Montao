@@ -13,7 +13,7 @@ export const getUsers = (communityTitle) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-    const request = new Request('/api/user/get_subscribed_users', {
+    const request = new Request('/api/users/get_subscribed_users', {
       method: 'POST',
       body: `communityTitle=${communityTitle}`,
       headers: headers,
@@ -138,7 +138,7 @@ export const checkAuthorization = () => {
       type: actionTypes.CHECK_AUTHORIZATION_REQUEST
     });
 
-    const request = new Request('/api/user/check_authorization', {
+    const request = new Request('/api/users/check_authorization', {
       method: 'GET',
       credentials: 'same-origin'
     });
@@ -175,7 +175,7 @@ export const addUser = (user) => {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-    let request = new Request('/api/user/add', {
+    let request = new Request('/api/users', {
       method: 'POST',
       body: JSON.stringify(user),
       headers: headers,
