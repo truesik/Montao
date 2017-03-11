@@ -19,12 +19,13 @@ import org.unstoppable.montao.service.UserService;
 import org.unstoppable.montao.validator.UserValidator;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/api/users")
 public class UserRestController {
     private final UserService userService;
     private final SubscriptionService subscriptionService;
@@ -39,7 +40,7 @@ public class UserRestController {
         this.communityService = communityService;
     }
 
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity addUser(@Valid @RequestBody UserRegistrationForm userForm,
                                   BindingResult result,
                                   UriComponentsBuilder uriComponentsBuilder) {
@@ -51,6 +52,33 @@ public class UserRestController {
         userService.registerNewUser(user);
         URI location = uriComponentsBuilder.path("/{username}").buildAndExpand(user.getUsername()).toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    //todo подправить, только например админ мог получить весь список. Добавить ошибки и тд.
+    //todo добивить лимит и оффсет
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity getUsers() {
+        List<User> users = userService.getAll();
+        return ResponseEntity.ok(users);
+    }
+
+    //todo добавить ошибки
+    @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity getUserById(@PathVariable("userId") String userId) {
+        User user = userService.getById(BigInteger.valueOf(Long.parseLong(userId)));
+        return ResponseEntity.ok(user);
+    }
+
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity deleteUser(User user) {
+        userService.delete(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity updateUser(@PathVariable("userId") String userId) {
+        //todo доделать
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping(value = "/check_username")
