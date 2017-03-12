@@ -45,7 +45,7 @@ const checkUsername = (values, oldErrors, currentField) => {
   const headers = new Headers();
   headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
   headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-  const request = new Request('/api/user/check_username', {
+  const request = new Request('/api/users/check_username', {
     method: 'POST',
     body: `username=${values.username}`,
     headers: headers,
@@ -79,7 +79,7 @@ const checkEmail = (values, oldErrors, currentField) => {
   const headers = new Headers();
   headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
   headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-  const request = new Request('/api/user/check_email', {
+  const request = new Request('/api/users/check_email', {
     method: 'POST',
     body: `email=${values.email}`,
     headers: headers,
