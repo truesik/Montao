@@ -14,7 +14,7 @@ export const getCommunities = (startRowPosition) => {
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
 
-    const request = new Request('/api/community/get_all', {
+    const request = new Request('/api/communities/get_all', {
       method: 'POST',
       body: `startRowPosition=${startRowPosition}`,
       headers: headers,
@@ -56,7 +56,7 @@ export const join = (communityTitle) => {
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
 
-    const request = new Request('/api/community/join', {
+    const request = new Request('/api/communities/join', {
       method: 'POST',
       body: `communityTitle=${communityTitle}`,
       headers: headers,
@@ -98,7 +98,7 @@ export const leave = (communityTitle) => {
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
 
-    const request = new Request('/api/community/leave', {
+    const request = new Request('/api/communities/leave', {
       method: 'POST',
       body: `communityTitle=${communityTitle}`,
       headers: headers,
@@ -138,7 +138,7 @@ export const add = (community) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-    const request = new Request('/api/community/add', {
+    const request = new Request('/api/communities', {
       method: 'POST',
       body: JSON.stringify(community),
       headers: headers,
@@ -184,7 +184,7 @@ export const checkSubscription = (communityTitle) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-    const request = new Request('/api/community/check_subscription', {
+    const request = new Request('/api/communities/check_subscription', {
       method: 'POST',
       body: `communityTitle=${communityTitle}`,
       headers: headers,
@@ -225,7 +225,7 @@ export const checkCommunity = (title) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-    const request = new Request('/api/community/get', {
+    const request = new Request('/api/communities/get', {
       method: 'POST',
       body: `communityTitle=${title}`,
       headers: headers,

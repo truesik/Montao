@@ -54,7 +54,7 @@ public class ChannelRestController {
             .convertAndSend("/topic/" + channel.getCommunity().getTitle() + "/newChannelNotification",
                 channel);
         URI location = uriComponentsBuilder
-            .path("/community/{communityTitle}/channels/{channelTitle}")
+            .path("/communities/{communityTitle}/channels/{channelTitle}")
             .buildAndExpand(channel.getCommunity().getTitle(), channel.getTitle())
             .toUri();
         return ResponseEntity.created(location).build();

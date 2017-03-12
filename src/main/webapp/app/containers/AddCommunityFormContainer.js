@@ -21,7 +21,7 @@ const asyncValidate = (values) => {
   const headers = new Headers();
   headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
   headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-  const request = new Request('/api/community/check_title', {
+  const request = new Request('/api/communities/check_title', {
     method: 'POST',
     body: `communityTitle=${values.title}`,
     headers: headers,

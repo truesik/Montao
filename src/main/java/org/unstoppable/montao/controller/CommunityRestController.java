@@ -10,7 +10,10 @@ import org.unstoppable.montao.entity.Channel;
 import org.unstoppable.montao.entity.Community;
 import org.unstoppable.montao.entity.Subscription;
 import org.unstoppable.montao.entity.User;
-import org.unstoppable.montao.exception.*;
+import org.unstoppable.montao.exception.CommunityFormException;
+import org.unstoppable.montao.exception.CommunityNotFoundException;
+import org.unstoppable.montao.exception.UserNotAuthorizedException;
+import org.unstoppable.montao.exception.UserNotFoundException;
 import org.unstoppable.montao.model.CommunityCreationForm;
 import org.unstoppable.montao.model.CommunitySubscription;
 import org.unstoppable.montao.service.ChannelService;
@@ -26,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/community")
+@RequestMapping(value = "/api/communities")
 public class CommunityRestController {
     private static final int QUANTITY = 40;
 
@@ -46,7 +49,7 @@ public class CommunityRestController {
         this.subscriptionService = subscriptionService;
     }
 
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity addCommunity(@Valid @RequestBody CommunityCreationForm communityForm,
                                        BindingResult result,
                                        UriComponentsBuilder uriComponentsBuilder) {
@@ -68,11 +71,34 @@ public class CommunityRestController {
         subscriptionService.subscribe(createSubscription(community, founder));
         // And create location
         URI location = uriComponentsBuilder
-                .path("/community/{communityTitle}")
-                .buildAndExpand(community.getTitle())
-                .toUri();
+            .path("/communities/{communityTitle}")
+            .buildAndExpand(community.getTitle())
+            .toUri();
         return ResponseEntity.created(location).build();
+    }
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity getCommunities() {
+        //todo добавить реализацию
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping(value = "/{communityId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity getCommunityById(@PathVariable("communityId") String communityId) {
+        //todo добавить реализацию
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping(value="/{communityId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity updateCommunity(@PathVariable("communityId") String communityId) {
+        //todo добавить реализацию
+        return ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity deleteCommunity(Community community) {
+        //todo добавить реализацию
+        return ResponseEntity.badRequest().build();
     }
 
     /**
@@ -99,7 +125,7 @@ public class CommunityRestController {
         }
         User user = userService.getByUsername(principal.getName());
         return ResponseEntity
-                .ok(subscriptionService.getCommunitiesWithSubscriptionsByUser(user, startRowPosition, QUANTITY));
+            .ok(subscriptionService.getCommunitiesWithSubscriptionsByUser(user, startRowPosition, QUANTITY));
     }
 
     @PostMapping(value = "/join")
@@ -156,7 +182,7 @@ public class CommunityRestController {
     public ResponseEntity getByTitle(String communityTitle) {
         Community community = communityService.getByTitle(communityTitle);
         if (community == null) {
-            throw  new CommunityNotFoundException("Community not found");
+            throw new CommunityNotFoundException("Community not found");
         }
         return ResponseEntity.ok(community);
     }
