@@ -11,8 +11,8 @@ export const getMessages = (communityTitle, channelTitle, startRowPosition) => {
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
 
-    const request = new Request('/api/message/get_messages', {
-      method: 'POST',
+    const request = new Request('/api/messages', {
+      method: 'GET',
       body: `communityTitle=${communityTitle}&channelTitle=${channelTitle}&startRowPosition=${startRowPosition}`,
       headers: headers,
       credentials: 'same-origin'
@@ -52,8 +52,8 @@ export const getOldestMessages = (communityTitle, channelTitle, startRowPosition
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
 
-    const request = new Request('/api/message/get_messages', {
-      method: 'POST',
+    const request = new Request('/api/messages', {
+      method: 'GET',
       body: `communityTitle=${communityTitle}&channelTitle=${channelTitle}&startRowPosition=${startRowPosition}`,
       headers: headers,
       credentials: 'same-origin'
@@ -102,7 +102,7 @@ export const sendMessage = (communityTitle, channelTitle, message) => {
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
 
-    const request = new Request('/api/message/add', {
+    const request = new Request('/api/messages', {
       method: 'POST',
       body: `text=${message}&communityTitle=${communityTitle}&channelTitle=${channelTitle}`,
       headers: headers,
