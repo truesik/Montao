@@ -1,0 +1,421 @@
+@import '../../../styles/utils.scss';
+
+.Profile {
+  background-image: url('./img/bg_slide3.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 500px;
+  position: relative;
+
+  &::after {
+    background-color: $text_color;
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  &__container {
+    height: 100%;
+    margin: 0 auto;
+    max-width: $pageWidth;
+    padding-left: 2.5641%;
+    padding-right: 2.5641%;
+    position: relative;
+    width: 100%;
+    z-index: 2;
+
+    @media (min-width: 1230px) {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+
+    @media #{$breakpointTablet} {
+      padding: 5rem 40px;
+    }
+  }
+
+  &__user {
+    margin: 80px 31% 0;
+    position: absolute;
+    text-align: center;
+    width: 33.33%;
+
+    @media #{$breakpointTablet} {
+      margin: 0;
+      position: relative;
+      width: 100%;
+    }
+
+    &-photo {
+      border: 2px solid #fff;
+      border-radius: 100%;
+      box-shadow: 0 0 15px 0 rgba(0,1,1,0.75);
+      height: 148px;
+      margin: 0 auto 11px;
+      overflow: hidden;
+      width: 148px;
+
+      @media #{$breakpointTablet} {
+        height: 15.625rem;
+        width: 15.625rem;
+      }
+
+      & img {
+        width: 100%;
+        vertical-align: middle;
+      }
+    }
+
+    &-name {
+      color: #fff;
+      font-size: 20px;
+
+      @media #{$breakpointTablet} {
+        font-size: 1.875rem;
+      }
+    }
+
+    &-place {
+      color: $gray_features;
+      font-size: 14px;
+      margin-bottom: 32px;
+
+      @media #{$breakpointTablet} {
+        font-size: 1.5rem;
+      }
+
+      & img {
+        margin-right: 5px;
+        width: 14px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  &__badges {
+    color: $border_color;
+    font-size: $base-font-size;
+    text-align: center;
+    width: 33.33%;
+
+    @media #{$breakpointTablet} {
+      float: none;
+      font-size: 1.5rem;
+      margin-top: 3.75rem;
+      text-align: left;
+      width: 100%;
+    }
+
+    &_invisible {
+      opacity: 0.5;
+    }
+
+    &_car-owner {
+      float: left;
+      margin-top: 154px;
+
+      @media #{$breakpointTablet} {
+        float: none;
+        font-size: 1.5rem;
+        margin-top: 3.75rem;
+        text-align: left;
+        width: 100%;
+      }
+    }
+
+    &_car-rental {
+      float: right;
+      margin-top: 142px;
+
+      @media #{$breakpointTablet} {
+        float: none;
+        font-size: 1.5rem;
+        margin-top: 3.75rem;
+        text-align: left;
+        width: 100%;
+      }
+    }
+
+    &-info {
+
+      @media #{$breakpointTablet} {
+        float: left;
+        text-align: center;
+      }
+
+      @media #{$breakpointMobile} {
+        float: none;
+      }
+    }
+  }
+
+  &__info-icon {
+    display: block;
+    margin-bottom: 2px;
+
+    &_car-owner {
+
+      &::before {
+        content: url('./img/car-owner.png');
+
+        @media #{$breakpointTablet} {
+          content: url('./img/car-owner-b.png');
+        }
+
+        @media #{$breakpointMobile} {
+          content: url('./img/car-owner.png');
+        }
+      }
+    }
+
+    &_car-renter {
+
+      &::before {
+        content: url('./img/car-renter.png');
+
+        @media #{$breakpointTablet} {
+          content: url('./img/car-renter-b.png');
+        }
+
+        @media #{$breakpointMobile} {
+          content: url('./img/car-renter.png');
+        }
+      }
+    }
+  }
+
+  &__rate {
+    display: block;
+    line-height: 1;
+    margin: 3px 0 22px;
+    white-space: nowrap;
+    vertical-align: top;
+
+    @media #{$breakpointTablet} {
+      margin: 0;
+    }
+
+    &-icon {
+      font-size: 14px;
+      margin-right: 0.2em;
+
+      @media #{$breakpointTablet} {
+        font-size: 16px;
+      }
+
+      @media #{$breakpointMobile} {
+        font-size: 12px;
+      }
+
+      &_gray {
+        color: $gray_text_color;
+      }
+
+      &_main {
+        color: $color_red;
+      }
+    }
+  }
+
+  &__options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @media #{$breakpointTablet} {
+      padding-top: 1.125rem;
+      margin-left: 10rem;
+      display: table;
+    }
+
+    @media #{$breakpointMobile} {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    &-item {
+      border-right: 1px solid $border-color;
+      color: $gray_features;
+      display: inline-block;
+      font-size:14px;
+      line-height: 15px;
+      padding: 0 15px 0 12px;
+      vertical-align: top;
+
+      @media #{$breakpointTablet} {
+        display: table-cell;
+        font-size: 1.5rem;
+        line-height: 1.5625rem;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      &:last-child {
+          border-right: 0;
+      }
+    }
+
+    &-value {
+      color: #fff;
+      display: block;
+      font-size: 24px;
+      line-height: 20px;
+      margin-bottom: 4px;
+
+      @media #{$breakpointTablet} {
+        font-size: 1.875rem;
+        line-height: 1.625rem;
+      }
+    }
+  }
+
+  &__edit-button {
+    border-radius: 3px;
+    background-color: rgba($main_color, 0.7);
+    height: 42px;
+    font-size: 20px;
+    left: 50%;
+    line-height: 42px;
+    padding: 0 60px;
+    position: absolute;
+    top: 320px;
+    transform: translateX(-50%);
+
+    @media #{$breakpointTablet} {
+      font-size: 1.875rem;
+      display: block;
+      height: 4.375rem;
+      left: auto;
+      line-height: 4.1875rem;
+      margin: 3.75rem auto 1.25rem;
+      max-width: 570px;
+      padding: 0 12px;
+      position: relative;
+      top: auto;
+      transform: translateX(0%);
+      width: 100%;
+    }
+
+    &:hover {
+      background-color: #fff;
+      color: $main_color;
+    }
+  }
+
+  &__social {
+    bottom: 60px;
+    position: absolute;
+    right: 30px;
+
+    @media #{$breakpointTablet} {
+      bottom: auto;
+      position: relative;
+      right: auto;
+    }
+
+    &-button {
+      border: 1px solid rgba(#fff, 0.1);
+      border-radius: 3px;
+      color: #fff;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 14px;
+      height: 31px;
+      line-height: 29px;
+      margin-left: 20px;
+      padding: 0 12px;
+      position: relative;
+      width: 170px;
+      vertical-align: middle;
+
+      @media #{$breakpointTablet} {
+        display: block;
+        font-size: 1.875rem;
+        height: 4.375rem;
+        line-height: 4.1875rem;
+        margin: 0 auto 1.25rem;
+        max-width: 570px;
+        text-align: center;
+        width: 100%;
+      }
+
+      &_facebook {
+          background-color: rgba(59,89,152,0.7);
+      }
+
+      &_twitter{
+          background-color: rgba(85,172,238,0.7);
+      }
+
+      &-icon {
+        margin-right: 25px;
+      }
+    }
+  }
+
+  &__contacts {
+    bottom: 55px;
+    left: 35px;
+    position: absolute;
+
+    @media #{$breakpointTablet} {
+      bottom: auto;
+      left: auto;
+      position: relative;
+    }
+
+    &-item {
+      color: #fff;
+      display: inline-block;
+      font-size: 14px;
+      margin-right: 10px;
+      padding-left: 20px;
+      position: relative;
+      vertical-align: middle;
+
+      @media #{$breakpointTablet} {
+        font-size: 1.5rem;
+        padding-left: 1.875rem;
+      }
+
+      &:last-child {
+        display: block;
+      }
+
+      &-link {
+        color: #fff;
+        text-decoration: underline;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+
+    &-icon {
+      left: 0;
+      position: absolute;
+      top: 3px;
+
+      &_phone {
+
+        &::before {
+          content: url('./img/phone.png');
+        }
+      }
+
+      &_mail {
+
+        &::before {
+          content: url('./img/mail.png');
+        }
+      }
+    }
+  }
+}

@@ -16,18 +16,19 @@ import UserProfileCont from './containers/UserProfileCont';
 let store = configureStore();
 
 ReactDOM.render(
-    <Provider store={store}>
-        <Router history={browserHistory}>
-            <Route path="/" component={AppContainer}>
-                <IndexRoute component={CommunityThumbnailBoxContainer}/>
-                <Route path="community/:community" component={CommunityContainer}/>
-                <Route path="community/:community/channel" component={ChatContainer}>
-                    <Route path=":channel" component={ChannelContainer}/>
-                </Route>
-                <Route path="user/:user" component={UserProfileCont}/>
-                <Route path="*" component={NotFound}/>
-            </Route>
-        </Router>
-    </Provider>,
-    document.getElementById('root')
+  <Provider store={store}>
+    <Router history={browserHistory}>
+      <Route path="/" component={AppContainer}>
+        <IndexRoute component={CommunityThumbnailBoxContainer}/>
+        <Route path="community/:community" component={CommunityContainer}/>
+        <Route path="community/:community/channel" component={ChatContainer}>
+          <Route path=":channel" component={ChannelContainer}/>
+        </Route>
+        <Route path="users/:user" component={UserProfileCont}/>
+        <Route path="*" component={NotFound}/>
+      </Route>
+    </Router>
+  </Provider>,
+  document.getElementById('root')
 );
+

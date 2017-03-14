@@ -1,37 +1,56 @@
 import React from 'react';
 
 import NotFound from '../components/NotFound';
+import Spinner from '../components/Spinner';
 
-const checkExistence = (Component) => {
-    return class extends React.Component {
-        componentDidMount() {
-            this.props.checkCommunityExistence(this.props.params.community);
-        }
+const checkExistence = (Component) =>
+  class Checker extends React.Component {
+    static propTypes = {
+      checkCommunityExistence: React.PropTypes.func.isRequired,
+      params: React.PropTypes.shape({
+        community: React.PropTypes.string.isRequired
+      }).isRequired,
+      valid: React.PropTypes.bool.isRequired,
+      notFound: React.PropTypes.bool.isRequired
+    };
 
-        render() {
-            let template;
-            if (this.props.valid && !this.props.notFound) {
-                template = (
-                    <Component {...this.props}/>
-                )
-            } else if (!this.props.valid && this.props.notFound) {
-                template = (
-                    <NotFound/>
-                )
-            } else if (!this.props.valid) {
-                template = (
-                    <div className="loading">
-                        <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-                    </div>
-                )
-            }
-            return (
-                <div>
-                    {template}
-                </div>
-            )
-        }
+    componentDidMount() {
+      this.props.checkCommunityExistence(this.props.params.community);
     }
-};
+
+    renderNotFound() {
+      return (
+        <NotFound/>
+      );
+    }
+
+    renderComponent() {
+      return (
+        <Component {...this.props}/>
+      );
+    }
+
+    renderSpinner() {
+      return (
+        <Spinner/>
+      );
+    }
+
+    render() {
+      let template;
+      if (this.props.valid && !this.props.notFound) {
+        template = this.renderComponent();
+      } else if (!this.props.valid && this.props.notFound) {
+        template = this.renderNotFound();
+      } else if (!this.props.valid) {
+        template = this.renderSpinner();
+      }
+      return (
+        <div>
+          {template}
+        </div>
+      );
+    }
+  };
 
 export default checkExistence;
