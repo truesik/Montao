@@ -48,10 +48,10 @@ public class ChannelRestControllerTest {
         String uri = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
-                .path("/community/{communityTitle}/channels/{channelTitle}")
+                .path("/communities/{communityTitle}/channels/{channelTitle}")
                 .buildAndExpand(community.getTitle(), channelForm.getTitle())
                 .toUriString();
-        RequestBuilder request = post("/api/channel/add")
+        RequestBuilder request = post("/api/channels")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(Helper.json(channelForm));
         ResultMatcher created = status().isCreated();
@@ -66,7 +66,7 @@ public class ChannelRestControllerTest {
     public void addAlreadyExistedChannel() throws Exception {
         ChannelCreationForm channelForm = Helper.createChannelForm();
         Mockito.when(channelService.checkTitle(channelForm.getTitle(), channelForm.getCommunityTitle())).thenReturn(false);
-        RequestBuilder request = post("/api/channel/add")
+        RequestBuilder request = post("/api/channels")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(Helper.json(channelForm));
         ResultMatcher conflict = status().isConflict();
@@ -80,7 +80,7 @@ public class ChannelRestControllerTest {
         Community community = Helper.createCommunity();
         Channel channel = Helper.createChannel(community);
         Mockito.when(channelService.checkTitle(channel.getTitle(), community.getTitle())).thenReturn(true);
-        RequestBuilder request = post("/api/channel/check_title")
+        RequestBuilder request = post("/api/channels/check_title")
                 .param("channelTitle", channel.getTitle())
                 .param("communityTitle", community.getTitle());
         ResultMatcher ok = status().isOk();
@@ -96,7 +96,7 @@ public class ChannelRestControllerTest {
         Community community = Helper.createCommunity();
         Channel channel = Helper.createChannel(community);
         Mockito.when(channelService.checkTitle(channel.getTitle(), community.getTitle())).thenReturn(false);
-        RequestBuilder request = post("/api/channel/check_title")
+        RequestBuilder request = post("/api/channels/check_title")
                 .param("channelTitle", channel.getTitle())
                 .param("communityTitle", community.getTitle());
         ResultMatcher ok = status().isOk();
@@ -112,7 +112,7 @@ public class ChannelRestControllerTest {
         Community community = Helper.createCommunity();
         Channel channel = Helper.createChannel(community);
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
-        RequestBuilder request = post("/api/channel/get_channels")
+        RequestBuilder request = post("/api/channels/get_channels")
                 .param("communityTitle", community.getTitle());
         ResultMatcher ok = status().isOk();
         String channelTitle = channel.getTitle();
@@ -129,7 +129,7 @@ public class ChannelRestControllerTest {
         Community community = Helper.createCommunity();
         community.getChannels().clear();
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
-        RequestBuilder request = post("/api/channel/get_channels")
+        RequestBuilder request = post("/api/channels/get_channels")
                 .param("communityTitle", community.getTitle());
         ResultMatcher noContent = status().isNoContent();
         mockMvc.perform(request)
