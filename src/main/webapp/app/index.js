@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute, browserHistory } from "react-router";
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import configureStore from "./store/configureStore";
 
@@ -11,7 +11,12 @@ import CommunityThumbnailBoxContainer from "./containers/CommunityThumbnailBoxCo
 import CommunityContainer from "./containers/CommunityContainer";
 import NotFound from "./components/NotFound";
 import ChannelContainer from "./containers/ChannelContainer";
+import SearchResultListContainer from './containers/SearchResultListContainer';
 import UserProfileCont from './containers/UserProfileCont';
+
+import 'font-awesome/css/font-awesome.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap';
 
 let store = configureStore();
 
@@ -25,10 +30,10 @@ ReactDOM.render(
           <Route path=":channel" component={ChannelContainer}/>
         </Route>
         <Route path="users/:user" component={UserProfileCont}/>
+        <Route path="search" component={SearchResultListContainer}/>
         <Route path="*" component={NotFound}/>
       </Route>
     </Router>
   </Provider>,
   document.getElementById('root')
 );
-

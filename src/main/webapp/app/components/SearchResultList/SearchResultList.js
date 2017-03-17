@@ -29,7 +29,7 @@ export default class SearchResultList extends React.Component {
     else {
       const searchResultListTemplate = results.map(result => (
         <li key={result.get('id')} className="list-group-item">
-          {result.get('title')}
+          <Link to={`/community/${result.get('title')}`}>{result.get('title')}</Link>
         </li>
       ));
       return (
