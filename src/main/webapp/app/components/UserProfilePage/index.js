@@ -1,1 +1,1 @@
-export default from './UserProfilePage.jsx';
+export default from './UserProfilePage.js';

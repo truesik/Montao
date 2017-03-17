@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
-import configureStore from "./store/configureStore";
+import configureStore from './store/configureStore';
 
 import AppContainer from './containers/AppContainer';
-import ChatContainer from "./containers/ChatContainer";
-import CommunityThumbnailBoxContainer from "./containers/CommunityThumbnailBoxContainer";
-import CommunityContainer from "./containers/CommunityContainer";
-import NotFound from "./components/NotFound";
-import ChannelContainer from "./containers/ChannelContainer";
+import ChatContainer from './containers/ChatContainer';
+import CommunityThumbnailBoxContainer from './containers/CommunityThumbnailBoxContainer';
+import CommunityContainer from './containers/CommunityContainer';
+import NotFound from './components/NotFound';
+import ChannelContainer from './containers/ChannelContainer';
 import SearchResultListContainer from './containers/SearchResultListContainer';
 import UserProfileCont from './containers/UserProfileCont';
 

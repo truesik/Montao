@@ -1,7 +1,7 @@
-@import '../../../styles/utils.scss';
+//@import '../../../styles/utils.scss';
 
 .Profile {
-  background-image: url('./img/bg_slide3.jpg');
+  //background-image: url('./img/bg_slide3.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -162,14 +162,14 @@
     &_car-owner {
 
       &::before {
-        content: url('./img/car-owner.png');
+        //content: url('./img/car-owner.png');
 
         @media #{$breakpointTablet} {
-          content: url('./img/car-owner-b.png');
+          //content: url('./img/car-owner-b.png');
         }
 
         @media #{$breakpointMobile} {
-          content: url('./img/car-owner.png');
+          //content: url('./img/car-owner.png');
         }
       }
     }
@@ -177,14 +177,14 @@
     &_car-renter {
 
       &::before {
-        content: url('./img/car-renter.png');
+        //content: url('./img/car-renter.png');
 
         @media #{$breakpointTablet} {
-          content: url('./img/car-renter-b.png');
+          //content: url('./img/car-renter-b.png');
         }
 
         @media #{$breakpointMobile} {
-          content: url('./img/car-renter.png');
+          //content: url('./img/car-renter.png');
         }
       }
     }
@@ -406,14 +406,14 @@
       &_phone {
 
         &::before {
-          content: url('./img/phone.png');
+          //content: url('./img/phone.png');
         }
       }
 
       &_mail {
 
         &::before {
-          content: url('./img/mail.png');
+          //content: url('./img/mail.png');
         }
       }
     }
