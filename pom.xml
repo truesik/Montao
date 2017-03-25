@@ -221,7 +221,15 @@
             <artifactId>hibernate-validator</artifactId>
             <version>5.2.4.Final</version>
         </dependency>
+
+        <!--hibernate-search-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-orm</artifactId>
+            <version>5.7.0.Final</version>
+        </dependency>
     </dependencies>
+
 
     <build>
         <finalName>montao</finalName>
