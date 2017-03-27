@@ -13,7 +13,7 @@
         <spring.version>4.3.0.RELEASE</spring.version>
         <jdk.version>1.8</jdk.version>
         <spring.security.version>4.2.0.RELEASE</spring.security.version>
-        <hibernate-version>5.2.1.Final</hibernate-version>
+        <hibernate-version>5.2.8.Final</hibernate-version>
         <spring-security-test>4.2.0.RELEASE</spring-security-test>
     </properties>
 
@@ -221,7 +221,15 @@
             <artifactId>hibernate-validator</artifactId>
             <version>5.2.4.Final</version>
         </dependency>
+
+        <!--hibernate-search-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-orm</artifactId>
+            <version>5.7.0.Final</version>
+        </dependency>
     </dependencies>
+
 
     <build>
         <finalName>montao</finalName>
