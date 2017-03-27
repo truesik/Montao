@@ -24,8 +24,12 @@ import java.util.Properties;
 //@ComponentScan(basePackages = {"org.unstoppable.montao.entity"})
 @PropertySource(value = {"classpath:hibernate.properties"})
 public class HibernateConfig {
+    private final Environment environment;
+
     @Autowired
-    private Environment environment;
+    public HibernateConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
