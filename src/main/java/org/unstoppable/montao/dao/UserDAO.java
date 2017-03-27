@@ -68,4 +68,11 @@ public interface UserDAO {
      * @return User.
      */
     User getByUUID(String token);
+
+    /**
+     * Возвращает общее количество записей в таблице.
+     *
+     * @return количество.
+     */
+    long getTotalCount();
 }
