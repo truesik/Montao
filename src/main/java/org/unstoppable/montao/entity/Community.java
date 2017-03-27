@@ -1,6 +1,8 @@
 package org.unstoppable.montao.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -14,6 +16,7 @@ import java.util.List;
  * Table that contains list of communities.
  */
 @Entity
+@Indexed
 @Table(name = "communities")
 public class Community {
     private static final int MIN_TITLE_LENGTH = 4;
@@ -24,9 +27,11 @@ public class Community {
 
     @Column(name = "title", nullable = false, unique = true)
     @NotEmpty
+    @Field
     @Size(min = MIN_TITLE_LENGTH)
     private String title;
 
+    @Field
     @Column(name = "description")
     private String description;
 
