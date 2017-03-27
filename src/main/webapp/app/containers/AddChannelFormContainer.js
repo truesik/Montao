@@ -22,7 +22,7 @@ const asyncValidate = (values) => {
   headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
   headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
   const data = `channelTitle=${values.title}&communityTitle=${values.community}`;
-  const request = new Request('/api/channel/check_title', {
+  const request = new Request('/api/channels/check_title', {
     method: 'POST',
     body: data,
     headers: headers,

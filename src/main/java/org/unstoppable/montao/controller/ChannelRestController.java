@@ -12,16 +12,16 @@ import org.unstoppable.montao.entity.Community;
 import org.unstoppable.montao.exception.ChannelFormException;
 import org.unstoppable.montao.exception.CommunityNotFoundException;
 import org.unstoppable.montao.model.ChannelCreationForm;
-import org.unstoppable.montao.service.*;
+import org.unstoppable.montao.service.ChannelService;
+import org.unstoppable.montao.service.CommunityService;
 import org.unstoppable.montao.validator.ChannelValidator;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/channel")
+@RequestMapping(value = "/api/channels")
 public class ChannelRestController {
     private final CommunityService communityService;
     private final ChannelService channelService;
@@ -36,7 +36,7 @@ public class ChannelRestController {
         this.messagingTemplate = messagingTemplate;
     }
 
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity addChannel(@Valid @RequestBody ChannelCreationForm channelForm,
                                      BindingResult result,
                                      UriComponentsBuilder uriComponentsBuilder) {
@@ -51,25 +51,44 @@ public class ChannelRestController {
         Channel channel = channelForm.createChannel(community);
         channelService.add(channel);
         messagingTemplate
-                .convertAndSend("/topic/" + channel.getCommunity().getTitle() + "/newChannelNotification",
+            .convertAndSend("/topic/" + channel.getCommunity().getTitle() + "/newChannelNotification",
                 channel);
         URI location = uriComponentsBuilder
-                .path("/community/{communityTitle}/channels/{channelTitle}")
-                .buildAndExpand(channel.getCommunity().getTitle(), channel.getTitle())
-                .toUri();
+            .path("/communities/{communityTitle}/channels/{channelTitle}")
+            .buildAndExpand(channel.getCommunity().getTitle(), channel.getTitle())
+            .toUri();
         return ResponseEntity.created(location).build();
     }
 
-    /**
-     * Returns false if channel title already exist and true if not.
-     *
-     * @param channelTitle   Channel title.
-     * @param communityTitle Community title.
-     * @return String "true" or "false".
-     */
-    @PostMapping(value = "/check_title")
-    public String checkTitle(String channelTitle, String communityTitle) {
-        return channelService.checkTitle(channelTitle, communityTitle).toString();
+    @PostMapping(value = "/get_channel", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity getChannelByTitle(@RequestParam String communityTitle, @RequestParam String channelTitle) {
+        Community community = communityService.getByTitle(communityTitle);
+        if (community == null) {
+            throw new CommunityNotFoundException("Community not found");
+        }
+        Channel channel = community.getChannels().stream()
+            .filter(c -> c.getTitle().equals(channelTitle))
+            .findFirst()
+            .orElse(null);
+        return ResponseEntity.ok(channel);
+    }
+
+    @GetMapping(value = "/{channelId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity getChannelById(@PathVariable("channelId") String channelId) {
+        //todo добавить реализацию
+        return ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity deleteChannel() {
+        //todo добавить реализацию
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping(value = "/{channelId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity updateChannelById(@PathVariable("channelId") String channelId) {
+        //todo добавить реализацию
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping(value = "/get_channels", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -85,16 +104,15 @@ public class ChannelRestController {
         return ResponseEntity.ok(channels);
     }
 
-    @PostMapping(value = "/get_channel", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity getChannelByTitle(@RequestParam String communityTitle, @RequestParam String channelTitle) {
-        Community community = communityService.getByTitle(communityTitle);
-        if (community == null) {
-            throw new CommunityNotFoundException("Community not found");
-        }
-        Channel channel = community.getChannels().stream()
-                .filter(c -> c.getTitle().equals(channelTitle))
-                .findFirst()
-                .orElse(null);
-        return ResponseEntity.ok(channel);
+    /**
+     * Returns false if channel title already exist and true if not.
+     *
+     * @param channelTitle   Channel title.
+     * @param communityTitle Community title.
+     * @return String "true" or "false".
+     */
+    @PostMapping(value = "/check_title")
+    public String checkTitle(String channelTitle, String communityTitle) {
+        return channelService.checkTitle(channelTitle, communityTitle).toString();
     }
 }

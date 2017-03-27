@@ -13,7 +13,7 @@ export const getChannels = (communityTitle) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-    const request = new Request('/api/channel/get_channels', {
+    const request = new Request('/api/channels/get_channels', {
       method: 'POST',
       body: `communityTitle=${communityTitle}`,
       headers: headers,
@@ -52,7 +52,7 @@ export const add = (channel) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json; charset=utf-8');
     headers.append('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-    const request = new Request('/api/channel/add', {
+    const request = new Request('/api/channels', {
       method: 'POST',
       body: JSON.stringify(channel),
       headers: headers,

@@ -43,9 +43,9 @@ public class UserDAOHibernate implements UserDAO {
     @Override
     public User getByUsername(String username) {
         String hql = "FROM User WHERE username = :username";
-        Query<User> query = sessionFactory.getCurrentSession().createQuery(hql, User.class);
-        query.setParameter("username", username);
-        return query.uniqueResult();
+        return sessionFactory.getCurrentSession().createQuery(hql, User.class)
+            .setParameter("username", username)
+            .uniqueResult();
     }
 
     @Override
@@ -67,5 +67,10 @@ public class UserDAOHibernate implements UserDAO {
         Query<User> query = sessionFactory.getCurrentSession().createQuery(hql, User.class);
         query.setParameter("uuid", token);
         return query.uniqueResult();
+    }
+
+    @Override
+    public long getTotalCount() {
+        return 0;
     }
 }

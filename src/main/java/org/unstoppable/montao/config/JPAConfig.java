@@ -1,6 +1,5 @@
 package org.unstoppable.montao.config;
 
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,37 +7,36 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.unstoppable.montao.entity.*;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-/**
- * Hibernate configuration.
- */
 @Configuration
 @EnableTransactionManagement
-//@ComponentScan(basePackages = {"org.unstoppable.montao.entity"})
 @PropertySource(value = {"classpath:hibernate.properties"})
-public class HibernateConfig {
+public class JPAConfig {
     private final Environment environment;
 
     @Autowired
-    public HibernateConfig(Environment environment) {
+    public JPAConfig(Environment environment) {
         this.environment = environment;
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("org.unstoppable.montao.*");
-        sessionFactory.setHibernateProperties(hibernateProperties());
-        sessionFactory.setAnnotatedClasses(User.class, Community.class, Channel.class, Message.class, Subscription.class);
-        return sessionFactory;
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactory.setDataSource(dataSource());
+        entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter());
+        entityManagerFactory.setPackagesToScan("org.unstoppable.projectstack.entity");
+        entityManagerFactory.setJpaProperties(hibernateProperties());
+        return entityManagerFactory;
     }
 
     @Bean
@@ -52,15 +50,20 @@ public class HibernateConfig {
     }
 
     @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory);
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;
     }
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
+    }
+
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter() {
+        return new HibernateJpaVendorAdapter();
     }
 
     /**

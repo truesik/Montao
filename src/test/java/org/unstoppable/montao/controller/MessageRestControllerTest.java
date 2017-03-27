@@ -21,7 +21,7 @@ import org.unstoppable.montao.service.UserService;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -56,7 +56,7 @@ public class MessageRestControllerTest {
         Message message = Helper.createMessage(channel);
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
         Mockito.when(userService.getByUsername(user.getUsername())).thenReturn(user);
-        RequestBuilder request = post("/api/message/add")
+        RequestBuilder request = post("/api/messages")
                 .principal(new UserPrincipal(user.getUsername()))
                 .param("text", message.getText())
                 .param("communityTitle", community.getTitle())
@@ -72,7 +72,7 @@ public class MessageRestControllerTest {
         Community community = Helper.createCommunity();
         Channel channel = Helper.createChannel(community);
         Message message = Helper.createMessage(channel);
-        RequestBuilder request = post("/api/message/add")
+        RequestBuilder request = post("/api/messages")
                 .param("text", message.getText())
                 .param("communityTitle", community.getTitle())
                 .param("channelTitle", channel.getTitle());
@@ -90,7 +90,7 @@ public class MessageRestControllerTest {
         List<Message> messages = Helper.createMessageList(message);
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
         Mockito.when(messageService.getByChannelWithLimitation(channel, 0, 20)).thenReturn(messages);
-        RequestBuilder request = post("/api/message/get_messages")
+        RequestBuilder request = get("/api/messages")
                 .param("communityTitle", community.getTitle())
                 .param("channelTitle", channel.getTitle())
                 .param("startRowPosition", "0");
@@ -108,7 +108,7 @@ public class MessageRestControllerTest {
     public void getMessagesWhenCurrentChannelIsNull() throws Exception {
         Community community = Helper.createCommunity();
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
-        RequestBuilder request = post("/api/message/get_messages")
+        RequestBuilder request = get("/api/messages")
                 .param("communityTitle", community.getTitle())
                 .param("channelTitle", "fake")
                 .param("startRowPosition", "0");

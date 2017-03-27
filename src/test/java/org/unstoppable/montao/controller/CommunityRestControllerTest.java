@@ -28,12 +28,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class CommunityRestControllerTest {
-    private static final String GET_ALL = "/api/community/get_all";
-    private static final String ADD = "/api/community/add";
-    private static final String CHECK_TITLE = "/api/community/check_title";
-    private static final String JOIN = "/api/community/join";
-    private static final String LEAVE = "/api/community/leave";
-    private static final String CHECK_SUBSCRIPTION = "/api/community/check_subscription";
+    private static final String GET_ALL = "/api/communities/get_all";
+    private static final String ADD = "/api/communities";
+    private static final String CHECK_TITLE = "/api/communities/check_title";
+    private static final String JOIN = "/api/communities/join";
+    private static final String LEAVE = "/api/communities/leave";
+    private static final String CHECK_SUBSCRIPTION = "/api/communities/check_subscription";
 
 
     private CommunityService communityService;
@@ -68,7 +68,7 @@ public class CommunityRestControllerTest {
         String uri = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
-                .path("/community/{communityTitle}")
+                .path("/communities/{communityTitle}")
                 .buildAndExpand(community.getTitle())
                 .toUriString();
         RequestBuilder request = post(ADD)

@@ -48,7 +48,7 @@ public class UserRestControllerTest {
         UserRegistrationForm userForm = Helper.createUserForm();
         Mockito.when(userService.checkUsername(userForm.getUsername())).thenReturn(true);
         Mockito.when(userService.checkEmail(userForm.getEmail())).thenReturn(true);
-        RequestBuilder request = post("/api/user/add")
+        RequestBuilder request = post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(Helper.json(userForm));
         String uri = UriComponentsBuilder.newInstance()
@@ -70,7 +70,7 @@ public class UserRestControllerTest {
         UserRegistrationForm userForm = Helper.createUserForm();
         userForm.setEmail("sdfsd");
         userForm.setUsername("ывпаыапва");
-        RequestBuilder request = post("/api/user/add")
+        RequestBuilder request = post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(Helper.json(userForm));
         ResultMatcher conflict = status().isConflict();
@@ -86,7 +86,7 @@ public class UserRestControllerTest {
         ResultMatcher ok = status().isOk();
         ResultMatcher result = content().string("false");
         mockMvc.perform(
-                post("/api/user/check_username")
+                post("/api/users/check_username")
                         .param("username", user.getUsername()))
                 .andDo(print())
                 .andExpect(ok)
@@ -96,7 +96,7 @@ public class UserRestControllerTest {
     @Test
     public void checkNewUsername() throws Exception {
         Mockito.when(userService.checkUsername("new_user")).thenReturn(true);
-        RequestBuilder request = post("/api/user/check_username")
+        RequestBuilder request = post("/api/users/check_username")
                 .param("username", "new_user");
         ResultMatcher ok = status().isOk();
         ResultMatcher result = content().string("true");
@@ -110,7 +110,7 @@ public class UserRestControllerTest {
     public void checkExistEmail() throws Exception {
         UserRegistrationForm user = Helper.createUserForm();
         Mockito.when(userService.checkEmail(user.getEmail())).thenReturn(false);
-        RequestBuilder request = post("/api/user/check_email")
+        RequestBuilder request = post("/api/users/check_email")
                 .param("email", user.getEmail());
         ResultMatcher result = content().string("false");
         ResultMatcher ok = status().isOk();
@@ -125,7 +125,7 @@ public class UserRestControllerTest {
         Mockito.when(userService.checkEmail("newemail@mail.com")).thenReturn(true);
         ResultMatcher ok = status().isOk();
         ResultMatcher result = content().string("true");
-        RequestBuilder request = post("/api/user/check_email")
+        RequestBuilder request = post("/api/users/check_email")
                 .param("email", "newemail@mail.com");
         mockMvc.perform(request)
                 .andDo(print())
@@ -136,7 +136,7 @@ public class UserRestControllerTest {
     @Test
     public void getPrincipal() throws Exception {
         String username = "username";
-        RequestBuilder request = get("/api/user/check_authorization")
+        RequestBuilder request = get("/api/users/check_authorization")
                 .principal(new UserPrincipal(username));
         ResultMatcher ok = status().isOk();
         ResultMatcher result = content().string(username);
@@ -148,7 +148,7 @@ public class UserRestControllerTest {
 
     @Test
     public void getNonAuthorizedPrincipal() throws Exception {
-        RequestBuilder request = get("/api/user/check_authorization");
+        RequestBuilder request = get("/api/users/check_authorization");
         ResultMatcher notAllowed = status().isMethodNotAllowed();
         mockMvc.perform(request)
                 .andDo(print())
@@ -163,7 +163,7 @@ public class UserRestControllerTest {
         List<Subscription> subscriptions = Helper.createSubscriptionList(subscription);
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(community);
         Mockito.when(subscriptionService.getByCommunity(community)).thenReturn(subscriptions);
-        RequestBuilder request = post("/api/user/get_subscribed_users")
+        RequestBuilder request = post("/api/users/get_subscribed_users")
                 .param("communityTitle", community.getTitle());
         ResultMatcher ok = status().isOk();
         ResultMatcher contentType = content().contentType(MediaType.APPLICATION_JSON_UTF8);
@@ -185,7 +185,7 @@ public class UserRestControllerTest {
     public void getSubscribedUsersWithWrongCommunity() throws Exception {
         Community community = Helper.createCommunity();
         Mockito.when(communityService.getByTitle(community.getTitle())).thenReturn(null);
-        RequestBuilder request = post("/api/user/get_subscribed_users")
+        RequestBuilder request = post("/api/users/get_subscribed_users")
                 .param("communityTitle", community.getTitle());
         ResultMatcher notFound = status().isNotFound();
         mockMvc.perform(request)

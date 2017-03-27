@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/message")
+@RequestMapping(value = "/api/messages")
 public class MessageRestController {
     private static final int QUANTITY = 20;
 
@@ -43,7 +43,7 @@ public class MessageRestController {
         this.messageService = messageService;
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping
     public ResponseEntity addMessage(@RequestParam(value = "text") String text,
                                      @RequestParam(value = "communityTitle") String communityTitle,
                                      @RequestParam(value = "channelTitle") String channelTitle,
@@ -80,17 +80,7 @@ public class MessageRestController {
         return ResponseEntity.created(location).build();
     }
 
-    private Message createMessage(String text, User user, Channel channel) {
-        Message message = new Message();
-        message.setUuid(UUID.randomUUID().toString());
-        message.setText(text);
-        message.setUser(user);
-        message.setChannel(channel);
-        message.setReceivedTime(LocalDateTime.now());
-        return message;
-    }
-
-    @PostMapping(value = "/get_messages", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity getMessages(@RequestParam(value = "communityTitle") String communityTitle,
                                       @RequestParam(value = "channelTitle") String channelTitle,
                                       @RequestParam(value = "startRowPosition") int startRowPosition) {
@@ -106,6 +96,33 @@ public class MessageRestController {
             throw new ChannelNotFoundException("Channel not found");
         }
         return ResponseEntity.ok(messageService.getByChannelWithLimitation(currentChannel, startRowPosition, QUANTITY));
+    }
 
+    @GetMapping(value = "/{messageId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity getMessageById(@PathVariable("messageId") String messageId) {
+        //todo добавить реализацию
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping(value = "/{messageId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity updateMessage(@PathVariable("messageId") String messageId) {
+        // todo добавить реализацию
+        return ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity deleteMessage(Message message) {
+        // todo добавить реализацию
+        return ResponseEntity.badRequest().build();
+    }
+
+    private Message createMessage(String text, User user, Channel channel) {
+        Message message = new Message();
+        message.setUuid(UUID.randomUUID().toString());
+        message.setText(text);
+        message.setUser(user);
+        message.setChannel(channel);
+        message.setReceivedTime(LocalDateTime.now());
+        return message;
     }
 }
