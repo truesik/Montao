@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class ChannelDOAJpa implements ChannelDAO{
+public class ChannelDAOJpa implements ChannelDAO{
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -44,8 +44,8 @@ public class ChannelDOAJpa implements ChannelDAO{
 
     @Override
     public List<Channel> getByCommunityTitle(String title) {
-        String jpql = "SELECT COUNT(title) FROM Channel";
+        String jpql = "FROM Channel WHERE community.title = :title ";
         Query query = entityManager.createQuery(jpql, Channel.class);
-        return  query.getSingleResult();
+        return  query.getResultList();
     }
 }
