@@ -9,70 +9,17 @@ import java.util.List;
  * Layer that works with User table in DB.
  */
 public interface UserDAO {
-    /**
-     * Returns user list.
-     *
-     * @return User list.
-     */
-    List<User> getAll();
+    public void add(User user);
 
-    /**
-     * Returns users by id.
-     *
-     * @param id User id.
-     * @return User.
-     */
-    User getById(BigInteger id);
+    public void delete(User user);
 
-    /**
-     * Removes user.
-     *
-     * @param user User.
-     */
-    void delete(User user);
+    public User update(User user);
 
-    /**
-     * Adds user to db.
-     *
-     * @param user User.
-     */
-    void add(User user);
+    public List<User> findAll (int page, int limit);
 
-    /**
-     * Returna user by username.
-     *
-     * @param username Username.
-     * @return User,
-     */
-    User getByUsername(String username);
+    public User findByUsername(String username);
 
-    /**
-     * Returns user by email.
-     *
-     * @param email Email.
-     * @return User.
-     */
-    User getByEmail(String email);
+    public User findByEmail(String email);
 
-    /**
-     * Update user fields.
-     *
-     * @param user User.
-     */
-    void update(User user);
-
-    /**
-     * Returns user by uuid.
-     *
-     * @param token uuid.
-     * @return User.
-     */
-    User getByUUID(String token);
-
-    /**
-     * Возвращает общее количество записей в таблице.
-     *
-     * @return количество.
-     */
-    long getTotalCount();
+    public Long totalCount();
 }
