@@ -21,5 +21,5 @@ public interface UserDAO {
 
     public User findByEmail(String email);
 
-    public Long totalCount();
+    public long totalCount();
 }

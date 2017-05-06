@@ -17,33 +17,39 @@ public class CommunityDAOJpa implements CommunityDAO {
     private EntityManager entityManager;
 
     @Override
-    public List<Community> getAll() {
-        String jpql = "FROM Community";
-        return entityManager.createQuery(jpql, Community.class).getResultList();
-    }
-
-    @Override
-    public Community getById(BigInteger id) {
-        return entityManager.find(Community.class, id);
-    }
-
-    @Override
-    public Community getByTitle(String title) {
-        return entityManager.find(Community.class, title);
-    }
+    public void add(Community community) {entityManager.persist(community);}
 
     @Override
     public void delete(Community community) {entityManager.remove(community);}
 
     @Override
-    public void add(Community community) {entityManager.persist(community);}
-
-    @Override
     public void update(Community community) {entityManager.merge(community);}
 
     @Override
-    public List<Community> getLimitedPublicCollection(int startRowPosition, int maxResult) {
-        String jpql = "FROM Community";
-        return entityManager.createQuery(jpql,Community.class).getResultList();
+    public List<Community> findAll(int limit, int page) {
+        String jpql = "SELECT c FROM Community c";
+        return entityManager
+            .createQuery(jpql, Community.class)
+            .setMaxResults(limit)
+            .setFirstResult((page - 1) * limit)
+            .getResultList();
+    }
+
+    @Override
+    public Community findByTitle(String title) {
+        return entityManager
+            .createQuery("SELECT c FROM Community c WHERE c.title=:title", Community.class)
+            .setParameter("title", title)
+            .getResultList()
+            .stream()
+            .findFirst()
+            .orElseThrow();
+    }
+
+    @Override
+    public long totalCount() {
+        return (long) entityManager
+            .createQuery("SELECT COUNT(c.id) FROM Community c")
+            .getSingleResult();
     }
 }

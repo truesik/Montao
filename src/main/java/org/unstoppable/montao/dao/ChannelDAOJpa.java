@@ -18,34 +18,55 @@ public class ChannelDAOJpa implements ChannelDAO{
     private EntityManager entityManager;
 
     @Override
-    public List<Channel> getAll() {
-        String jpql = "FROM Channel";
-        return entityManager.createQuery(jpql, Channel.class).getResultList();
+    public void add(Channel channel) {
+        entityManager.persist(channel);
     }
 
     @Override
-    public Channel getById(BigInteger id) {
-        return entityManager.find(Channel.class, id);
+    public void delete(Channel channel) {
+        entityManager.remove(channel);
     }
 
     @Override
-    public Channel getByTitle(String title) {
-        return entityManager.find(Channel.class, title);
+    public void update(Channel channel) {
+        entityManager.merge(channel);
     }
 
     @Override
-    public void delete(Channel channel) { entityManager.remove(channel);    }
+    public List<Channel> findAll(int page, int limit) {
+        return entityManager
+            .createQuery("SELECT c FROM Channel c",Channel.class)
+            .setMaxResults(limit)
+            .setFirstResult((page - 1)* limit)
+            .getResultList();
+    }
 
     @Override
-    public void add(Channel channel) { entityManager.persist(channel); }
+    public Channel findByTitle(String title) {
+        return entityManager
+            .createQuery("SELECT c FROM Channel c WHERE c.title=:title",Channel.class)
+            .setParameter("title", title)
+            .getResultList()
+            .stream()
+            .findFirst()
+            .orElseThrow();
+    }
 
     @Override
-    public void update(Channel channel) { entityManager.merge(channel); }
+    public Channel findById(Long id) {
+        return entityManager
+            .createQuery("SELECT c FROM Channel c WHERE c.id=:id",Channel.class)
+            .setParameter("id", id)
+            .getResultList()
+            .stream()
+            .findFirst()
+            .orElseThrow();
+    }
 
     @Override
-    public List<Channel> getByCommunityTitle(String title) {
-        String jpql = "FROM Channel WHERE community.title = :title ";
-        Query query = entityManager.createQuery(jpql, Channel.class);
-        return  query.getResultList();
+    public long totalCount() {
+        return (long) entityManager
+            .createQuery("SELECT COUNT(c.id) FROM Channel c")
+            .getSingleResult();
     }
 }

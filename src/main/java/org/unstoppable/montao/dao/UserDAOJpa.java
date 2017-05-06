@@ -64,10 +64,10 @@ public class UserDAOJpa implements UserDAO {
     }
 
     @Override
-    public Long totalCount() {
-        String jpql = "SELECT count(u.id) from User u";
-        long a = parseLong(entityManager.createQuery(jpql, User.class)
-            .getSingleResult());
-        return a;
+    public long totalCount() {
+        String jpql = "SELECT COUNT(u.id) FROM User u";
+        return (long) entityManager
+            .createQuery(jpql, User.class)
+            .getSingleResult();
     }
 }
