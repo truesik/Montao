@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 @Transactional
@@ -43,7 +44,7 @@ public class CommunityDAOJpa implements CommunityDAO {
             .getResultList()
             .stream()
             .findFirst()
-            .orElseThrow();
+            .orElseThrow(()->{ throw new NoSuchElementException("Community with $title title not found");});
     }
 
     @Override

@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 @Transactional
@@ -49,7 +50,7 @@ public class ChannelDAOJpa implements ChannelDAO{
             .getResultList()
             .stream()
             .findFirst()
-            .orElseThrow();
+            .orElseThrow(()->{ throw new NoSuchElementException("Channel with $title title not found");});
     }
 
     @Override
@@ -60,7 +61,7 @@ public class ChannelDAOJpa implements ChannelDAO{
             .getResultList()
             .stream()
             .findFirst()
-            .orElseThrow();
+            .orElseThrow(()->{ throw new NoSuchElementException("Channel with $id id not found");});
     }
 
     @Override

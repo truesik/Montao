@@ -21,11 +21,11 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @PropertySource(value = {"classpath:hibernate.properties"})
-public class JPAConfig {
+public class JpaConfig {
     private final Environment environment;
 
     @Autowired
-    public JPAConfig(Environment environment) {
+    public JpaConfig(Environment environment) {
         this.environment = environment;
     }
 

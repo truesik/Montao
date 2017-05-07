@@ -22,26 +22,43 @@ public class SubscriptionDAOJpa implements SubscriptionDAO{
     public void add(Subscription subscription) {entityManager.persist(subscription);}
 
     @Override
-    public Subscription getSubscription(Community community, User user) {
-
-    }
-
-    @Override
     public void delete(Subscription subscription) {entityManager.remove(subscription);}
 
     @Override
-    public List<Subscription> getByUser(User user) {
-        String jpql = "FROM Subscription where subscription.user = :user";
-        return entityManager.createQuery(jpql,Subscription.class).getResultList();
+    public List<Community> findByUser(User user, int page, int limit) {
+        return entityManager
+            .createQuery("SELECT s FROM Subscription s WHERE s.user =:user", Community.class)
+            .setParameter("user",user)
+            .setFirstResult((page-1)*limit)
+            .setMaxResults(limit)
+            .getResultList();
     }
 
     @Override
-    public List<Subscription> getByCommunity(Community community) {
-        return null;
+    public List<User> findByCommunity(Community community, int page, int limit) {
+        return entityManager
+            .createQuery("SELECT s FROM Subscription s WHERE s.community =:community", User.class)
+            .setParameter("community",community)
+            .setFirstResult((page-1)*limit)
+            .setMaxResults(limit)
+            .getResultList();
     }
 
     @Override
-    public List<CommunitySubscription> getCommunitiesWithSubscriptionsByUser(User user, int startRowPosition, int maxResult) {
-        return null;
+    public long communitiesCountByUser(User user) {
+        return (long) entityManager
+            .createQuery("SELECT COUNT (s.id) FROM  Subscription s WHERE s.user =:user")
+            .setParameter("user", user)
+            .getSingleResult();
     }
+
+    @Override
+    public long userCountByCommunity(Community community) {
+        return (long) entityManager
+            .createQuery("SELECT COUNT (s.id) FROM  Subscription s WHERE s.community =:community")
+            .setParameter("community", community)
+            .getSingleResult();
+    }
+
+
 }

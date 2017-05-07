@@ -49,7 +49,9 @@ public class UserDAOJpa implements UserDAO {
             .getResultList()
             .stream()
             .findFirst()
-            .orElseThrow(NoSuchElementException("User with $username username not found"));
+            .orElseThrow(()->{
+                throw new NoSuchElementException("User with $username username not found");
+            });
     }
 
     @Override
@@ -60,14 +62,14 @@ public class UserDAOJpa implements UserDAO {
             .getResultList()
             .stream()
             .findFirst()
-            .orElseThrow(NoSuchElementException("User with $username username not found"));
+            .orElseThrow(()->{ throw new NoSuchElementException("User with $email email not found");});
     }
 
     @Override
     public long totalCount() {
         String jpql = "SELECT COUNT(u.id) FROM User u";
         return (long) entityManager
-            .createQuery(jpql, User.class)
+            .createQuery(jpql)
             .getSingleResult();
     }
 }
