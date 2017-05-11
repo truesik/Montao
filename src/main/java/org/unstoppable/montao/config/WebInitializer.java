@@ -12,7 +12,7 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{
                 ApplicationContext.class,
-                HibernateConfig.class,
+                JpaConfig.class,
                 SecurityConfig.class
         };
     }

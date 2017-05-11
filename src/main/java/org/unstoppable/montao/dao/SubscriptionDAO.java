@@ -10,13 +10,13 @@ import java.util.List;
 public interface SubscriptionDAO {
     void add(Subscription subscription);
 
-    Subscription getSubscription(Community community, User user);
-
     void delete(Subscription subscription);
 
-    List<Subscription> getByUser(User user);
+    List<Community> findByUser(User user, int page, int limit);
 
-    List<Subscription> getByCommunity(Community community);
+    List<User> findByCommunity(Community community, int page, int limit);
 
-    List<CommunitySubscription> getCommunitiesWithSubscriptionsByUser(User user, int startRowPosition, int maxResult);
+    long communitiesCountByUser(User user);
+
+    long userCountByCommunity(Community community);
 }

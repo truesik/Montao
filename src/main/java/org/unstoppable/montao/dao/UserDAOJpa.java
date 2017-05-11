@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 @Transactional
@@ -16,16 +17,9 @@ public class UserDAOJpa implements UserDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-
     @Override
-    public List<User> getAll() {
-        String jql = "from User";
-        return entityManager.createQuery(jql, User.class).getResultList();
-    }
-
-    @Override
-    public User getById(BigInteger id) {
-        return entityManager.find(User.class, id);
+    public void add(User user) {
+        entityManager.persist(user);
     }
 
     @Override
@@ -34,49 +28,48 @@ public class UserDAOJpa implements UserDAO {
     }
 
     @Override
-    public void add(User user) {
-        entityManager.persist(user);
+    public User update(User user) {
+        return entityManager.merge(user);
     }
 
     @Override
-    public User getByUsername(String username) {
-        String jql = "from User where username = :username";
-        return entityManager.createQuery(jql, User.class)
-            .setParameter("username", username)
-            .getResultList().stream()
+    public List<User> findAll(int page, int limit) {
+        String jpql = "SELECT u FROM User u";
+        return entityManager.createQuery(jpql,User.class)
+            .setMaxResults(limit)
+            .setFirstResult((page-1)*limit)
+            .getResultList();
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        String jpql = "SELECT u FROM User u WHERE u.username = :username";//Выбрать обекты класса User из таблицы User у которых поле username свопадает с передаваемым параметром username
+        return entityManager.createQuery(jpql,User.class)
+            .setParameter("username", username)//передаваемый параметр username
+            .getResultList()
+            .stream()
             .findFirst()
-            .orElse(null);
+            .orElseThrow(()->{
+                throw new NoSuchElementException("User with $username username not found");
+            });
     }
 
     @Override
-    public User getByEmail(String email) {
-        String jql = "from User where email = :email";
-        return entityManager.createQuery(jql, User.class)
+    public User findByEmail(String email) {
+        String jpql = "SELECT u FROM User u WHERE u.email=:email";
+        return entityManager.createQuery(jpql,User.class)
             .setParameter("email", email)
-            .getResultList().stream()
+            .getResultList()
+            .stream()
             .findFirst()
-            .orElse(null);
+            .orElseThrow(()->{ throw new NoSuchElementException("User with $email email not found");});
     }
 
     @Override
-    public void update(User user) {
-        entityManager.merge(user);
-    }
-
-    @Override
-    public User getByUUID(String token) {
-        String jql = "from User where uuid = :uuid";
-        return entityManager.createQuery(jql, User.class)
-            .setParameter("uuid", token)
-            .getResultList().stream()
-            .findFirst()
-            .orElse(null);
-    }
-
-    @Override
-    public long getTotalCount() {
-        String jql = "select count(id) from User";
-        Query query = entityManager.createQuery(jql, User.class);
-        return (long) query.getSingleResult();
+    public long totalCount() {
+        String jpql = "SELECT COUNT(u.id) FROM User u";
+        return (long) entityManager
+            .createQuery(jpql)
+            .getSingleResult();
     }
 }
