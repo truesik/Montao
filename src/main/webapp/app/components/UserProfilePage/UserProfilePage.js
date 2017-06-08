@@ -1,33 +1,84 @@
-import React from 'react';
-// import Icon from '../Icon';
-// import './UserProfilePage.scss';
+import React, { Component, PropTypes } from 'react';
+import Icon from './Icon';
+import UserProfileSettings from '../UserProfileSettings';
+import UserProfileFavChannels from '../UserProfileFavChannels';
+import './UserProfilePage.css';
+import image from './1.jpg';
 
-export class UserProfilePage extends React.Component {
-  /*
-   static propTypes = {
-   profile: PropTypes.object,
-   toggleUserProfileDialog: PropTypes.func
-   };
+export class UserProfilePage extends Component {
 
-   static defaultProps = {
-   profile: {}
-   };
-   */
-  accountHandler() {
+  static propTypes = {
+    profile: PropTypes.object,
+  };
 
+  static defaultProps = {
+    profile: {
+      first_name: 'unknown',
+      last_name: 'unknown',
+      image: './1.jpg'
+    }
+  };
+
+  constructor(props){
+    super(props);
+    this.state = {
+      showAccountOptions: false,
+      showNotificationOptions: false, 
+      showFavOptions: false
+    };
+    this.accountHandler = this.accountHandler.bind(this);
+    this.notifHandler = this.notifHandler.bind(this);
+    this.channelsHandler = this.channelsHandler.bind(this);
   }
 
-  notifHandler() {
-
+  accountHandler(e) {
+    e.preventDefault();
+    this.setState({
+      showAccountOptions: !(this.state.showAccountOptions)
+    });
   }
 
-  clickHandler() {
-    // this.props.toggleUserProfileDialog(true);
+  notifHandler(e) {
+    e.preventDefault();
+    this.setState({
+      showNotificationOptions: !(this.state.showNotificationOptions)
+    });
   }
 
-  channelsHandler() {
-
+  channelsHandler(e) {
+    e.preventDefault();
+    this.setState({
+      showFavOptions: !(this.state.showFavOptions)
+    });
   }
+
+  SettingsRender() {
+    const { showAccountOptions } = this.state;
+    if(showAccountOptions == true){
+      return (
+          <UserProfileSettings/>
+      );
+    }
+  }
+  
+  NotifRender(){
+    const { showNotificationOptions } = this.state;
+    if( showNotificationOptions == true){
+      return (
+          <div></div>
+      );
+    }
+  }
+
+  FavChannelsRender() {
+    const { showFavOptions } = this.state;
+    if(showFavOptions == true){
+      return (
+          <UserProfileFavChannels/>
+      );
+    }
+  }
+
 
   render() {
     const { profile } = this.props;
@@ -37,7 +88,7 @@ export class UserProfilePage extends React.Component {
           <div className="container-fluid">
             <div className="navbar-header">
               <button type="button" className="navbar-toggle collapsed" data-toggle="collapse"
-                      data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span className="sr-only">Toggle navigation</span>
               </button>
               <a className="navbar-brand" href="/">Montao</a>
@@ -49,27 +100,34 @@ export class UserProfilePage extends React.Component {
             </div>
           </div>
         </nav>
-
-        <div className="Profile__container">
-          <div className="Profile__user">
-            <div className="Profile__user-photo" onClick={this.onClickHandler}>
-              <img src={profile.image}/>
-              {/*<Icon className="ProfileCard__edit-icon Profile__user-photo-icon"/>*/}
-              <input type="file" className="Profile__user-hiddenElement" ref="photo"/>
+        <div className="Profile">
+          <div className="Profile__container">
+            <div className="Profile__user">
+              <div className="Profile__user-photo" onClick={this.onClickHandler}>
+                <img src={image} />
+                <Icon className="ProfileCard__edit-icon Profile__user-photo-icon" />
+                <input type="file" className="Profile__user-hiddenElement" ref="photo" />
+              </div>
+              <div className="Profile__user-name">
+                {`${profile.first_name || ''} ${profile.last_name || ''}`}
+              </div>
+              <h1>User profile</h1><br />
+              <ul className="nav navbar-nav navbar-left">
+                <img src={image}></img>
+                <li><a href="" onClick={this.accountHandler}>Account settigs</a></li>
+                <li><a href="" onClick={this.notifHandler}>Notification</a></li>
+                <li><a href="" onClick={this.channelsHandler}>Favorite channels</a></li>
+              </ul>
+                <div className="Profile__options">
+                  <br/><br/>
+                  <hr />
+                  {this.SettingsRender() || this.NotifRender() || this.FavChannelsRender()}
+                </div>
             </div>
-            <div className="Profile__user-name">
-              {`${profile.first_name || ''} ${profile.last_name || ''}`}
-            </div>
-            <h1>User profile</h1><br />
-            <ul className="nav navbar-nav navbar-left">
-              <li><a href="" onClick="this.accountHandler">Account settigs</a></li>
-              <li><a href="" onClick="this.notifHandler">Notification</a></li>
-              <li><a href="" onClick="this.channelsHandler">Favorite channels</a></li>
-            </ul>
-            <br />
           </div>
         </div>
       </div>
+
     );
   }
 }

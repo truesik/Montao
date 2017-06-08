@@ -1,0 +1,56 @@
+.Profile {
+  background-image: url('./1.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  }
+
+  .Profile::after {
+    background-color: blue;
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  .Profile__container {
+    height: 100%;
+    margin: 0 auto;
+    padding-left: 2.5641%;
+    padding-right: 2.5641%;
+    position: relative;
+    width: 100%;
+    z-index: 2;
+
+  }
+
+  .Profile__user {
+    margin: 80px 31% 0;
+    position: absolute;
+    text-align: center;
+    width: 33.33%;
+    }
+
+  .Profile__user-photo {
+    border: 2px solid #fff;
+    border-radius: 100%;
+    box-shadow: 0 0 15px 0 rgba(0,1,1,0.75);
+    height: 148px;
+    margin: 0 auto 11px;
+    overflow: hidden;
+    width: 148px;
+    }
+
+  .Profile img {
+      width: 100%;
+      vertical-align: middle;
+    }
+    
+  .Profile__user-hiddenElement{
+    display: none;
+  }
